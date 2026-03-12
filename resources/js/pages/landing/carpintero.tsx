@@ -1,11 +1,13 @@
-import { Form, Head, Link } from '@inertiajs/react';
+import { Form, Head } from '@inertiajs/react';
 import {
     Check,
     ChevronRight,
     Hammer,
     Home,
+    Mail,
     MapPin,
     MessageCircle,
+    Phone,
     Ruler,
     ShieldCheck,
     Sparkles,
@@ -13,6 +15,7 @@ import {
     Wrench,
 } from 'lucide-react';
 import InputError from '@/components/input-error';
+import { PublicHeader } from '@/components/public-header';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -132,6 +135,7 @@ export default function CarpinteroLanding({ landing, bookingStatus }: Props) {
     const heroSubtitle =
         landing.hero_subtitle ??
         'Diseñamos, fabricamos e instalamos carpintería para tu hogar o negocio. Cotización rápida por WhatsApp y trabajo prolijo.';
+    const currentYear = new Date().getFullYear();
 
     const businessSchema = {
         '@context': 'https://schema.org',
@@ -177,76 +181,11 @@ export default function CarpinteroLanding({ landing, bookingStatus }: Props) {
             </Head>
 
             <div className="min-h-screen bg-background text-foreground">
-                <header className="sticky top-0 z-50 border-b border-border/60 bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/70">
-                    <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
-                        <Link
-                            href="/"
-                            className="flex items-center gap-2 font-semibold tracking-tight"
-                        >
-                            <span className="inline-flex size-9 items-center justify-center rounded-md bg-primary text-primary-foreground">
-                                <Hammer className="size-4" />
-                            </span>
-                            <span>Carpintería</span>
-                        </Link>
-
-                        <nav className="hidden items-center gap-6 text-sm md:flex">
-                            <a
-                                href="#servicios"
-                                className="text-muted-foreground hover:text-foreground"
-                            >
-                                Servicios
-                            </a>
-                            <a
-                                href="#trabajos"
-                                className="text-muted-foreground hover:text-foreground"
-                            >
-                                Trabajos
-                            </a>
-                            <a
-                                href="#booking"
-                                className="text-muted-foreground hover:text-foreground"
-                            >
-                                Agendar
-                            </a>
-                            <a
-                                href="#proceso"
-                                className="text-muted-foreground hover:text-foreground"
-                            >
-                                Proceso
-                            </a>
-                            <a
-                                href="#faq"
-                                className="text-muted-foreground hover:text-foreground"
-                            >
-                                FAQ
-                            </a>
-                            <a
-                                href="#contacto"
-                                className="text-muted-foreground hover:text-foreground"
-                            >
-                                Contacto
-                            </a>
-                        </nav>
-
-                        <div className="flex items-center gap-2">
-                            <Button asChild className="hidden sm:inline-flex">
-                                <a
-                                    href={whatsappHref}
-                                    target="_blank"
-                                    rel="noreferrer"
-                                >
-                                    Cotizar por WhatsApp
-                                    <ChevronRight className="size-4" />
-                                </a>
-                            </Button>
-                            <Button asChild variant="outline" size="icon">
-                                <a href="#contacto" aria-label="Ir a contacto">
-                                    <MapPin className="size-4" />
-                                </a>
-                            </Button>
-                        </div>
-                    </div>
-                </header>
+                <PublicHeader
+                    landing={{ whatsapp_number: landing.whatsapp_number }}
+                    isHome
+                    whatsappHref={whatsappHref}
+                />
 
                 <main>
                     <section className="relative overflow-hidden">
@@ -916,7 +855,7 @@ export default function CarpinteroLanding({ landing, bookingStatus }: Props) {
                                 <Card className="overflow-hidden p-0">
                                     <div className="relative">
                                         <div
-                                            className="h-48 bg-cover bg-center bg-no-repeat md:bg-fixed"
+                                            className="h-48 bg-cover bg-center bg-no-repeat"
                                             style={{
                                                 backgroundImage: `url(${images.kitchen})`,
                                             }}
@@ -989,37 +928,134 @@ export default function CarpinteroLanding({ landing, bookingStatus }: Props) {
                     </a>
                 </Button>
 
-                <footer className="border-t border-border/60 py-10">
+                <footer className="border-t border-border/60 bg-background py-12">
                     <div className="mx-auto max-w-6xl px-4">
-                        <div className="flex flex-col justify-between gap-6 md:flex-row md:items-center">
-                            <div>
-                                <div className="font-semibold">
-                                    Carpintería en Guayaquil
+                        <div className="grid gap-10 md:grid-cols-12">
+                            <div className="md:col-span-5">
+                                <div className="flex items-center gap-2 font-semibold tracking-tight">
+                                    <span className="inline-flex size-9 items-center justify-center rounded-md bg-primary text-primary-foreground">
+                                        <Hammer className="size-4" />
+                                    </span>
+                                    <span>Carpintería en Guayaquil</span>
                                 </div>
-                                <div className="mt-1 text-sm text-muted-foreground">
-                                    Ecuador · Muebles a medida · Closets ·
-                                    Puertas · Reparaciones
+                                <p className="mt-4 max-w-md text-sm text-muted-foreground">
+                                    Muebles a medida, closets empotrados, cocinas,
+                                    puertas y reparaciones. Trabajo limpio, tiempos
+                                    realistas y cotización clara.
+                                </p>
+
+                                <div className="mt-6 flex flex-wrap gap-2">
+                                    <Button asChild>
+                                        <a
+                                            href={whatsappHref}
+                                            target="_blank"
+                                            rel="noreferrer"
+                                        >
+                                            WhatsApp
+                                            <ChevronRight className="size-4" />
+                                        </a>
+                                    </Button>
+                                    <Button asChild variant="outline">
+                                        <a href="/contacto">
+                                            Contacto
+                                            <ChevronRight className="size-4" />
+                                        </a>
+                                    </Button>
                                 </div>
                             </div>
-                            <div className="flex items-center gap-3">
-                                <Button asChild variant="outline">
-                                    <a href="#servicios">Servicios</a>
-                                </Button>
-                                <Button asChild>
+
+                            <div className="md:col-span-3">
+                                <div className="text-sm font-semibold">
+                                    Navegación
+                                </div>
+                                <div className="mt-4 grid gap-2 text-sm">
                                     <a
-                                        href={whatsappHref}
-                                        target="_blank"
-                                        rel="noreferrer"
+                                        href="#servicios"
+                                        className="text-muted-foreground hover:text-foreground"
                                     >
-                                        Cotizar
-                                        <ChevronRight className="size-4" />
+                                        Servicios
                                     </a>
-                                </Button>
+                                    <a
+                                        href="#trabajos"
+                                        className="text-muted-foreground hover:text-foreground"
+                                    >
+                                        Trabajos
+                                    </a>
+                                    <a
+                                        href="#booking"
+                                        className="text-muted-foreground hover:text-foreground"
+                                    >
+                                        Agendar
+                                    </a>
+                                    <a
+                                        href="#faq"
+                                        className="text-muted-foreground hover:text-foreground"
+                                    >
+                                        FAQ
+                                    </a>
+                                </div>
+                            </div>
+
+                            <div className="md:col-span-2">
+                                <div className="text-sm font-semibold">
+                                    Páginas
+                                </div>
+                                <div className="mt-4 grid gap-2 text-sm">
+                                    <a
+                                        href="/servicios"
+                                        className="text-muted-foreground hover:text-foreground"
+                                    >
+                                        Servicios
+                                    </a>
+                                    <a
+                                        href="/trabajos"
+                                        className="text-muted-foreground hover:text-foreground"
+                                    >
+                                        Trabajos
+                                    </a>
+                                    <a
+                                        href="/contacto"
+                                        className="text-muted-foreground hover:text-foreground"
+                                    >
+                                        Contacto
+                                    </a>
+                                </div>
+                            </div>
+
+                            <div className="md:col-span-2">
+                                <div className="text-sm font-semibold">
+                                    Contacto
+                                </div>
+                                <div className="mt-4 grid gap-3 text-sm text-muted-foreground">
+                                    {landing.contact_phone && (
+                                        <div className="flex items-center gap-2">
+                                            <Phone className="size-4" />
+                                            <span>{landing.contact_phone}</span>
+                                        </div>
+                                    )}
+                                    {landing.contact_email && (
+                                        <div className="flex items-center gap-2">
+                                            <Mail className="size-4" />
+                                            <span>{landing.contact_email}</span>
+                                        </div>
+                                    )}
+                                    <div className="flex items-center gap-2">
+                                        <MapPin className="size-4" />
+                                        <span>Guayaquil, Ecuador</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div className="mt-8 text-xs text-muted-foreground">
-                            Landing page para SEO: carpintero en Guayaquil,
-                            Ecuador.
+
+                        <div className="mt-10 flex flex-col gap-2 border-t border-border/60 pt-6 text-xs text-muted-foreground md:flex-row md:items-center md:justify-between">
+                            <div>
+                                © {currentYear} Carpintería en Guayaquil. Todos
+                                los derechos reservados.
+                            </div>
+                            <div>
+                                Ecuador · Muebles a medida · Closets · Puertas ·
+                                Reparaciones
+                            </div>
                         </div>
                     </div>
                 </footer>

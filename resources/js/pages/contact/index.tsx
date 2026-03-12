@@ -1,6 +1,7 @@
-import { Head, Link } from '@inertiajs/react';
-import { ChevronRight, Mail, MessageCircle, Phone } from 'lucide-react';
+import { Head } from '@inertiajs/react';
+import { Mail, MessageCircle, Phone } from 'lucide-react';
 import { useState } from 'react';
+import { PublicHeader } from '@/components/public-header';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -56,36 +57,10 @@ export default function ContactPage({ landing }: Props) {
             <Head title="Contacto" />
 
             <div className="min-h-screen bg-background text-foreground">
-                <header className="border-b border-border/60">
-                    <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
-                        <Link
-                            href="/"
-                            className="flex items-center gap-2 font-semibold tracking-tight"
-                        >
-                            <span>Carpintería</span>
-                        </Link>
-                        <div className="flex items-center gap-2">
-                            <Button asChild variant="outline">
-                                <a
-                                    href={whatsappHref}
-                                    target="_blank"
-                                    rel="noreferrer"
-                                >
-                                    WhatsApp
-                                    <ChevronRight className="size-4" />
-                                </a>
-                            </Button>
-                            {mailtoHref && (
-                                <Button asChild>
-                                    <a href={mailtoHref}>
-                                        Email
-                                        <ChevronRight className="size-4" />
-                                    </a>
-                                </Button>
-                            )}
-                        </div>
-                    </div>
-                </header>
+                <PublicHeader
+                    landing={{ whatsapp_number: landing.whatsapp_number }}
+                    whatsappHref={whatsappHref}
+                />
 
                 <main className="mx-auto max-w-6xl px-4 py-10 sm:py-14">
                     <div className="grid gap-10 lg:grid-cols-2 lg:items-start">

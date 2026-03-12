@@ -1,7 +1,11 @@
 import { Head, Link } from '@inertiajs/react';
-import { ChevronRight } from 'lucide-react';
+import { PublicHeader } from '@/components/public-header';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
+
+type Landing = {
+    whatsapp_number: string | null;
+};
 
 type Work = {
     id: number;
@@ -23,36 +27,19 @@ type Paginator<T> = {
 };
 
 type Props = {
+    landing: Landing;
     works: Paginator<Work>;
 };
 
-export default function WorksIndex({ works }: Props) {
+export default function WorksIndex({ landing, works }: Props) {
     return (
         <>
             <Head title="Trabajos" />
 
             <div className="min-h-screen bg-background text-foreground">
-                <header className="border-b border-border/60">
-                    <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
-                        <Link
-                            href="/"
-                            className="flex items-center gap-2 font-semibold tracking-tight"
-                        >
-                            <span>Carpintería</span>
-                        </Link>
-                        <div className="flex items-center gap-2">
-                            <Button asChild variant="outline">
-                                <Link href="/#servicios">Servicios</Link>
-                            </Button>
-                            <Button asChild>
-                                <Link href="/contacto">
-                                    Contacto
-                                    <ChevronRight className="size-4" />
-                                </Link>
-                            </Button>
-                        </div>
-                    </div>
-                </header>
+                <PublicHeader
+                    landing={{ whatsapp_number: landing.whatsapp_number }}
+                />
 
                 <main className="mx-auto max-w-6xl px-4 py-10 sm:py-14">
                     <div className="max-w-3xl">

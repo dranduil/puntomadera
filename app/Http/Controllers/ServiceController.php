@@ -11,7 +11,12 @@ class ServiceController extends Controller
 {
     public function index(): Response
     {
+        $landing = HomeLanding::query()->first();
+
         return Inertia::render('services/index', [
+            'landing' => $landing?->toArray() ?? [
+                'whatsapp_number' => null,
+            ],
             'services' => Service::query()
                 ->where('is_published', true)
                 ->orderBy('name')
