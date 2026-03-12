@@ -25,4 +25,3 @@ class Work extends Model
         ];
     }
 }
-

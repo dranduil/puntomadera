@@ -61,7 +61,15 @@ export default function ServiceShow({ landing, service }: Props) {
         ]
             .filter(Boolean)
             .join('\n');
-    }, [details, email, location, name, phone, service.default_message, service.name]);
+    }, [
+        details,
+        email,
+        location,
+        name,
+        phone,
+        service.default_message,
+        service.name,
+    ]);
 
     const whatsappHref = buildWhatsAppHref(whatsappNumber, composedMessage);
 
@@ -113,30 +121,33 @@ export default function ServiceShow({ landing, service }: Props) {
                                 </p>
                             )}
                             {service.description && (
-                                <p className="mt-4 text-sm text-muted-foreground whitespace-pre-wrap">
+                                <p className="mt-4 text-sm whitespace-pre-wrap text-muted-foreground">
                                     {service.description}
                                 </p>
                             )}
 
-                            {service.process_steps && service.process_steps.length > 0 && (
-                                <Card className="mt-8 p-6">
-                                    <div className="text-sm font-semibold">
-                                        Proceso
-                                    </div>
-                                    <Separator className="my-4" />
-                                    <div className="grid gap-3 text-sm text-muted-foreground">
-                                        {service.process_steps.map((step) => (
-                                            <div
-                                                key={step}
-                                                className="flex items-start gap-3"
-                                            >
-                                                <div className="mt-0.5 size-2 rounded-full bg-primary" />
-                                                <div>{step}</div>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </Card>
-                            )}
+                            {service.process_steps &&
+                                service.process_steps.length > 0 && (
+                                    <Card className="mt-8 p-6">
+                                        <div className="text-sm font-semibold">
+                                            Proceso
+                                        </div>
+                                        <Separator className="my-4" />
+                                        <div className="grid gap-3 text-sm text-muted-foreground">
+                                            {service.process_steps.map(
+                                                (step) => (
+                                                    <div
+                                                        key={step}
+                                                        className="flex items-start gap-3"
+                                                    >
+                                                        <div className="mt-0.5 size-2 rounded-full bg-primary" />
+                                                        <div>{step}</div>
+                                                    </div>
+                                                ),
+                                            )}
+                                        </div>
+                                    </Card>
+                                )}
                         </div>
 
                         <Card className="p-6 sm:p-8">
@@ -151,28 +162,38 @@ export default function ServiceShow({ landing, service }: Props) {
                                     <Input
                                         id="name"
                                         value={name}
-                                        onChange={(e) => setName(e.target.value)}
+                                        onChange={(e) =>
+                                            setName(e.target.value)
+                                        }
                                         placeholder="Tu nombre"
                                     />
                                 </div>
 
                                 <div className="grid gap-2">
-                                    <Label htmlFor="phone">Teléfono / WhatsApp</Label>
+                                    <Label htmlFor="phone">
+                                        Teléfono / WhatsApp
+                                    </Label>
                                     <Input
                                         id="phone"
                                         value={phone}
-                                        onChange={(e) => setPhone(e.target.value)}
+                                        onChange={(e) =>
+                                            setPhone(e.target.value)
+                                        }
                                         placeholder="+593 ..."
                                     />
                                 </div>
 
                                 <div className="grid gap-2">
-                                    <Label htmlFor="email">Email (opcional)</Label>
+                                    <Label htmlFor="email">
+                                        Email (opcional)
+                                    </Label>
                                     <Input
                                         id="email"
                                         type="email"
                                         value={email}
-                                        onChange={(e) => setEmail(e.target.value)}
+                                        onChange={(e) =>
+                                            setEmail(e.target.value)
+                                        }
                                         placeholder="email@example.com"
                                     />
                                 </div>
@@ -194,7 +215,9 @@ export default function ServiceShow({ landing, service }: Props) {
                                     <textarea
                                         id="details"
                                         value={details}
-                                        onChange={(e) => setDetails(e.target.value)}
+                                        onChange={(e) =>
+                                            setDetails(e.target.value)
+                                        }
                                         className="min-h-32 w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-xs outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50"
                                         placeholder="Medidas, material, fotos, referencias..."
                                     />
@@ -244,4 +267,3 @@ export default function ServiceShow({ landing, service }: Props) {
         </>
     );
 }
-

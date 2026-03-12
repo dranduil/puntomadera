@@ -67,4 +67,3 @@ class WorkAdminController extends Controller
         return $slug;
     }
 }
-

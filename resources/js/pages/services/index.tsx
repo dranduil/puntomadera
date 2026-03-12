@@ -69,7 +69,9 @@ export default function ServicesIndex({ services }: Props) {
 
                                 <div className="mt-5">
                                     <Button asChild className="w-full">
-                                        <Link href={`/servicios/${service.slug}`}>
+                                        <Link
+                                            href={`/servicios/${service.slug}`}
+                                        >
                                             Ver proceso y contactar
                                             <ChevronRight className="size-4" />
                                         </Link>
@@ -83,4 +85,3 @@ export default function ServicesIndex({ services }: Props) {
         </>
     );
 }
-

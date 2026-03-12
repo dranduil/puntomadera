@@ -67,4 +67,3 @@ class ServiceAdminController extends Controller
         return $slug;
     }
 }
-

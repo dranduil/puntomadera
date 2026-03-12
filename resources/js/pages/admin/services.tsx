@@ -56,7 +56,10 @@ export default function ServicesAdmin({ services }: Props) {
                     <div className="text-sm font-semibold">New service</div>
                     <Separator className="my-5" />
 
-                    <Form {...store.form()} className="grid gap-4 md:grid-cols-2">
+                    <Form
+                        {...store.form()}
+                        className="grid gap-4 md:grid-cols-2"
+                    >
                         {({ processing, errors }) => (
                             <>
                                 <div className="grid gap-2 md:col-span-2">
@@ -71,7 +74,9 @@ export default function ServicesAdmin({ services }: Props) {
                                 </div>
 
                                 <div className="grid gap-2">
-                                    <Label htmlFor="new_slug">Slug (optional)</Label>
+                                    <Label htmlFor="new_slug">
+                                        Slug (optional)
+                                    </Label>
                                     <Input
                                         id="new_slug"
                                         name="slug"
@@ -194,7 +199,9 @@ export default function ServicesAdmin({ services }: Props) {
                                                     <Input
                                                         id={`name-${service.id}`}
                                                         name="name"
-                                                        defaultValue={service.name}
+                                                        defaultValue={
+                                                            service.name
+                                                        }
                                                     />
                                                     <InputError
                                                         message={errors.name}
@@ -210,7 +217,9 @@ export default function ServicesAdmin({ services }: Props) {
                                                     <Input
                                                         id={`slug-${service.id}`}
                                                         name="slug"
-                                                        defaultValue={service.slug}
+                                                        defaultValue={
+                                                            service.slug
+                                                        }
                                                     />
                                                     <InputError
                                                         message={errors.slug}
@@ -227,7 +236,8 @@ export default function ServicesAdmin({ services }: Props) {
                                                         id={`summary-${service.id}`}
                                                         name="summary"
                                                         defaultValue={
-                                                            service.summary ?? ''
+                                                            service.summary ??
+                                                            ''
                                                         }
                                                     />
                                                     <InputError
@@ -245,7 +255,8 @@ export default function ServicesAdmin({ services }: Props) {
                                                         id={`description-${service.id}`}
                                                         name="description"
                                                         defaultValue={
-                                                            service.description ?? ''
+                                                            service.description ??
+                                                            ''
                                                         }
                                                         className="min-h-24 w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-xs outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50"
                                                     />
@@ -358,4 +369,3 @@ export default function ServicesAdmin({ services }: Props) {
         </AppLayout>
     );
 }
-

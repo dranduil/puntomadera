@@ -101,25 +101,28 @@ export default function WorksIndex({ works }: Props) {
                                                 {work.description}
                                             </p>
                                         )}
-                                        {work.images && work.images.length > 1 && (
-                                            <div className="mt-4 grid grid-cols-4 gap-2">
-                                                {work.images
-                                                    .slice(0, 4)
-                                                    .map((url) => (
-                                                        <div
-                                                            key={url}
-                                                            className="aspect-square overflow-hidden rounded-md bg-muted"
-                                                        >
-                                                            <img
-                                                                src={url}
-                                                                alt={work.title}
-                                                                className="h-full w-full object-cover"
-                                                                loading="lazy"
-                                                            />
-                                                        </div>
-                                                    ))}
-                                            </div>
-                                        )}
+                                        {work.images &&
+                                            work.images.length > 1 && (
+                                                <div className="mt-4 grid grid-cols-4 gap-2">
+                                                    {work.images
+                                                        .slice(0, 4)
+                                                        .map((url) => (
+                                                            <div
+                                                                key={url}
+                                                                className="aspect-square overflow-hidden rounded-md bg-muted"
+                                                            >
+                                                                <img
+                                                                    src={url}
+                                                                    alt={
+                                                                        work.title
+                                                                    }
+                                                                    className="h-full w-full object-cover"
+                                                                    loading="lazy"
+                                                                />
+                                                            </div>
+                                                        ))}
+                                                </div>
+                                            )}
                                     </div>
                                 </Card>
                             );
@@ -132,7 +135,9 @@ export default function WorksIndex({ works }: Props) {
                                 <Button
                                     key={link.label}
                                     asChild
-                                    variant={link.active ? 'default' : 'outline'}
+                                    variant={
+                                        link.active ? 'default' : 'outline'
+                                    }
                                     disabled={!link.url}
                                 >
                                     <Link href={link.url ?? '/trabajos'}>
@@ -151,4 +156,3 @@ export default function WorksIndex({ works }: Props) {
         </>
     );
 }
-

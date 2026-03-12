@@ -51,4 +51,3 @@ class UpdateServiceRequest extends FormRequest
         ];
     }
 }
-

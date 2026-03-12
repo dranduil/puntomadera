@@ -23,12 +23,11 @@ import { store as storeBooking } from '@/routes/bookings';
 
 const images = {
     hero: 'images/guayaquil.jpg',
-    workshop:
-        'images/works/service04.jpg',
-    kitchen:
-        'https://images.unsplash.com/photo-1556911220-bff31c812dba?auto=format&fit=crop&w=1800&q=80',
-    closet: 'https://images.unsplash.com/photo-1615873968403-89e068629265?auto=format&fit=crop&w=1800&q=80',
-    doors: 'https://images.unsplash.com/photo-1600566753051-f0c9a6bbd3b3?auto=format&fit=crop&w=1800&q=80',
+    workshop: 'images/works/service04.jpg',
+    kitchen: 'images/works/service01.jpg',
+    closet: 'images/works/service05.jpg',
+    doors: 'images/works/service03.jpg',
+    parallax: 'images/works/service06.jpg'
 };
 
 const defaultSeo = {
@@ -111,10 +110,7 @@ const faqs = [
     },
 ];
 
-export default function CarpinteroLanding({
-    landing,
-    bookingStatus,
-}: Props) {
+export default function CarpinteroLanding({ landing, bookingStatus }: Props) {
     const areasServed = landing.areas_served ?? [
         'Guayaquil',
         'Samborondón',
@@ -460,7 +456,7 @@ export default function CarpinteroLanding({
                                 </Button>
                             </div>
 
-                            <div className="mt-10 grid gap-4 md:grid-cols-12">
+                            <div className="mt-10 grid gap-4 md:grid-cols-12 md:auto-rows-[240px]">
                                 {[
                                     {
                                         title: 'Cocina con anaqueles',
@@ -486,15 +482,15 @@ export default function CarpinteroLanding({
                                     <Card
                                         key={item.title}
                                         className={cn(
-                                            'group overflow-hidden p-0',
+                                            'group overflow-hidden p-0 md:h-full',
                                             item.className,
                                         )}
                                     >
-                                        <div className="relative aspect-[16/10] w-full">
+                                        <div className="relative h-56 w-full sm:h-64 md:h-full">
                                             <img
                                                 src={item.image}
                                                 alt={item.title}
-                                                className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                                                className="absolute inset-0 block h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                                                 loading="lazy"
                                             />
                                             <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-background/10 to-transparent" />
@@ -520,7 +516,7 @@ export default function CarpinteroLanding({
                         <div
                             className="absolute inset-0 bg-cover bg-center bg-no-repeat md:bg-fixed"
                             style={{
-                                backgroundImage: `url(${images.workshop})`,
+                                backgroundImage: `url(${images.parallax})`,
                             }}
                             aria-hidden="true"
                         />
@@ -932,7 +928,10 @@ export default function CarpinteroLanding({
                                             <Separator className="my-5" />
 
                                             <div className="grid gap-3">
-                                                <Button asChild className="w-full">
+                                                <Button
+                                                    asChild
+                                                    className="w-full"
+                                                >
                                                     <a
                                                         href={whatsappHref}
                                                         target="_blank"

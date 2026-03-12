@@ -66,7 +66,11 @@ export default function ContactPage({ landing }: Props) {
                         </Link>
                         <div className="flex items-center gap-2">
                             <Button asChild variant="outline">
-                                <a href={whatsappHref} target="_blank" rel="noreferrer">
+                                <a
+                                    href={whatsappHref}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                >
                                     WhatsApp
                                     <ChevronRight className="size-4" />
                                 </a>
@@ -90,8 +94,9 @@ export default function ContactPage({ landing }: Props) {
                                 Contacto
                             </h1>
                             <p className="mt-3 text-muted-foreground">
-                                Elige cómo contactarnos: WhatsApp o email. Escribe
-                                tus datos y se creará un mensaje por defecto.
+                                Elige cómo contactarnos: WhatsApp o email.
+                                Escribe tus datos y se creará un mensaje por
+                                defecto.
                             </p>
 
                             <div className="mt-6 grid gap-3 text-sm text-muted-foreground">
@@ -123,28 +128,38 @@ export default function ContactPage({ landing }: Props) {
                                     <Input
                                         id="name"
                                         value={name}
-                                        onChange={(e) => setName(e.target.value)}
+                                        onChange={(e) =>
+                                            setName(e.target.value)
+                                        }
                                         placeholder="Tu nombre"
                                     />
                                 </div>
 
                                 <div className="grid gap-2">
-                                    <Label htmlFor="phone">Teléfono / WhatsApp</Label>
+                                    <Label htmlFor="phone">
+                                        Teléfono / WhatsApp
+                                    </Label>
                                     <Input
                                         id="phone"
                                         value={phone}
-                                        onChange={(e) => setPhone(e.target.value)}
+                                        onChange={(e) =>
+                                            setPhone(e.target.value)
+                                        }
                                         placeholder="+593 ..."
                                     />
                                 </div>
 
                                 <div className="grid gap-2">
-                                    <Label htmlFor="email">Email (opcional)</Label>
+                                    <Label htmlFor="email">
+                                        Email (opcional)
+                                    </Label>
                                     <Input
                                         id="email"
                                         type="email"
                                         value={email}
-                                        onChange={(e) => setEmail(e.target.value)}
+                                        onChange={(e) =>
+                                            setEmail(e.target.value)
+                                        }
                                         placeholder="email@example.com"
                                     />
                                 </div>
@@ -154,7 +169,9 @@ export default function ContactPage({ landing }: Props) {
                                     <textarea
                                         id="message"
                                         value={message}
-                                        onChange={(e) => setMessage(e.target.value)}
+                                        onChange={(e) =>
+                                            setMessage(e.target.value)
+                                        }
                                         className="min-h-32 w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-xs outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50"
                                         placeholder="Cuéntanos qué necesitas, medidas, fotos o referencias..."
                                     />
@@ -163,12 +180,20 @@ export default function ContactPage({ landing }: Props) {
 
                             <div className="mt-6 grid gap-2 sm:grid-cols-2">
                                 <Button asChild className="w-full">
-                                    <a href={whatsappHref} target="_blank" rel="noreferrer">
+                                    <a
+                                        href={whatsappHref}
+                                        target="_blank"
+                                        rel="noreferrer"
+                                    >
                                         Abrir WhatsApp
                                     </a>
                                 </Button>
                                 {mailtoHref ? (
-                                    <Button asChild variant="outline" className="w-full">
+                                    <Button
+                                        asChild
+                                        variant="outline"
+                                        className="w-full"
+                                    >
                                         <a href={mailtoHref}>Enviar Email</a>
                                     </Button>
                                 ) : (

@@ -19,4 +19,3 @@ class WorkController extends Controller
         ]);
     }
 }
-

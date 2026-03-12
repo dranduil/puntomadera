@@ -21,4 +21,3 @@ class ContactPageController extends Controller
         ]);
     }
 }
-

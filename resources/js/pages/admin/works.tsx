@@ -56,7 +56,10 @@ export default function WorksAdmin({ works }: Props) {
                     <div className="text-sm font-semibold">New work</div>
                     <Separator className="my-5" />
 
-                    <Form {...store.form()} className="grid gap-4 md:grid-cols-2">
+                    <Form
+                        {...store.form()}
+                        className="grid gap-4 md:grid-cols-2"
+                    >
                         {({ processing, errors }) => (
                             <>
                                 <div className="grid gap-2 md:col-span-2">
@@ -71,7 +74,9 @@ export default function WorksAdmin({ works }: Props) {
                                 </div>
 
                                 <div className="grid gap-2">
-                                    <Label htmlFor="new_slug">Slug (optional)</Label>
+                                    <Label htmlFor="new_slug">
+                                        Slug (optional)
+                                    </Label>
                                     <Input
                                         id="new_slug"
                                         name="slug"
@@ -212,7 +217,9 @@ export default function WorksAdmin({ works }: Props) {
                                                     <Input
                                                         id={`title-${work.id}`}
                                                         name="title"
-                                                        defaultValue={work.title}
+                                                        defaultValue={
+                                                            work.title
+                                                        }
                                                     />
                                                     <InputError
                                                         message={errors.title}
@@ -250,7 +257,9 @@ export default function WorksAdmin({ works }: Props) {
                                                         }
                                                     />
                                                     <InputError
-                                                        message={errors.worked_on}
+                                                        message={
+                                                            errors.worked_on
+                                                        }
                                                     />
                                                 </div>
 
@@ -268,7 +277,9 @@ export default function WorksAdmin({ works }: Props) {
                                                         }
                                                     />
                                                     <InputError
-                                                        message={errors.location}
+                                                        message={
+                                                            errors.location
+                                                        }
                                                     />
                                                 </div>
 
@@ -282,7 +293,8 @@ export default function WorksAdmin({ works }: Props) {
                                                         id={`description-${work.id}`}
                                                         name="description"
                                                         defaultValue={
-                                                            work.description ?? ''
+                                                            work.description ??
+                                                            ''
                                                         }
                                                         className="min-h-24 w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-xs outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50"
                                                     />
