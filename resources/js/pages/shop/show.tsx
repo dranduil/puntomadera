@@ -1,5 +1,5 @@
-import { Head, Link } from '@inertiajs/react';
-import { Check, ShoppingCart } from 'lucide-react';
+import { Head } from '@inertiajs/react';
+import { Check } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { PublicHeader } from '@/components/public-header';
 import { Button } from '@/components/ui/button';
@@ -16,7 +16,6 @@ type Product = {
     sku: string | null;
     summary: string | null;
     description: string | null;
-    process_steps: string[] | null;
     price_cents: number;
     currency: string;
     stock_qty: number;
@@ -28,31 +27,11 @@ type Props = {
     product: Product;
 };
 
-type CartItem = {
-    id: number;
-    slug: string;
-    name: string;
-    price_cents: number;
-    currency: string;
-    qty: number;
-    image_path: string | null;
-};
-
 function formatMoney(cents: number, currency = 'USD') {
     return new Intl.NumberFormat('es-EC', {
         style: 'currency',
         currency,
     }).format(cents / 100);
-}
-
-function parseCart(raw: string | null): CartItem[] {
-    if (!raw) return [];
-    try {
-        const parsed = JSON.parse(raw) as CartItem[];
-        return Array.isArray(parsed) ? parsed : [];
-    } catch {
-        return [];
-    }
 }
 
 function sanitizeWhatsapp(number: string) {
@@ -70,40 +49,16 @@ export default function ShopShow({ landing, product }: Props) {
 
     const whatsappHref = useMemo(() => {
         const message = [
-            'Hola, quiero comprar este producto:',
+            'Hola, quiero cotizar este producto:',
             `Producto: ${product.name}`,
             product.sku ? `SKU: ${product.sku}` : null,
             `Cantidad: ${qty}`,
-            `Precio unitario: ${formatMoney(product.price_cents, product.currency)}`,
-            `Total: ${formatMoney(product.price_cents * qty, product.currency)}`,
+            `Precio referencial: ${formatMoney(product.price_cents, product.currency)}`,
         ]
             .filter(Boolean)
             .join('\n');
         return `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
     }, [product, qty, whatsappNumber]);
-
-    const addToCart = () => {
-        if (typeof window === 'undefined') return;
-        const current = parseCart(window.localStorage.getItem('pm_cart_v1'));
-        const index = current.findIndex((item) => item.id === product.id);
-
-        if (index >= 0) {
-            const nextQty = Math.min(maxQty, current[index].qty + qty);
-            current[index] = { ...current[index], qty: nextQty };
-        } else {
-            current.push({
-                id: product.id,
-                slug: product.slug,
-                name: product.name,
-                price_cents: product.price_cents,
-                currency: product.currency,
-                qty: Math.min(maxQty, qty),
-                image_path: product.image_path,
-            });
-        }
-
-        window.localStorage.setItem('pm_cart_v1', JSON.stringify(current));
-    };
 
     return (
         <>
@@ -181,36 +136,29 @@ export default function ShopShow({ landing, product }: Props) {
                                         className="h-9 w-24 rounded-md border border-input bg-background px-3 text-sm"
                                     />
                                 </div>
-                                <div className="mt-5 grid gap-2 sm:grid-cols-2">
-                                    <Button onClick={addToCart}>
-                                        <ShoppingCart className="size-4" />
-                                        Agregar al carrito
-                                    </Button>
-                                    <Button asChild variant="outline">
-                                        <a
-                                            href={whatsappHref}
-                                            target="_blank"
-                                            rel="noreferrer"
-                                        >
-                                            Comprar por WhatsApp
-                                        </a>
-                                    </Button>
-                                </div>
-                                <Button asChild variant="ghost" className="mt-2 w-full">
-                                    <Link href="/tienda/carrito">Ir al carrito</Link>
+                                <Button asChild className="mt-5 w-full">
+                                    <a
+                                        href={whatsappHref}
+                                        target="_blank"
+                                        rel="noreferrer"
+                                    >
+                                        Solicitar por WhatsApp
+                                    </a>
                                 </Button>
                             </div>
 
-                            {product.process_steps && product.process_steps.length > 0 ? (
-                                <div className="mt-6 grid gap-2">
-                                    {product.process_steps.map((step) => (
-                                        <div key={step} className="flex items-start gap-2 text-sm">
-                                            <Check className="mt-0.5 size-4 text-primary" />
-                                            <span className="text-muted-foreground">{step}</span>
-                                        </div>
-                                    ))}
-                                </div>
-                            ) : null}
+                            <div className="mt-6 grid gap-2">
+                                {[
+                                    'Producto separado de servicios de carpintería.',
+                                    'Solicitud por WhatsApp para confirmar detalles.',
+                                    'Entrega y tiempos confirmados al responder.',
+                                ].map((line) => (
+                                    <div key={line} className="flex items-start gap-2 text-sm">
+                                        <Check className="mt-0.5 size-4 text-primary" />
+                                        <span className="text-muted-foreground">{line}</span>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
                     </div>
                 </main>

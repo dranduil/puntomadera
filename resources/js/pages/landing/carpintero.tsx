@@ -115,6 +115,8 @@ const faqs = [
 
 export default function CarpinteroLanding({ landing, bookingStatus }: Props) {
     const appName = import.meta.env.VITE_APP_NAME || 'punto-madera';
+    const siteUrl = import.meta.env.VITE_APP_URL || 'https://puntomadera.ec';
+    const canonicalUrl = `${siteUrl.replace(/\/$/, '')}/`;
     const areasServed = landing.areas_served ?? [
         'Guayaquil',
         'Samborondón',
@@ -142,15 +144,24 @@ export default function CarpinteroLanding({ landing, bookingStatus }: Props) {
     const businessSchema = {
         '@context': 'https://schema.org',
         '@type': 'HomeAndConstructionBusiness',
-        name: 'Carpintería en Guayaquil',
-        areaServed: areasServed.map((name) => ({ '@type': 'City', name })),
+        name: `${appName} - Carpinteria en Guayaquil`,
+        areaServed: [
+            { '@type': 'Country', name: 'Ecuador' },
+            { '@type': 'City', name: 'Guayaquil' },
+            ...areasServed.map((name) => ({ '@type': 'City', name })),
+        ],
         address: {
             '@type': 'PostalAddress',
             addressLocality: 'Guayaquil',
             addressRegion: 'Guayas',
-            addressCountry: 'EC',
+            addressCountry: 'Ecuador',
         },
-        url: '/',
+        geo: {
+            '@type': 'GeoCoordinates',
+            latitude: -2.170998,
+            longitude: -79.922356,
+        },
+        url: canonicalUrl,
         sameAs: [whatsappHref],
         serviceType: [
             'Carpintería a domicilio',
@@ -166,17 +177,28 @@ export default function CarpinteroLanding({ landing, bookingStatus }: Props) {
         <>
             <Head title={seoTitle}>
                 <meta name="description" content={seoDescription} />
-                <link rel="canonical" href="/" />
+                <meta
+                    name="keywords"
+                    content="carpinteria en guayaquil, carpintero en guayaquil, muebles a medida guayaquil, closets empotrados guayaquil, ebanisteria guayaquil, carpinteria ecuador"
+                />
+                <meta name="geo.region" content="EC-G" />
+                <meta name="geo.placename" content="Guayaquil, Ecuador" />
+                <meta name="geo.position" content="-2.170998;-79.922356" />
+                <meta name="ICBM" content="-2.170998, -79.922356" />
+                <link rel="canonical" href={canonicalUrl} />
                 <meta
                     property="og:title"
                     content="Carpintero en Guayaquil | Carpintería a domicilio"
                 />
                 <meta property="og:description" content={seoDescription} />
-                <meta property="og:url" content="/" />
+                <meta property="og:url" content={canonicalUrl} />
                 <meta property="og:type" content="website" />
                 <meta property="og:locale" content="es_EC" />
+                <meta property="og:site_name" content={appName} />
                 <meta property="og:image" content={images.hero} />
                 <meta name="twitter:card" content="summary_large_image" />
+                <meta name="twitter:title" content={seoTitle} />
+                <meta name="twitter:description" content={seoDescription} />
                 <script type="application/ld+json">
                     {JSON.stringify(businessSchema)}
                 </script>

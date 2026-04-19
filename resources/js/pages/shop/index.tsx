@@ -1,5 +1,5 @@
 import { Head, Link } from '@inertiajs/react';
-import { ChevronRight, ShoppingCart } from 'lucide-react';
+import { ChevronRight } from 'lucide-react';
 import { PublicHeader } from '@/components/public-header';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -44,21 +44,13 @@ export default function ShopIndex({ landing, products }: Props) {
                 />
 
                 <main className="mx-auto max-w-6xl px-4 py-10 sm:py-14">
-                    <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-                        <div className="max-w-2xl">
-                            <h1 className="text-3xl font-semibold tracking-tight">
-                                Tienda
-                            </h1>
-                            <p className="mt-3 text-muted-foreground">
-                                Compra directa. Sin cotización.
-                            </p>
-                        </div>
-                        <Button asChild variant="outline">
-                            <Link href="/tienda/carrito">
-                                Ir al carrito
-                                <ShoppingCart className="size-4" />
-                            </Link>
-                        </Button>
+                    <div className="max-w-2xl">
+                        <h1 className="text-3xl font-semibold tracking-tight">
+                            Tienda
+                        </h1>
+                        <p className="mt-3 text-muted-foreground">
+                            Catálogo de productos. Selecciona producto y envía solicitud por WhatsApp.
+                        </p>
                     </div>
 
                     <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

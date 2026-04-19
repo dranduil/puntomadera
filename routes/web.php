@@ -22,8 +22,7 @@ Route::redirect('/carpintero-guayaquil', '/');
 Route::get('/contacto', [ContactPageController::class, 'show'])->name('contact.show');
 Route::get('/trabajos', [WorkController::class, 'index'])->name('works.index');
 Route::get('/tienda', [ShopController::class, 'index'])->name('shop.index');
-Route::get('/tienda/carrito', [ShopController::class, 'cart'])->name('shop.cart');
-Route::get('/tienda/{service:slug}', [ShopController::class, 'show'])->name('shop.show');
+Route::get('/tienda/{product:slug}', [ShopController::class, 'show'])->name('shop.show');
 Route::get('/servicios', [ServiceController::class, 'index'])->name('services.index');
 Route::get('/servicios/{service:slug}', [ServiceController::class, 'show'])->name('services.show');
 

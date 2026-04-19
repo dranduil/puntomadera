@@ -1,5 +1,5 @@
 import { Link } from '@inertiajs/react';
-import { Hammer, Menu } from 'lucide-react';
+import { ChevronDown, Hammer, Menu } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
     Sheet,
@@ -35,18 +35,20 @@ export function PublicHeader({ landing, isHome = false, whatsappHref }: Props) {
         whatsappHref ??
         buildWhatsAppHref(
             whatsappNumber,
-            'Hola, quiero comprar en punto-madera.',
+            'Hola, quiero cotizar con punto-madera.',
         );
 
-    const navItems = [
-        { label: 'Tienda', href: '/tienda', type: 'page' as const },
-        { label: 'Carrito', href: '/tienda/carrito', type: 'page' as const },
-        { label: 'Servicios', href: '/servicios', type: 'page' as const },
-        { label: 'Trabajos', href: '/trabajos', type: 'page' as const },
+    const shopItems = [
+        { label: 'Tienda', href: '/tienda' },
+    ];
+
+    const exploreItems = [
+        { label: 'Servicios', href: '/servicios' },
+        { label: 'Trabajos', href: '/trabajos' },
         { label: 'Agendar', href: sectionHref('booking') },
         { label: 'Proceso', href: sectionHref('proceso') },
         { label: 'FAQ', href: sectionHref('faq') },
-        { label: 'Contacto', href: '/contacto', type: 'page' as const },
+        { label: 'Contacto', href: '/contacto' },
     ];
 
     return (
@@ -69,25 +71,56 @@ export function PublicHeader({ landing, isHome = false, whatsappHref }: Props) {
                     >
                         Inicio
                     </Link>
-                    {navItems.map((item) =>
-                        item.type === 'page' ? (
-                            <Link
-                                key={item.href}
-                                href={item.href}
-                                className="text-muted-foreground hover:text-foreground"
-                            >
-                                {item.label}
-                            </Link>
-                        ) : (
-                            <a
-                                key={item.href}
-                                href={item.href}
-                                className="text-muted-foreground hover:text-foreground"
-                            >
-                                {item.label}
-                            </a>
-                        ),
-                    )}
+                    <div className="group relative">
+                        <button
+                            type="button"
+                            className="inline-flex items-center gap-1 text-muted-foreground hover:text-foreground"
+                        >
+                            Comprar
+                            <ChevronDown className="size-4" />
+                        </button>
+                        <div className="invisible absolute top-full left-0 z-50 mt-2 min-w-44 rounded-md border border-border/60 bg-background p-2 opacity-0 shadow-sm transition group-hover:visible group-hover:opacity-100">
+                            {shopItems.map((item) => (
+                                <Link
+                                    key={item.href}
+                                    href={item.href}
+                                    className="block rounded-sm px-2 py-1.5 text-muted-foreground hover:bg-muted/60 hover:text-foreground"
+                                >
+                                    {item.label}
+                                </Link>
+                            ))}
+                        </div>
+                    </div>
+                    <div className="group relative">
+                        <button
+                            type="button"
+                            className="inline-flex items-center gap-1 text-muted-foreground hover:text-foreground"
+                        >
+                            Navegar
+                            <ChevronDown className="size-4" />
+                        </button>
+                        <div className="invisible absolute top-full left-0 z-50 mt-2 min-w-52 rounded-md border border-border/60 bg-background p-2 opacity-0 shadow-sm transition group-hover:visible group-hover:opacity-100">
+                            {exploreItems.map((item) =>
+                                item.href.startsWith('/') ? (
+                                    <Link
+                                        key={item.href}
+                                        href={item.href}
+                                        className="block rounded-sm px-2 py-1.5 text-muted-foreground hover:bg-muted/60 hover:text-foreground"
+                                    >
+                                        {item.label}
+                                    </Link>
+                                ) : (
+                                    <a
+                                        key={item.href}
+                                        href={item.href}
+                                        className="block rounded-sm px-2 py-1.5 text-muted-foreground hover:bg-muted/60 hover:text-foreground"
+                                    >
+                                        {item.label}
+                                    </a>
+                                ),
+                            )}
+                        </div>
+                    </div>
                 </nav>
 
                 <div className="flex items-center gap-2">
@@ -113,31 +146,57 @@ export function PublicHeader({ landing, isHome = false, whatsappHref }: Props) {
                                     >
                                         <Link href="/">Inicio</Link>
                                     </Button>
-                                    {navItems.map((item) =>
-                                        item.type === 'page' ? (
-                                            <Button
-                                                key={item.href}
-                                                asChild
-                                                variant="ghost"
-                                                className="justify-start"
-                                            >
-                                                <Link href={item.href}>
-                                                    {item.label}
-                                                </Link>
-                                            </Button>
-                                        ) : (
-                                            <Button
-                                                key={item.href}
-                                                asChild
-                                                variant="ghost"
-                                                className="justify-start"
-                                            >
-                                                <a href={item.href}>
-                                                    {item.label}
-                                                </a>
-                                            </Button>
-                                        ),
-                                    )}
+                                    <details className="rounded-md border border-border/60 p-2">
+                                        <summary className="cursor-pointer list-none text-sm font-medium">
+                                            Comprar
+                                        </summary>
+                                        <div className="mt-2 grid gap-1">
+                                            {shopItems.map((item) => (
+                                                <Button
+                                                    key={item.href}
+                                                    asChild
+                                                    variant="ghost"
+                                                    className="justify-start"
+                                                >
+                                                    <Link href={item.href}>
+                                                        {item.label}
+                                                    </Link>
+                                                </Button>
+                                            ))}
+                                        </div>
+                                    </details>
+                                    <details className="rounded-md border border-border/60 p-2">
+                                        <summary className="cursor-pointer list-none text-sm font-medium">
+                                            Navegar
+                                        </summary>
+                                        <div className="mt-2 grid gap-1">
+                                            {exploreItems.map((item) =>
+                                                item.href.startsWith('/') ? (
+                                                    <Button
+                                                        key={item.href}
+                                                        asChild
+                                                        variant="ghost"
+                                                        className="justify-start"
+                                                    >
+                                                        <Link href={item.href}>
+                                                            {item.label}
+                                                        </Link>
+                                                    </Button>
+                                                ) : (
+                                                    <Button
+                                                        key={item.href}
+                                                        asChild
+                                                        variant="ghost"
+                                                        className="justify-start"
+                                                    >
+                                                        <a href={item.href}>
+                                                            {item.label}
+                                                        </a>
+                                                    </Button>
+                                                ),
+                                            )}
+                                        </div>
+                                    </details>
 
                                     <div className="mt-4 grid gap-2">
                                         <Button asChild>
@@ -166,7 +225,7 @@ export function PublicHeader({ landing, isHome = false, whatsappHref }: Props) {
                             target="_blank"
                             rel="noreferrer"
                         >
-                            Comprar por WhatsApp
+                            Cotizar por WhatsApp
                         </a>
                     </Button>
                     <Button asChild variant="outline">
