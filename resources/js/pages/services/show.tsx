@@ -41,7 +41,8 @@ export default function ServiceShow({ landing, service }: Props) {
     const [location, setLocation] = useState('');
     const [details, setDetails] = useState('');
 
-    const rawWhatsapp = landing.whatsapp_number?.trim();
+    const envWhatsapp = import.meta.env.VITE_WHATSAPP_NUMBER?.trim();
+    const rawWhatsapp = envWhatsapp || landing.whatsapp_number?.trim();
     const whatsappNumber = rawWhatsapp ? rawWhatsapp : '593000000000';
 
     const emailTo = landing.contact_email?.trim() || '';

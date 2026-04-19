@@ -1,0 +1,112 @@
+import { Head, Link } from '@inertiajs/react';
+import { ChevronRight, ShoppingCart } from 'lucide-react';
+import { PublicHeader } from '@/components/public-header';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+
+type Landing = {
+    whatsapp_number: string | null;
+};
+
+type Product = {
+    id: number;
+    name: string;
+    slug: string;
+    sku: string | null;
+    summary: string | null;
+    price_cents: number;
+    currency: string;
+    stock_qty: number;
+    image_path: string | null;
+    is_featured: boolean;
+};
+
+type Props = {
+    landing: Landing;
+    products: Product[];
+};
+
+function formatMoney(cents: number, currency = 'USD') {
+    return new Intl.NumberFormat('es-EC', {
+        style: 'currency',
+        currency,
+    }).format(cents / 100);
+}
+
+export default function ShopIndex({ landing, products }: Props) {
+    return (
+        <>
+            <Head title="Tienda" />
+
+            <div className="min-h-screen bg-background text-foreground">
+                <PublicHeader
+                    landing={{ whatsapp_number: landing.whatsapp_number }}
+                />
+
+                <main className="mx-auto max-w-6xl px-4 py-10 sm:py-14">
+                    <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+                        <div className="max-w-2xl">
+                            <h1 className="text-3xl font-semibold tracking-tight">
+                                Tienda
+                            </h1>
+                            <p className="mt-3 text-muted-foreground">
+                                Compra directa. Sin cotización.
+                            </p>
+                        </div>
+                        <Button asChild variant="outline">
+                            <Link href="/tienda/carrito">
+                                Ir al carrito
+                                <ShoppingCart className="size-4" />
+                            </Link>
+                        </Button>
+                    </div>
+
+                    <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                        {products.map((product) => (
+                            <Card key={product.id} className="overflow-hidden p-0">
+                                <div className="relative h-44 w-full bg-muted/30">
+                                    {product.image_path ? (
+                                        <img
+                                            src={product.image_path}
+                                            alt={product.name}
+                                            className="h-full w-full object-cover"
+                                            loading="lazy"
+                                        />
+                                    ) : null}
+                                </div>
+                                <div className="p-5">
+                                    <div className="text-lg font-semibold">
+                                        {product.name}
+                                    </div>
+                                    <div className="mt-1 text-sm text-muted-foreground">
+                                        SKU: {product.sku ?? product.slug}
+                                    </div>
+                                    <div className="mt-3 text-sm text-muted-foreground">
+                                        {product.summary ?? 'Producto disponible'}
+                                    </div>
+                                    <div className="mt-4 flex items-center justify-between">
+                                        <div className="text-xl font-semibold">
+                                            {formatMoney(
+                                                product.price_cents,
+                                                product.currency,
+                                            )}
+                                        </div>
+                                        <div className="text-xs text-muted-foreground">
+                                            Stock: {product.stock_qty}
+                                        </div>
+                                    </div>
+                                    <Button asChild className="mt-4 w-full">
+                                        <Link href={`/tienda/${product.slug}`}>
+                                            Ver producto
+                                            <ChevronRight className="size-4" />
+                                        </Link>
+                                    </Button>
+                                </div>
+                            </Card>
+                        ))}
+                    </div>
+                </main>
+            </div>
+        </>
+    );
+}

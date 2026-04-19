@@ -28,8 +28,10 @@ export default function ContactPage({ landing }: Props) {
     const [email, setEmail] = useState('');
     const [message, setMessage] = useState('');
 
-    const rawWhatsapp = landing.whatsapp_number?.trim();
+    const envWhatsapp = import.meta.env.VITE_WHATSAPP_NUMBER?.trim();
+    const rawWhatsapp = envWhatsapp || landing.whatsapp_number?.trim();
     const whatsappNumber = rawWhatsapp ? rawWhatsapp : '593000000000';
+    const displayWhatsapp = envWhatsapp || landing.whatsapp_number;
 
     const emailTo = landing.contact_email?.trim() || '';
 
@@ -87,10 +89,10 @@ export default function ContactPage({ landing }: Props) {
                                         <span>{landing.contact_email}</span>
                                     </div>
                                 )}
-                                {landing.whatsapp_number && (
+                                {displayWhatsapp && (
                                     <div className="flex items-center gap-2">
                                         <MessageCircle className="size-4" />
-                                        <span>{landing.whatsapp_number}</span>
+                                        <span>{displayWhatsapp}</span>
                                     </div>
                                 )}
                             </div>

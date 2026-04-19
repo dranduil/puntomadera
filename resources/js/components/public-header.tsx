@@ -28,16 +28,19 @@ export function PublicHeader({ landing, isHome = false, whatsappHref }: Props) {
     const appName = import.meta.env.VITE_APP_NAME || 'punto-madera';
     const sectionHref = (id: string) => (isHome ? `#${id}` : `/#${id}`);
 
-    const rawWhatsapp = landing?.whatsapp_number?.trim();
+    const envWhatsapp = import.meta.env.VITE_WHATSAPP_NUMBER?.trim();
+    const rawWhatsapp = envWhatsapp || landing?.whatsapp_number?.trim();
     const whatsappNumber = rawWhatsapp ? rawWhatsapp : '593000000000';
     const defaultWhatsappHref =
         whatsappHref ??
         buildWhatsAppHref(
             whatsappNumber,
-            'Hola, necesito una cotización de carpintería en Guayaquil.',
+            'Hola, quiero comprar en punto-madera.',
         );
 
     const navItems = [
+        { label: 'Tienda', href: '/tienda', type: 'page' as const },
+        { label: 'Carrito', href: '/tienda/carrito', type: 'page' as const },
         { label: 'Servicios', href: '/servicios', type: 'page' as const },
         { label: 'Trabajos', href: '/trabajos', type: 'page' as const },
         { label: 'Agendar', href: sectionHref('booking') },
@@ -163,7 +166,7 @@ export function PublicHeader({ landing, isHome = false, whatsappHref }: Props) {
                             target="_blank"
                             rel="noreferrer"
                         >
-                            Cotizar por WhatsApp
+                            Comprar por WhatsApp
                         </a>
                     </Button>
                     <Button asChild variant="outline">

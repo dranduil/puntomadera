@@ -13,6 +13,12 @@ class Service extends Model
         'description',
         'process_steps',
         'default_message',
+        'sku',
+        'price_cents',
+        'currency',
+        'stock_qty',
+        'image_path',
+        'is_featured',
         'is_published',
     ];
 
@@ -20,6 +26,9 @@ class Service extends Model
     {
         return [
             'process_steps' => 'array',
+            'price_cents' => 'integer',
+            'stock_qty' => 'integer',
+            'is_featured' => 'boolean',
             'is_published' => 'boolean',
         ];
     }

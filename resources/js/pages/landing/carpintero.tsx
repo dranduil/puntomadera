@@ -114,13 +114,15 @@ const faqs = [
 ];
 
 export default function CarpinteroLanding({ landing, bookingStatus }: Props) {
+    const appName = import.meta.env.VITE_APP_NAME || 'punto-madera';
     const areasServed = landing.areas_served ?? [
         'Guayaquil',
         'Samborondón',
         'Daule',
     ];
 
-    const rawWhatsapp = landing.whatsapp_number?.trim();
+    const envWhatsapp = import.meta.env.VITE_WHATSAPP_NUMBER?.trim();
+    const rawWhatsapp = envWhatsapp || landing.whatsapp_number?.trim();
     const whatsappNumber = (rawWhatsapp ? rawWhatsapp : '593000000000').replace(
         /[^0-9]/g,
         '',
@@ -374,7 +376,7 @@ export default function CarpinteroLanding({ landing, bookingStatus }: Props) {
                         </div>
                     </section>
 
-                    <section id="trabajos" className="py-16 sm:py-20">
+                    <section id="trabajos" className="hidden">
                         <div className="mx-auto max-w-6xl px-4">
                             <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
                                 <div className="max-w-2xl">
@@ -936,7 +938,7 @@ export default function CarpinteroLanding({ landing, bookingStatus }: Props) {
                                     <span className="inline-flex size-9 items-center justify-center rounded-md bg-primary text-primary-foreground">
                                         <Hammer className="size-4" />
                                     </span>
-                                    <span>Carpintería en Guayaquil</span>
+                                    <span>{appName}</span>
                                 </div>
                                 <p className="mt-4 max-w-md text-sm text-muted-foreground">
                                     Muebles a medida, closets empotrados, cocinas,
@@ -1049,8 +1051,8 @@ export default function CarpinteroLanding({ landing, bookingStatus }: Props) {
 
                         <div className="mt-10 flex flex-col gap-2 border-t border-border/60 pt-6 text-xs text-muted-foreground md:flex-row md:items-center md:justify-between">
                             <div>
-                                © {currentYear} Carpintería en Guayaquil. Todos
-                                los derechos reservados.
+                                © {currentYear} {appName}. Todos los derechos
+                                reservados.
                             </div>
                             <div>
                                 Ecuador · Muebles a medida · Closets · Puertas ·
