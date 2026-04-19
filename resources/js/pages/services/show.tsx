@@ -22,6 +22,7 @@ type Service = {
     description: string | null;
     process_steps: string[] | null;
     default_message: string | null;
+    image_path: string | null;
 };
 
 type Props = {
@@ -100,6 +101,17 @@ export default function ServiceShow({ landing, service }: Props) {
                             <h1 className="mt-2 text-3xl font-semibold tracking-tight">
                                 {service.name}
                             </h1>
+                            {service.image_path && (
+                                <Card className="mt-5 overflow-hidden p-0">
+                                    <div className="h-64 w-full bg-muted/30 sm:h-80">
+                                        <img
+                                            src={service.image_path}
+                                            alt={service.name}
+                                            className="h-full w-full object-cover"
+                                        />
+                                    </div>
+                                </Card>
+                            )}
                             {service.summary && (
                                 <p className="mt-3 text-muted-foreground">
                                     {service.summary}

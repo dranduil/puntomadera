@@ -13,6 +13,7 @@ class Service extends Model
         'description',
         'process_steps',
         'default_message',
+        'image_path',
         'is_published',
     ];
 

@@ -71,15 +71,12 @@ export function PublicHeader({ landing, isHome = false, whatsappHref }: Props) {
                     >
                         Inicio
                     </Link>
-                    <div className="group relative">
-                        <button
-                            type="button"
-                            className="inline-flex items-center gap-1 text-muted-foreground hover:text-foreground"
-                        >
+                    <details className="group relative">
+                        <summary className="inline-flex cursor-pointer list-none items-center gap-1 text-muted-foreground hover:text-foreground">
                             Comprar
                             <ChevronDown className="size-4" />
-                        </button>
-                        <div className="invisible absolute top-full left-0 z-50 mt-2 min-w-44 rounded-md border border-border/60 bg-background p-2 opacity-0 shadow-sm transition group-hover:visible group-hover:opacity-100">
+                        </summary>
+                        <div className="absolute top-full left-0 z-50 mt-2 min-w-44 rounded-md border border-border/60 bg-background p-2 shadow-sm">
                             {shopItems.map((item) => (
                                 <Link
                                     key={item.href}
@@ -90,16 +87,13 @@ export function PublicHeader({ landing, isHome = false, whatsappHref }: Props) {
                                 </Link>
                             ))}
                         </div>
-                    </div>
-                    <div className="group relative">
-                        <button
-                            type="button"
-                            className="inline-flex items-center gap-1 text-muted-foreground hover:text-foreground"
-                        >
+                    </details>
+                    <details className="group relative">
+                        <summary className="inline-flex cursor-pointer list-none items-center gap-1 text-muted-foreground hover:text-foreground">
                             Navegar
                             <ChevronDown className="size-4" />
-                        </button>
-                        <div className="invisible absolute top-full left-0 z-50 mt-2 min-w-52 rounded-md border border-border/60 bg-background p-2 opacity-0 shadow-sm transition group-hover:visible group-hover:opacity-100">
+                        </summary>
+                        <div className="absolute top-full left-0 z-50 mt-2 min-w-52 rounded-md border border-border/60 bg-background p-2 shadow-sm">
                             {exploreItems.map((item) =>
                                 item.href.startsWith('/') ? (
                                     <Link
@@ -120,7 +114,7 @@ export function PublicHeader({ landing, isHome = false, whatsappHref }: Props) {
                                 ),
                             )}
                         </div>
-                    </div>
+                    </details>
                 </nav>
 
                 <div className="flex items-center gap-2">

@@ -34,6 +34,7 @@ class DatabaseSeeder extends Seeder
                     'Fabricacion, instalacion y control final de calidad.',
                 ],
                 'default_message' => 'Hola, quiero cotizar servicio de carpintero a domicilio en Guayaquil. Comparto medidas, fotos y ubicacion.',
+                'image_path' => 'images/works/service06.jpg',
                 'is_published' => true,
             ],
             [
@@ -47,6 +48,7 @@ class DatabaseSeeder extends Seeder
                     'Fabricacion, entrega e instalacion en sitio.',
                 ],
                 'default_message' => 'Hola, deseo cotizar muebles a medida en Guayaquil. Tengo referencias, medidas y fotos del espacio.',
+                'image_path' => 'images/works/service01.jpg',
                 'is_published' => true,
             ],
             [
@@ -60,6 +62,7 @@ class DatabaseSeeder extends Seeder
                     'Fabricacion modular e instalacion con nivelacion y ajustes.',
                 ],
                 'default_message' => 'Hola, necesito cotizar closets o anaqueles de cocina en Guayaquil. Quiero opcion personalizada.',
+                'image_path' => 'images/works/service05.jpg',
                 'is_published' => true,
             ],
             [
@@ -73,6 +76,7 @@ class DatabaseSeeder extends Seeder
                     'Instalacion final y prueba de apertura, cierre y seguridad.',
                 ],
                 'default_message' => 'Hola, quiero cotizar instalacion o reparacion de puerta de madera en Guayaquil.',
+                'image_path' => 'images/works/service03.jpg',
                 'is_published' => true,
             ],
             [
@@ -86,6 +90,7 @@ class DatabaseSeeder extends Seeder
                     'Acabado final y recomendaciones de mantenimiento.',
                 ],
                 'default_message' => 'Hola, necesito reparar un mueble de madera en Guayaquil. Puedo enviar fotos y medidas.',
+                'image_path' => 'images/works/service07.jpg',
                 'is_published' => true,
             ],
             [
@@ -99,6 +104,7 @@ class DatabaseSeeder extends Seeder
                     'Ejecucion artesanal, control de detalle y entrega final.',
                 ],
                 'default_message' => 'Hola, quiero cotizar trabajo de ebanisteria fina en Guayaquil con acabado personalizado.',
+                'image_path' => 'images/works/service04.jpg',
                 'is_published' => true,
             ],
         ];

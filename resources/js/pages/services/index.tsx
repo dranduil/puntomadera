@@ -15,6 +15,7 @@ type Service = {
     summary: string | null;
     description: string | null;
     process_steps: string[] | null;
+    image_path: string | null;
 };
 
 type Props = {
@@ -45,7 +46,18 @@ export default function ServicesIndex({ landing, services }: Props) {
 
                     <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                         {services.map((service) => (
-                            <Card key={service.id} className="p-6">
+                            <Card key={service.id} className="overflow-hidden p-0">
+                                <div className="h-44 w-full bg-muted/30">
+                                    {service.image_path ? (
+                                        <img
+                                            src={service.image_path}
+                                            alt={service.name}
+                                            className="h-full w-full object-cover"
+                                            loading="lazy"
+                                        />
+                                    ) : null}
+                                </div>
+                                <div className="p-6">
                                 <div className="text-lg font-semibold">
                                     {service.name}
                                 </div>
@@ -64,6 +76,7 @@ export default function ServicesIndex({ landing, services }: Props) {
                                             <ChevronRight className="size-4" />
                                         </Link>
                                     </Button>
+                                </div>
                                 </div>
                             </Card>
                         ))}
