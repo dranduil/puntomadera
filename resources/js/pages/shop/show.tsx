@@ -16,8 +16,6 @@ type Product = {
     sku: string | null;
     summary: string | null;
     description: string | null;
-    price_cents: number;
-    currency: string;
     stock_qty: number;
     image_path: string | null;
 };
@@ -26,13 +24,6 @@ type Props = {
     landing: Landing;
     product: Product;
 };
-
-function formatMoney(cents: number, currency = 'USD') {
-    return new Intl.NumberFormat('es-EC', {
-        style: 'currency',
-        currency,
-    }).format(cents / 100);
-}
 
 function sanitizeWhatsapp(number: string) {
     return number.replace(/[^0-9]/g, '');
@@ -53,7 +44,6 @@ export default function ShopShow({ landing, product }: Props) {
             `Producto: ${product.name}`,
             product.sku ? `SKU: ${product.sku}` : null,
             `Cantidad: ${qty}`,
-            `Precio referencial: ${formatMoney(product.price_cents, product.currency)}`,
         ]
             .filter(Boolean)
             .join('\n');
@@ -99,16 +89,15 @@ export default function ShopShow({ landing, product }: Props) {
                             ) : null}
 
                             <div className="mt-6 rounded-md border border-border/60 p-4">
-                                <div className="flex items-center justify-between">
-                                    <div className="text-2xl font-semibold">
-                                        {formatMoney(
-                                            product.price_cents,
-                                            product.currency,
-                                        )}
-                                    </div>
-                                    <div className="text-sm text-muted-foreground">
-                                        Stock: {product.stock_qty}
-                                    </div>
+                                <div className="text-sm font-medium">
+                                    Próximamente
+                                </div>
+                                <p className="mt-1 text-sm text-muted-foreground">
+                                    Producto en etapa de lanzamiento. Solicita
+                                    cotización y disponibilidad por WhatsApp.
+                                </p>
+                                <div className="mt-3 text-sm text-muted-foreground">
+                                    Stock referencial: {product.stock_qty}
                                 </div>
                                 <div className="mt-4 flex items-center gap-3">
                                     <label htmlFor="qty" className="text-sm">
@@ -151,7 +140,7 @@ export default function ShopShow({ landing, product }: Props) {
                                 {[
                                     'Producto separado de servicios de carpintería.',
                                     'Solicitud por WhatsApp para confirmar detalles.',
-                                    'Entrega y tiempos confirmados al responder.',
+                                    'Precio final confirmado al responder.',
                                 ].map((line) => (
                                     <div key={line} className="flex items-start gap-2 text-sm">
                                         <Check className="mt-0.5 size-4 text-primary" />

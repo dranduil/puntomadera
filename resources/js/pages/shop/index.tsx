@@ -14,9 +14,6 @@ type Product = {
     slug: string;
     sku: string | null;
     summary: string | null;
-    price_cents: number;
-    currency: string;
-    stock_qty: number;
     image_path: string | null;
     is_featured: boolean;
 };
@@ -25,13 +22,6 @@ type Props = {
     landing: Landing;
     products: Product[];
 };
-
-function formatMoney(cents: number, currency = 'USD') {
-    return new Intl.NumberFormat('es-EC', {
-        style: 'currency',
-        currency,
-    }).format(cents / 100);
-}
 
 export default function ShopIndex({ landing, products }: Props) {
     return (
@@ -49,7 +39,8 @@ export default function ShopIndex({ landing, products }: Props) {
                             Tienda
                         </h1>
                         <p className="mt-3 text-muted-foreground">
-                            Catálogo de productos. Selecciona producto y envía solicitud por WhatsApp.
+                            Próximamente. Catálogo de productos para solicitud
+                            de cotización por WhatsApp.
                         </p>
                     </div>
 
@@ -76,20 +67,12 @@ export default function ShopIndex({ landing, products }: Props) {
                                     <div className="mt-3 text-sm text-muted-foreground">
                                         {product.summary ?? 'Producto disponible'}
                                     </div>
-                                    <div className="mt-4 flex items-center justify-between">
-                                        <div className="text-xl font-semibold">
-                                            {formatMoney(
-                                                product.price_cents,
-                                                product.currency,
-                                            )}
-                                        </div>
-                                        <div className="text-xs text-muted-foreground">
-                                            Stock: {product.stock_qty}
-                                        </div>
+                                    <div className="mt-4 inline-flex rounded-full border border-border/60 px-2 py-1 text-xs text-muted-foreground">
+                                        Próximamente
                                     </div>
                                     <Button asChild className="mt-4 w-full">
                                         <Link href={`/tienda/${product.slug}`}>
-                                            Ver producto
+                                            Solicitar cotización
                                             <ChevronRight className="size-4" />
                                         </Link>
                                     </Button>

@@ -19,7 +19,6 @@ class ShopController extends Controller
             ],
             'products' => Product::query()
                 ->where('is_published', true)
-                ->where('price_cents', '>', 0)
                 ->orderByDesc('is_featured')
                 ->orderBy('name')
                 ->get(),
@@ -30,7 +29,7 @@ class ShopController extends Controller
     {
         $landing = HomeLanding::query()->first();
 
-        abort_unless($product->is_published && $product->price_cents > 0, 404);
+        abort_unless($product->is_published, 404);
 
         return Inertia::render('shop/show', [
             'landing' => $landing?->toArray() ?? [
