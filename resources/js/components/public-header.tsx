@@ -25,6 +25,7 @@ function buildWhatsAppHref(number: string, message: string) {
 }
 
 export function PublicHeader({ landing, isHome = false, whatsappHref }: Props) {
+    const appName = import.meta.env.VITE_APP_NAME || 'punto-madera';
     const sectionHref = (id: string) => (isHome ? `#${id}` : `/#${id}`);
 
     const rawWhatsapp = landing?.whatsapp_number?.trim();
@@ -55,7 +56,7 @@ export function PublicHeader({ landing, isHome = false, whatsappHref }: Props) {
                     <span className="inline-flex size-9 items-center justify-center rounded-md bg-primary text-primary-foreground">
                         <Hammer className="size-4" />
                     </span>
-                    <span>Carpintería</span>
+                    <span>{appName}</span>
                 </Link>
 
                 <nav className="hidden items-center gap-6 text-sm md:flex">
@@ -99,9 +100,7 @@ export function PublicHeader({ landing, isHome = false, whatsappHref }: Props) {
                                     Navigation
                                 </SheetTitle>
                                 <SheetHeader className="text-left">
-                                    <div className="font-semibold">
-                                        Carpintería
-                                    </div>
+                                    <div className="font-semibold">{appName}</div>
                                 </SheetHeader>
                                 <div className="mt-6 grid gap-2 text-sm">
                                     <Button
