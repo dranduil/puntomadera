@@ -16,7 +16,6 @@ class LocalSeoPageController extends Controller
         $page = $this->pages()[$slug];
         $landingData = $landing?->toArray() ?? [
             'whatsapp_number' => null,
-            'contact_email' => null,
             'contact_phone' => null,
             'areas_served' => null,
         ];
@@ -45,7 +44,6 @@ class LocalSeoPageController extends Controller
                 'name' => str_replace('-', ' ', config('app.name', 'punto madera')),
                 'url' => $siteUrl,
                 'telephone' => $landingData['contact_phone'] ?? $landingData['whatsapp_number'] ?? null,
-                'email' => $landingData['contact_email'] ?? null,
                 'address' => [
                     '@type' => 'PostalAddress',
                     'addressLocality' => 'Guayaquil',

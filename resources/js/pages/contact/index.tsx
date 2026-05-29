@@ -1,5 +1,5 @@
 import { Head } from '@inertiajs/react';
-import { Mail, MessageCircle, Phone } from 'lucide-react';
+import { MessageCircle, Phone } from 'lucide-react';
 import { useState } from 'react';
 import { PublicHeader } from '@/components/public-header';
 import { Button } from '@/components/ui/button';
@@ -9,7 +9,6 @@ import { Label } from '@/components/ui/label';
 
 type Landing = {
     whatsapp_number: string | null;
-    contact_email: string | null;
     contact_phone: string | null;
 };
 
@@ -25,7 +24,6 @@ function buildWhatsAppHref(number: string, message: string) {
 export default function ContactPage({ landing }: Props) {
     const [name, setName] = useState('');
     const [phone, setPhone] = useState('');
-    const [email, setEmail] = useState('');
     const [message, setMessage] = useState('');
 
     const envWhatsapp = import.meta.env.VITE_WHATSAPP_NUMBER?.trim();
@@ -33,26 +31,17 @@ export default function ContactPage({ landing }: Props) {
     const whatsappNumber = rawWhatsapp ? rawWhatsapp : '593000000000';
     const displayWhatsapp = envWhatsapp || landing.whatsapp_number;
 
-    const emailTo = landing.contact_email?.trim() || '';
-
     const composedMessage = [
         'Hola, necesito una cotización de carpintería en Guayaquil.',
         '',
         name ? `Nombre: ${name}` : null,
         phone ? `Teléfono: ${phone}` : null,
-        email ? `Email: ${email}` : null,
         message ? `Mensaje: ${message}` : null,
     ]
         .filter(Boolean)
         .join('\n');
 
     const whatsappHref = buildWhatsAppHref(whatsappNumber, composedMessage);
-
-    const mailtoHref = emailTo
-        ? `mailto:${emailTo}?subject=${encodeURIComponent(
-              'Consulta de carpintería',
-          )}&body=${encodeURIComponent(composedMessage)}`
-        : null;
 
     return (
         <>
@@ -74,9 +63,9 @@ export default function ContactPage({ landing }: Props) {
                                 Contacto
                             </h1>
                             <p className="mt-4 text-base leading-7 text-muted-foreground">
-                                Cuéntanos qué espacio quieres transformar.
-                                Preparamos un mensaje claro para coordinar por
-                                WhatsApp o email.
+                                Cuéntanos qué espacio quieres transformar y
+                                preparamos un mensaje claro para coordinar todo
+                                por WhatsApp.
                             </p>
 
                             <div className="mt-6 grid gap-3 text-sm text-muted-foreground">
@@ -84,12 +73,6 @@ export default function ContactPage({ landing }: Props) {
                                     <div className="flex items-center gap-2">
                                         <Phone className="size-4" />
                                         <span>{landing.contact_phone}</span>
-                                    </div>
-                                )}
-                                {landing.contact_email && (
-                                    <div className="flex items-center gap-2">
-                                        <Mail className="size-4" />
-                                        <span>{landing.contact_email}</span>
                                     </div>
                                 )}
                                 {displayWhatsapp && (
@@ -130,21 +113,6 @@ export default function ContactPage({ landing }: Props) {
                                 </div>
 
                                 <div className="grid gap-2">
-                                    <Label htmlFor="email">
-                                        Email (opcional)
-                                    </Label>
-                                    <Input
-                                        id="email"
-                                        type="email"
-                                        value={email}
-                                        onChange={(e) =>
-                                            setEmail(e.target.value)
-                                        }
-                                        placeholder="email@example.com"
-                                    />
-                                </div>
-
-                                <div className="grid gap-2">
                                     <Label htmlFor="message">Mensaje</Label>
                                     <textarea
                                         id="message"
@@ -158,7 +126,7 @@ export default function ContactPage({ landing }: Props) {
                                 </div>
                             </div>
 
-                            <div className="mt-6 grid gap-2 sm:grid-cols-2">
+                            <div className="mt-6">
                                 <Button asChild className="w-full">
                                     <a
                                         href={whatsappHref}
@@ -168,23 +136,6 @@ export default function ContactPage({ landing }: Props) {
                                         Abrir WhatsApp
                                     </a>
                                 </Button>
-                                {mailtoHref ? (
-                                    <Button
-                                        asChild
-                                        variant="outline"
-                                        className="w-full"
-                                    >
-                                        <a href={mailtoHref}>Enviar Email</a>
-                                    </Button>
-                                ) : (
-                                    <Button
-                                        variant="outline"
-                                        className="w-full"
-                                        disabled
-                                    >
-                                        Email no configurado
-                                    </Button>
-                                )}
                             </div>
 
                             <div className="mt-6 rounded-md border border-border/70 bg-secondary/45 p-3 text-sm whitespace-pre-wrap">

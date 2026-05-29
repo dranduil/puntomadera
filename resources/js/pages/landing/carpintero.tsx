@@ -1,10 +1,9 @@
-import { Form, Head } from '@inertiajs/react';
+import { Head } from '@inertiajs/react';
 import {
     Check,
     ChevronRight,
     Hammer,
     Home,
-    Mail,
     MapPin,
     MessageCircle,
     Phone,
@@ -14,7 +13,7 @@ import {
     Timer,
     Wrench,
 } from 'lucide-react';
-import InputError from '@/components/input-error';
+import { useMemo, useState } from 'react';
 import { PublicHeader } from '@/components/public-header';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -22,7 +21,6 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
-import { store as storeBooking } from '@/routes/bookings';
 
 const images = {
     hero: 'images/guayaquil.jpg',
@@ -45,14 +43,12 @@ type Landing = {
     seo_title: string | null;
     seo_description: string | null;
     whatsapp_number: string | null;
-    contact_email: string | null;
     contact_phone: string | null;
     areas_served: string[] | null;
 };
 
 type Props = {
     landing: Landing;
-    bookingStatus?: string | null;
 };
 
 const services = [
@@ -113,7 +109,7 @@ const faqs = [
     },
 ];
 
-export default function CarpinteroLanding({ landing, bookingStatus }: Props) {
+export default function CarpinteroLanding({ landing }: Props) {
     const appName = import.meta.env.VITE_APP_NAME || 'punto madera';
     const siteUrl = import.meta.env.VITE_APP_URL || 'https://puntomadera.ec';
     const canonicalUrl = `${siteUrl.replace(/\/$/, '')}/`;
@@ -140,6 +136,41 @@ export default function CarpinteroLanding({ landing, bookingStatus }: Props) {
         landing.hero_subtitle ??
         'Diseñamos, fabricamos e instalamos carpintería para tu hogar o negocio. Cotización rápida por WhatsApp y trabajo prolijo.';
     const currentYear = new Date().getFullYear();
+    const [bookingName, setBookingName] = useState('');
+    const [bookingPhone, setBookingPhone] = useState('');
+    const [bookingService, setBookingService] = useState('Muebles a medida');
+    const [bookingPreferredDate, setBookingPreferredDate] = useState('');
+    const [bookingPreferredTime, setBookingPreferredTime] = useState('');
+    const [bookingMessage, setBookingMessage] = useState('');
+
+    const bookingWhatsappHref = useMemo(() => {
+        const message = [
+            'Hola, quiero agendar una cotización de carpintería en Guayaquil.',
+            '',
+            bookingName ? `Nombre: ${bookingName}` : null,
+            bookingPhone ? `Teléfono / WhatsApp: ${bookingPhone}` : null,
+            bookingService ? `Servicio: ${bookingService}` : null,
+            bookingPreferredDate
+                ? `Fecha preferida: ${bookingPreferredDate}`
+                : null,
+            bookingPreferredTime
+                ? `Hora preferida: ${bookingPreferredTime}`
+                : null,
+            bookingMessage ? `Detalles: ${bookingMessage}` : null,
+        ]
+            .filter(Boolean)
+            .join('\n');
+
+        return `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+    }, [
+        bookingMessage,
+        bookingName,
+        bookingPhone,
+        bookingPreferredDate,
+        bookingPreferredTime,
+        bookingService,
+        whatsappNumber,
+    ]);
 
     const businessSchema = {
         '@context': 'https://schema.org',
@@ -541,167 +572,134 @@ export default function CarpinteroLanding({ landing, bookingStatus }: Props) {
                                 </div>
 
                                 <Card className="p-6 sm:p-8">
-                                    {bookingStatus && (
-                                        <div className="mb-6 rounded-md border border-border/60 bg-muted/20 p-3 text-sm">
-                                            {bookingStatus}
+                                    <div className="space-y-4">
+                                        <div className="grid gap-2">
+                                            <Label htmlFor="booking_name">
+                                                Nombre
+                                            </Label>
+                                            <Input
+                                                id="booking_name"
+                                                value={bookingName}
+                                                onChange={(event) =>
+                                                    setBookingName(
+                                                        event.target.value,
+                                                    )
+                                                }
+                                                placeholder="Tu nombre"
+                                            />
                                         </div>
-                                    )}
 
-                                    <Form
-                                        {...storeBooking.form()}
-                                        resetOnSuccess={[
-                                            'name',
-                                            'email',
-                                            'phone',
-                                            'service',
-                                            'preferred_date',
-                                            'preferred_time',
-                                            'message',
-                                        ]}
-                                        className="space-y-4"
-                                    >
-                                        {({ processing, errors }) => (
-                                            <>
-                                                <div className="grid gap-2">
-                                                    <Label htmlFor="booking_name">
-                                                        Nombre
-                                                    </Label>
-                                                    <Input
-                                                        id="booking_name"
-                                                        name="name"
-                                                        required
-                                                        placeholder="Tu nombre"
-                                                    />
-                                                    <InputError
-                                                        message={errors.name}
-                                                    />
-                                                </div>
+                                        <div className="grid gap-2">
+                                            <Label htmlFor="booking_phone">
+                                                Teléfono / WhatsApp
+                                            </Label>
+                                            <Input
+                                                id="booking_phone"
+                                                value={bookingPhone}
+                                                onChange={(event) =>
+                                                    setBookingPhone(
+                                                        event.target.value,
+                                                    )
+                                                }
+                                                placeholder="+593 ..."
+                                            />
+                                        </div>
 
-                                                <div className="grid gap-2">
-                                                    <Label htmlFor="booking_phone">
-                                                        Teléfono / WhatsApp
-                                                    </Label>
-                                                    <Input
-                                                        id="booking_phone"
-                                                        name="phone"
-                                                        required
-                                                        placeholder="+593 ..."
-                                                    />
-                                                    <InputError
-                                                        message={errors.phone}
-                                                    />
-                                                </div>
+                                        <div className="grid gap-2">
+                                            <Label htmlFor="booking_service">
+                                                Servicio
+                                            </Label>
+                                            <select
+                                                id="booking_service"
+                                                value={bookingService}
+                                                onChange={(event) =>
+                                                    setBookingService(
+                                                        event.target.value,
+                                                    )
+                                                }
+                                                className="h-11 w-full rounded-md border border-input bg-card px-3.5 text-sm shadow-xs outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/30"
+                                            >
+                                                <option value="Muebles a medida">
+                                                    Muebles a medida
+                                                </option>
+                                                <option value="Cocinas y anaqueles">
+                                                    Cocinas y anaqueles
+                                                </option>
+                                                <option value="Closets empotrados">
+                                                    Closets empotrados
+                                                </option>
+                                                <option value="Puertas e instalación">
+                                                    Puertas e instalación
+                                                </option>
+                                                <option value="Reparación de muebles">
+                                                    Reparación de muebles
+                                                </option>
+                                                <option value="Ebanistería y detalles">
+                                                    Ebanistería y detalles
+                                                </option>
+                                            </select>
+                                        </div>
 
-                                                <div className="grid gap-2">
-                                                    <Label htmlFor="booking_email">
-                                                        Email (opcional)
-                                                    </Label>
-                                                    <Input
-                                                        id="booking_email"
-                                                        name="email"
-                                                        type="email"
-                                                        placeholder="email@example.com"
-                                                    />
-                                                    <InputError
-                                                        message={errors.email}
-                                                    />
-                                                </div>
+                                        <div className="grid gap-4 sm:grid-cols-2">
+                                            <div className="grid gap-2">
+                                                <Label htmlFor="booking_preferred_date">
+                                                    Fecha preferida
+                                                </Label>
+                                                <Input
+                                                    id="booking_preferred_date"
+                                                    type="date"
+                                                    value={bookingPreferredDate}
+                                                    onChange={(event) =>
+                                                        setBookingPreferredDate(
+                                                            event.target.value,
+                                                        )
+                                                    }
+                                                />
+                                            </div>
+                                            <div className="grid gap-2">
+                                                <Label htmlFor="booking_preferred_time">
+                                                    Hora preferida
+                                                </Label>
+                                                <Input
+                                                    id="booking_preferred_time"
+                                                    value={bookingPreferredTime}
+                                                    onChange={(event) =>
+                                                        setBookingPreferredTime(
+                                                            event.target.value,
+                                                        )
+                                                    }
+                                                    placeholder="Mañana / Tarde"
+                                                />
+                                            </div>
+                                        </div>
 
-                                                <div className="grid gap-2">
-                                                    <Label htmlFor="booking_service">
-                                                        Servicio
-                                                    </Label>
-                                                    <select
-                                                        id="booking_service"
-                                                        name="service"
-                                                        defaultValue="muebles-a-medida"
-                                                        className="h-11 w-full rounded-md border border-input bg-card px-3.5 text-sm shadow-xs outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/30"
-                                                    >
-                                                        <option value="muebles-a-medida">
-                                                            Muebles a medida
-                                                        </option>
-                                                        <option value="cocinas-anaqueles">
-                                                            Cocinas y anaqueles
-                                                        </option>
-                                                        <option value="closets">
-                                                            Closets empotrados
-                                                        </option>
-                                                        <option value="puertas">
-                                                            Puertas e
-                                                            instalación
-                                                        </option>
-                                                        <option value="reparacion">
-                                                            Reparación de
-                                                            muebles
-                                                        </option>
-                                                        <option value="ebanisteria">
-                                                            Ebanistería y
-                                                            detalles
-                                                        </option>
-                                                    </select>
-                                                    <InputError
-                                                        message={errors.service}
-                                                    />
-                                                </div>
+                                        <div className="grid gap-2">
+                                            <Label htmlFor="booking_message">
+                                                Detalles (opcional)
+                                            </Label>
+                                            <textarea
+                                                id="booking_message"
+                                                value={bookingMessage}
+                                                onChange={(event) =>
+                                                    setBookingMessage(
+                                                        event.target.value,
+                                                    )
+                                                }
+                                                className="min-h-28 w-full rounded-md border border-input bg-card px-3.5 py-2.5 text-sm shadow-xs outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/30"
+                                                placeholder="Cuéntanos qué necesitas, medidas, fotos o referencias..."
+                                            />
+                                        </div>
 
-                                                <div className="grid gap-4 sm:grid-cols-2">
-                                                    <div className="grid gap-2">
-                                                        <Label htmlFor="booking_preferred_date">
-                                                            Fecha preferida
-                                                        </Label>
-                                                        <Input
-                                                            id="booking_preferred_date"
-                                                            name="preferred_date"
-                                                            type="date"
-                                                        />
-                                                        <InputError
-                                                            message={
-                                                                errors.preferred_date
-                                                            }
-                                                        />
-                                                    </div>
-                                                    <div className="grid gap-2">
-                                                        <Label htmlFor="booking_preferred_time">
-                                                            Hora preferida
-                                                        </Label>
-                                                        <Input
-                                                            id="booking_preferred_time"
-                                                            name="preferred_time"
-                                                            placeholder="Mañana / Tarde"
-                                                        />
-                                                        <InputError
-                                                            message={
-                                                                errors.preferred_time
-                                                            }
-                                                        />
-                                                    </div>
-                                                </div>
-
-                                                <div className="grid gap-2">
-                                                    <Label htmlFor="booking_message">
-                                                        Detalles (opcional)
-                                                    </Label>
-                                                    <textarea
-                                                        id="booking_message"
-                                                        name="message"
-                                                        className="min-h-28 w-full rounded-md border border-input bg-card px-3.5 py-2.5 text-sm shadow-xs outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/30"
-                                                        placeholder="Cuéntanos qué necesitas, medidas, fotos o referencias..."
-                                                    />
-                                                    <InputError
-                                                        message={errors.message}
-                                                    />
-                                                </div>
-
-                                                <Button
-                                                    type="submit"
-                                                    className="w-full"
-                                                    disabled={processing}
-                                                >
-                                                    Enviar solicitud
-                                                </Button>
-                                            </>
-                                        )}
-                                    </Form>
+                                        <Button asChild className="w-full">
+                                            <a
+                                                href={bookingWhatsappHref}
+                                                target="_blank"
+                                                rel="noreferrer"
+                                            >
+                                                Enviar por WhatsApp
+                                            </a>
+                                        </Button>
+                                    </div>
                                 </Card>
                             </div>
                         </div>
@@ -837,11 +835,6 @@ export default function CarpinteroLanding({ landing, bookingStatus }: Props) {
                                             <div>
                                                 Teléfono:{' '}
                                                 {landing.contact_phone}
-                                            </div>
-                                        )}
-                                        {landing.contact_email && (
-                                            <div>
-                                                Email: {landing.contact_email}
                                             </div>
                                         )}
                                     </div>
@@ -1055,12 +1048,6 @@ export default function CarpinteroLanding({ landing, bookingStatus }: Props) {
                                         <div className="flex items-center gap-2">
                                             <Phone className="size-4" />
                                             <span>{landing.contact_phone}</span>
-                                        </div>
-                                    )}
-                                    {landing.contact_email && (
-                                        <div className="flex items-center gap-2">
-                                            <Mail className="size-4" />
-                                            <span>{landing.contact_email}</span>
                                         </div>
                                     )}
                                     <div className="flex items-center gap-2">

@@ -1,5 +1,5 @@
 import { Head } from '@inertiajs/react';
-import { Mail, MessageCircle } from 'lucide-react';
+import { MessageCircle } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { PublicHeader } from '@/components/public-header';
 import { Button } from '@/components/ui/button';
@@ -10,7 +10,6 @@ import { Separator } from '@/components/ui/separator';
 
 type Landing = {
     whatsapp_number: string | null;
-    contact_email: string | null;
     contact_phone: string | null;
 };
 
@@ -38,15 +37,12 @@ function buildWhatsAppHref(number: string, message: string) {
 export default function ServiceShow({ landing, service }: Props) {
     const [name, setName] = useState('');
     const [phone, setPhone] = useState('');
-    const [email, setEmail] = useState('');
     const [location, setLocation] = useState('');
     const [details, setDetails] = useState('');
 
     const envWhatsapp = import.meta.env.VITE_WHATSAPP_NUMBER?.trim();
     const rawWhatsapp = envWhatsapp || landing.whatsapp_number?.trim();
     const whatsappNumber = rawWhatsapp ? rawWhatsapp : '593000000000';
-
-    const emailTo = landing.contact_email?.trim() || '';
 
     const composedMessage = useMemo(() => {
         const header =
@@ -58,29 +54,14 @@ export default function ServiceShow({ landing, service }: Props) {
             '',
             name ? `Nombre: ${name}` : null,
             phone ? `Teléfono: ${phone}` : null,
-            email ? `Email: ${email}` : null,
             location ? `Ubicación: ${location}` : null,
             details ? `Detalles: ${details}` : null,
         ]
             .filter(Boolean)
             .join('\n');
-    }, [
-        details,
-        email,
-        location,
-        name,
-        phone,
-        service.default_message,
-        service.name,
-    ]);
+    }, [details, location, name, phone, service.default_message, service.name]);
 
     const whatsappHref = buildWhatsAppHref(whatsappNumber, composedMessage);
-
-    const mailtoHref = emailTo
-        ? `mailto:${emailTo}?subject=${encodeURIComponent(
-              `Servicio: ${service.name}`,
-          )}&body=${encodeURIComponent(composedMessage)}`
-        : null;
 
     return (
         <>
@@ -181,21 +162,6 @@ export default function ServiceShow({ landing, service }: Props) {
                                 </div>
 
                                 <div className="grid gap-2">
-                                    <Label htmlFor="email">
-                                        Email (opcional)
-                                    </Label>
-                                    <Input
-                                        id="email"
-                                        type="email"
-                                        value={email}
-                                        onChange={(e) =>
-                                            setEmail(e.target.value)
-                                        }
-                                        placeholder="email@example.com"
-                                    />
-                                </div>
-
-                                <div className="grid gap-2">
                                     <Label htmlFor="location">Ubicación</Label>
                                     <Input
                                         id="location"
@@ -221,7 +187,7 @@ export default function ServiceShow({ landing, service }: Props) {
                                 </div>
                             </div>
 
-                            <div className="mt-6 grid gap-2 sm:grid-cols-2">
+                            <div className="mt-6">
                                 <Button asChild className="w-full">
                                     <a
                                         href={whatsappHref}
@@ -232,26 +198,6 @@ export default function ServiceShow({ landing, service }: Props) {
                                         WhatsApp
                                     </a>
                                 </Button>
-                                {mailtoHref ? (
-                                    <Button
-                                        asChild
-                                        variant="outline"
-                                        className="w-full"
-                                    >
-                                        <a href={mailtoHref}>
-                                            <Mail className="size-4" />
-                                            Email
-                                        </a>
-                                    </Button>
-                                ) : (
-                                    <Button
-                                        variant="outline"
-                                        className="w-full"
-                                        disabled
-                                    >
-                                        Email no configurado
-                                    </Button>
-                                )}
                             </div>
 
                             <div className="mt-6 rounded-md border border-border/70 bg-secondary/45 p-3 text-sm whitespace-pre-wrap">
