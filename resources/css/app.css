@@ -9,7 +9,7 @@
 
 @theme {
     --font-sans:
-        'Instrument Sans', ui-sans-serif, system-ui, sans-serif,
+        'Poppins', 'Inter', 'Montserrat', Arial, sans-serif,
         'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
         'Noto Color Emoji';
 
@@ -62,39 +62,51 @@
 }
 
 :root {
-    --background: oklch(0.982 0.01 85);
-    --foreground: oklch(0.24 0.02 55);
-    --card: oklch(0.992 0.006 85);
-    --card-foreground: oklch(0.24 0.02 55);
-    --popover: oklch(0.995 0.005 85);
-    --popover-foreground: oklch(0.24 0.02 55);
-    --primary: oklch(0.45 0.11 55);
-    --primary-foreground: oklch(0.985 0.008 85);
-    --secondary: oklch(0.93 0.018 75);
-    --secondary-foreground: oklch(0.3 0.03 55);
-    --muted: oklch(0.95 0.012 80);
-    --muted-foreground: oklch(0.5 0.03 60);
-    --accent: oklch(0.84 0.08 72);
-    --accent-foreground: oklch(0.24 0.02 55);
+    --color-wood-deep: #3b2c20;
+    --color-walnut: #8b6f4e;
+    --color-sand: #cdbaa2;
+    --color-linen: #f2ede6;
+    --color-ivory: #faf8f5;
+    --color-text: #2a211a;
+    --color-text-muted: #8a7b6c;
+    --color-border: #e4d8ca;
+    --color-success-bg: #eaf4ec;
+    --color-warning-bg: #fff3da;
+    --color-error-bg: #fdeaea;
+
+    --background: #faf8f5;
+    --foreground: #2a211a;
+    --card: #faf8f5;
+    --card-foreground: #2a211a;
+    --popover: #faf8f5;
+    --popover-foreground: #2a211a;
+    --primary: #3b2c20;
+    --primary-foreground: #faf8f5;
+    --secondary: #f2ede6;
+    --secondary-foreground: #3b2c20;
+    --muted: #f2ede6;
+    --muted-foreground: #8a7b6c;
+    --accent: #cdb59a;
+    --accent-foreground: #3b2c20;
     --destructive: oklch(0.577 0.245 27.325);
     --destructive-foreground: oklch(0.98 0.01 85);
-    --border: oklch(0.88 0.018 75);
-    --input: oklch(0.9 0.016 75);
-    --ring: oklch(0.58 0.09 58);
-    --chart-1: oklch(0.5 0.11 55);
-    --chart-2: oklch(0.62 0.1 90);
-    --chart-3: oklch(0.4 0.07 35);
-    --chart-4: oklch(0.68 0.12 120);
-    --chart-5: oklch(0.57 0.13 25);
-    --radius: 0.625rem;
-    --sidebar: oklch(0.958 0.012 80);
-    --sidebar-foreground: oklch(0.26 0.025 55);
-    --sidebar-primary: oklch(0.45 0.11 55);
-    --sidebar-primary-foreground: oklch(0.985 0.008 85);
-    --sidebar-accent: oklch(0.9 0.02 75);
-    --sidebar-accent-foreground: oklch(0.26 0.025 55);
-    --sidebar-border: oklch(0.84 0.02 75);
-    --sidebar-ring: oklch(0.58 0.09 58);
+    --border: #e4d8ca;
+    --input: #e4d8ca;
+    --ring: #8b6f4e;
+    --chart-1: #3b2c20;
+    --chart-2: #8b6f4e;
+    --chart-3: #cdb59a;
+    --chart-4: #7b8a68;
+    --chart-5: #9a6b58;
+    --radius: 0.5rem;
+    --sidebar: #f2ede6;
+    --sidebar-foreground: #2a211a;
+    --sidebar-primary: #3b2c20;
+    --sidebar-primary-foreground: #faf8f5;
+    --sidebar-accent: #e4d8ca;
+    --sidebar-accent-foreground: #3b2c20;
+    --sidebar-border: #d8c8b8;
+    --sidebar-ring: #8b6f4e;
 }
 
 .dark {
@@ -139,5 +151,20 @@
 
     body {
         @apply bg-background text-foreground;
+        font-feature-settings:
+            'rlig' 1,
+            'calt' 1;
+    }
+
+    h1,
+    h2,
+    h3 {
+        @apply text-primary;
+        letter-spacing: 0;
+    }
+
+    ::selection {
+        background: var(--color-sand);
+        color: var(--color-wood-deep);
     }
 }

@@ -30,7 +30,7 @@ const images = {
     kitchen: 'images/works/service01.jpg',
     closet: 'images/works/service05.jpg',
     doors: 'images/works/service03.jpg',
-    parallax: 'images/works/service06.jpg'
+    parallax: 'images/works/service06.jpg',
 };
 
 const defaultSeo = {
@@ -114,7 +114,7 @@ const faqs = [
 ];
 
 export default function CarpinteroLanding({ landing, bookingStatus }: Props) {
-    const appName = import.meta.env.VITE_APP_NAME || 'punto-madera';
+    const appName = import.meta.env.VITE_APP_NAME || 'punto madera';
     const siteUrl = import.meta.env.VITE_APP_URL || 'https://puntomadera.ec';
     const canonicalUrl = `${siteUrl.replace(/\/$/, '')}/`;
     const areasServed = landing.areas_served ?? [
@@ -222,18 +222,9 @@ export default function CarpinteroLanding({ landing, bookingStatus }: Props) {
                             className="absolute inset-0 bg-gradient-to-b from-background/40 via-background/70 to-background"
                             aria-hidden="true"
                         />
-                        <div
-                            className="absolute -top-32 right-[-8rem] h-72 w-72 rounded-full bg-primary/20 blur-3xl"
-                            aria-hidden="true"
-                        />
-                        <div
-                            className="absolute -bottom-40 left-[-10rem] h-80 w-80 rounded-full bg-muted-foreground/15 blur-3xl"
-                            aria-hidden="true"
-                        />
-
                         <div className="relative mx-auto max-w-6xl px-4 py-16 sm:py-20 lg:py-24">
                             <div className="max-w-2xl">
-                                <div className="inline-flex items-center gap-2 rounded-full border border-border/70 bg-background/70 px-3 py-1 text-xs text-muted-foreground backdrop-blur">
+                                <div className="inline-flex items-center gap-2 rounded-full border border-border/70 bg-background/80 px-3 py-1 text-xs text-muted-foreground backdrop-blur">
                                     <MapPin className="size-3.5" />
                                     Guayaquil, Ecuador · Servicio a domicilio
                                 </div>
@@ -349,7 +340,7 @@ export default function CarpinteroLanding({ landing, bookingStatus }: Props) {
                                 ))}
                             </div>
 
-                            <div className="mt-10 grid gap-6 rounded-2xl border border-border/70 bg-gradient-to-br from-background to-accent/20 p-6 sm:grid-cols-2 sm:p-8">
+                            <div className="mt-10 grid gap-6 rounded-lg border border-border/70 bg-secondary/55 p-6 sm:grid-cols-2 sm:p-8">
                                 <div>
                                     <h3 className="text-xl font-semibold">
                                         Zonas atendidas
@@ -385,7 +376,7 @@ export default function CarpinteroLanding({ landing, bookingStatus }: Props) {
                                     ].map((item) => (
                                         <div
                                             key={item}
-                                            className="flex items-start gap-3 rounded-xl border border-border/70 bg-background/60 p-4"
+                                            className="flex items-start gap-3 rounded-lg border border-border/70 bg-background/70 p-4"
                                         >
                                             <Check className="mt-0.5 size-4 text-primary" />
                                             <div className="text-sm">
@@ -419,7 +410,7 @@ export default function CarpinteroLanding({ landing, bookingStatus }: Props) {
                                 </Button>
                             </div>
 
-                            <div className="mt-10 grid gap-4 md:grid-cols-12 md:auto-rows-[240px]">
+                            <div className="mt-10 grid gap-4 md:auto-rows-[240px] md:grid-cols-12">
                                 {[
                                     {
                                         title: 'Cocina con anaqueles',
@@ -624,7 +615,7 @@ export default function CarpinteroLanding({ landing, bookingStatus }: Props) {
                                                         id="booking_service"
                                                         name="service"
                                                         defaultValue="muebles-a-medida"
-                                                        className="h-9 w-full rounded-md border border-input bg-background px-3 text-sm shadow-xs outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50"
+                                                        className="h-11 w-full rounded-md border border-input bg-card px-3.5 text-sm shadow-xs outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/30"
                                                     >
                                                         <option value="muebles-a-medida">
                                                             Muebles a medida
@@ -693,7 +684,7 @@ export default function CarpinteroLanding({ landing, bookingStatus }: Props) {
                                                     <textarea
                                                         id="booking_message"
                                                         name="message"
-                                                        className="min-h-28 w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-xs outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50"
+                                                        className="min-h-28 w-full rounded-md border border-input bg-card px-3.5 py-2.5 text-sm shadow-xs outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/30"
                                                         placeholder="Cuéntanos qué necesitas, medidas, fotos o referencias..."
                                                     />
                                                     <InputError
@@ -956,16 +947,25 @@ export default function CarpinteroLanding({ landing, bookingStatus }: Props) {
                     <div className="mx-auto max-w-6xl px-4">
                         <div className="grid gap-10 md:grid-cols-12">
                             <div className="md:col-span-5">
-                                <div className="flex items-center gap-2 font-semibold tracking-tight">
-                                    <span className="inline-flex size-9 items-center justify-center rounded-md bg-primary text-primary-foreground">
-                                        <Hammer className="size-4" />
+                                <div className="flex items-center gap-3 text-primary">
+                                    <span className="relative inline-flex size-11 items-center justify-center rounded-full border border-[#8B6F4E]/45 bg-[#F2EDE6] text-[0.68rem] font-semibold tracking-[0.16em]">
+                                        PM
+                                        <span className="absolute inset-2 rounded-full border border-[#CDBAA2]/70" />
                                     </span>
-                                    <span>{appName}</span>
+                                    <span>
+                                        <span className="block text-sm font-light tracking-[0.38em] lowercase">
+                                            {appName.replace('-', ' ')}
+                                        </span>
+                                        <span className="mt-1 block text-[0.58rem] tracking-[0.32em] text-muted-foreground uppercase">
+                                            Guayaquil · Ecuador
+                                        </span>
+                                    </span>
                                 </div>
                                 <p className="mt-4 max-w-md text-sm text-muted-foreground">
-                                    Muebles a medida, closets empotrados, cocinas,
-                                    puertas y reparaciones. Trabajo limpio, tiempos
-                                    realistas y cotización clara.
+                                    Muebles a medida, closets empotrados,
+                                    cocinas, puertas y reparaciones. Trabajo
+                                    limpio, tiempos realistas y cotización
+                                    clara.
                                 </p>
 
                                 <div className="mt-6 flex flex-wrap gap-2">

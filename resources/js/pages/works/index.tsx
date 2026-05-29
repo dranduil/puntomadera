@@ -43,11 +43,14 @@ export default function WorksIndex({ landing, works }: Props) {
 
                 <main className="mx-auto max-w-6xl px-4 py-10 sm:py-14">
                     <div className="max-w-3xl">
-                        <h1 className="text-3xl font-semibold tracking-tight">
+                        <div className="text-xs font-medium tracking-[0.28em] text-muted-foreground uppercase">
+                            Proyectos
+                        </div>
+                        <h1 className="mt-3 text-4xl font-semibold tracking-tight">
                             Trabajos recientes
                         </h1>
-                        <p className="mt-3 text-muted-foreground">
-                            Galería de trabajos reales: muebles a medida,
+                        <p className="mt-4 text-base leading-7 text-muted-foreground">
+                            Galería de trabajos reales con madera, melamina,
                             closets, cocinas, puertas y reparaciones.
                         </p>
                     </div>
@@ -57,13 +60,16 @@ export default function WorksIndex({ landing, works }: Props) {
                             const cover = work.images?.[0] ?? null;
 
                             return (
-                                <Card key={work.id} className="overflow-hidden">
-                                    <div className="relative aspect-[4/3] w-full bg-muted">
+                                <Card
+                                    key={work.id}
+                                    className="group overflow-hidden p-0 transition-all duration-200 hover:-translate-y-0.5"
+                                >
+                                    <div className="relative aspect-[4/3] w-full overflow-hidden bg-muted">
                                         {cover ? (
                                             <img
                                                 src={cover}
                                                 alt={work.title}
-                                                className="h-full w-full object-cover"
+                                                className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                                                 loading="lazy"
                                             />
                                         ) : (
@@ -73,7 +79,7 @@ export default function WorksIndex({ landing, works }: Props) {
                                         )}
                                     </div>
                                     <div className="p-5">
-                                        <div className="font-semibold">
+                                        <div className="font-medium text-primary">
                                             {work.title}
                                         </div>
                                         {(work.location || work.worked_on) && (

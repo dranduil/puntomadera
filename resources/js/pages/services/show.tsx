@@ -95,10 +95,10 @@ export default function ServiceShow({ landing, service }: Props) {
                 <main className="mx-auto max-w-6xl px-4 py-10 sm:py-14">
                     <div className="grid gap-10 lg:grid-cols-2 lg:items-start">
                         <div>
-                            <div className="text-sm text-muted-foreground">
+                            <div className="text-xs font-medium tracking-[0.28em] text-muted-foreground uppercase">
                                 Servicios
                             </div>
-                            <h1 className="mt-2 text-3xl font-semibold tracking-tight">
+                            <h1 className="mt-3 text-4xl font-semibold tracking-tight">
                                 {service.name}
                             </h1>
                             {service.image_path && (
@@ -113,12 +113,12 @@ export default function ServiceShow({ landing, service }: Props) {
                                 </Card>
                             )}
                             {service.summary && (
-                                <p className="mt-3 text-muted-foreground">
+                                <p className="mt-4 text-base leading-7 text-muted-foreground">
                                     {service.summary}
                                 </p>
                             )}
                             {service.description && (
-                                <p className="mt-4 text-sm whitespace-pre-wrap text-muted-foreground">
+                                <p className="mt-5 text-sm leading-7 whitespace-pre-wrap text-muted-foreground">
                                     {service.description}
                                 </p>
                             )}
@@ -126,7 +126,7 @@ export default function ServiceShow({ landing, service }: Props) {
                             {service.process_steps &&
                                 service.process_steps.length > 0 && (
                                     <Card className="mt-8 p-6">
-                                        <div className="text-sm font-semibold">
+                                        <div className="text-sm font-medium text-primary">
                                             Proceso
                                         </div>
                                         <Separator className="my-4" />
@@ -215,7 +215,7 @@ export default function ServiceShow({ landing, service }: Props) {
                                         onChange={(e) =>
                                             setDetails(e.target.value)
                                         }
-                                        className="min-h-32 w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-xs outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50"
+                                        className="min-h-32 w-full rounded-md border border-input bg-card px-3.5 py-2.5 text-sm shadow-xs outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/30"
                                         placeholder="Medidas, material, fotos, referencias..."
                                     />
                                 </div>
@@ -254,7 +254,7 @@ export default function ServiceShow({ landing, service }: Props) {
                                 )}
                             </div>
 
-                            <div className="mt-6 rounded-md border border-border/60 bg-muted/20 p-3 text-sm whitespace-pre-wrap">
+                            <div className="mt-6 rounded-md border border-border/70 bg-secondary/45 p-3 text-sm whitespace-pre-wrap">
                                 {composedMessage}
                             </div>
                         </Card>

@@ -67,13 +67,16 @@ export default function ContactPage({ landing }: Props) {
                 <main className="mx-auto max-w-6xl px-4 py-10 sm:py-14">
                     <div className="grid gap-10 lg:grid-cols-2 lg:items-start">
                         <div>
-                            <h1 className="text-3xl font-semibold tracking-tight">
+                            <div className="text-xs font-medium tracking-[0.28em] text-muted-foreground uppercase">
+                                Guayaquil · Ecuador
+                            </div>
+                            <h1 className="mt-3 text-4xl font-semibold tracking-tight">
                                 Contacto
                             </h1>
-                            <p className="mt-3 text-muted-foreground">
-                                Elige cómo contactarnos: WhatsApp o email.
-                                Escribe tus datos y se creará un mensaje por
-                                defecto.
+                            <p className="mt-4 text-base leading-7 text-muted-foreground">
+                                Cuéntanos qué espacio quieres transformar.
+                                Preparamos un mensaje claro para coordinar por
+                                WhatsApp o email.
                             </p>
 
                             <div className="mt-6 grid gap-3 text-sm text-muted-foreground">
@@ -149,7 +152,7 @@ export default function ContactPage({ landing }: Props) {
                                         onChange={(e) =>
                                             setMessage(e.target.value)
                                         }
-                                        className="min-h-32 w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-xs outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50"
+                                        className="min-h-32 w-full rounded-md border border-input bg-card px-3.5 py-2.5 text-sm shadow-xs outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/30"
                                         placeholder="Cuéntanos qué necesitas, medidas, fotos o referencias..."
                                     />
                                 </div>
@@ -184,7 +187,7 @@ export default function ContactPage({ landing }: Props) {
                                 )}
                             </div>
 
-                            <div className="mt-6 rounded-md border border-border/60 bg-muted/20 p-3 text-sm whitespace-pre-wrap">
+                            <div className="mt-6 rounded-md border border-border/70 bg-secondary/45 p-3 text-sm whitespace-pre-wrap">
                                 {composedMessage}
                             </div>
                         </Card>

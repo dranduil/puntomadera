@@ -35,48 +35,52 @@ export default function ServicesIndex({ landing, services }: Props) {
 
                 <main className="mx-auto max-w-6xl px-4 py-10 sm:py-14">
                     <div className="max-w-3xl">
-                        <h1 className="text-3xl font-semibold tracking-tight">
+                        <div className="text-xs font-medium tracking-[0.28em] text-muted-foreground uppercase">
+                            Carpintería a medida
+                        </div>
+                        <h1 className="mt-3 text-4xl font-semibold tracking-tight">
                             Servicios
                         </h1>
-                        <p className="mt-3 text-muted-foreground">
-                            Selecciona un servicio para ver el proceso y enviar
-                            un mensaje con tus datos por WhatsApp o email.
+                        <p className="mt-4 text-base leading-7 text-muted-foreground">
+                            Soluciones cálidas y funcionales para muebles,
+                            cocinas, closets, puertas y detalles interiores.
                         </p>
                     </div>
 
                     <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                         {services.map((service) => (
-                            <Card key={service.id} className="overflow-hidden p-0">
-                                <div className="h-44 w-full bg-muted/30">
+                            <Card
+                                key={service.id}
+                                className="group overflow-hidden p-0 transition-all duration-200 hover:-translate-y-0.5"
+                            >
+                                <div className="h-48 w-full overflow-hidden bg-muted">
                                     {service.image_path ? (
                                         <img
                                             src={service.image_path}
                                             alt={service.name}
-                                            className="h-full w-full object-cover"
+                                            className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                                             loading="lazy"
                                         />
                                     ) : null}
                                 </div>
                                 <div className="p-6">
-                                <div className="text-lg font-semibold">
-                                    {service.name}
-                                </div>
-                                <p className="mt-2 text-sm text-muted-foreground">
-                                    {service.summary ??
-                                        service.description ??
-                                        'Ver detalles del servicio y proceso.'}
-                                </p>
+                                    <div className="text-lg font-medium text-primary">
+                                        {service.name}
+                                    </div>
+                                    <p className="mt-2 text-sm leading-6 text-muted-foreground">
+                                        {service.summary ??
+                                            service.description ??
+                                            'Ver detalles del servicio y proceso.'}
+                                    </p>
 
-                                <div className="mt-5">
-                                    <Button asChild className="w-full">
+                                    <Button asChild className="mt-5 w-full">
                                         <Link
                                             href={`/servicios/${service.slug}`}
                                         >
-                                            Ver proceso y contactar
+                                            Ver proceso
                                             <ChevronRight className="size-4" />
                                         </Link>
                                     </Button>
-                                </div>
                                 </div>
                             </Card>
                         ))}
