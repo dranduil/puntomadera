@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\WorkAdminController;
 use App\Http\Controllers\ContactMessageController;
 use App\Http\Controllers\ContactPageController;
 use App\Http\Controllers\HomeLandingController;
+use App\Http\Controllers\LocalSeoPageController;
 use App\Http\Controllers\ServiceBookingController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\ShopController;
@@ -16,8 +17,18 @@ use App\Http\Middleware\AdminOnly;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeLandingController::class, 'show'])->name('home');
+Route::get('/sitemap.xml', [LocalSeoPageController::class, 'sitemap'])->name('sitemap');
 
 Route::redirect('/carpintero-guayaquil', '/');
+Route::get('/instalacion-puertas-guayaquil', [LocalSeoPageController::class, 'show'])
+    ->defaults('slug', 'instalacion-puertas-guayaquil')
+    ->name('seo.doors.installation');
+Route::get('/reparacion-puertas-guayaquil', [LocalSeoPageController::class, 'show'])
+    ->defaults('slug', 'reparacion-puertas-guayaquil')
+    ->name('seo.doors.repair');
+Route::get('/carpinteria-a-medida-guayaquil', [LocalSeoPageController::class, 'show'])
+    ->defaults('slug', 'carpinteria-a-medida-guayaquil')
+    ->name('seo.custom.carpentry');
 
 Route::get('/contacto', [ContactPageController::class, 'show'])->name('contact.show');
 Route::get('/trabajos', [WorkController::class, 'index'])->name('works.index');

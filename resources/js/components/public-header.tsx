@@ -49,6 +49,18 @@ export function PublicHeader({ landing, isHome = false, whatsappHref }: Props) {
 
     const exploreItems = [
         { label: 'Servicios', href: '/servicios' },
+        {
+            label: 'Instalación de puertas',
+            href: '/instalacion-puertas-guayaquil',
+        },
+        {
+            label: 'Reparación de puertas',
+            href: '/reparacion-puertas-guayaquil',
+        },
+        {
+            label: 'Carpintería a medida',
+            href: '/carpinteria-a-medida-guayaquil',
+        },
         { label: 'Trabajos', href: '/trabajos' },
         { label: 'Agendar', href: sectionHref('booking') },
         { label: 'Proceso', href: sectionHref('proceso') },
