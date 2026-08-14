@@ -65,6 +65,8 @@ RUN apt-get update \
         libsqlite3-dev \
     && docker-php-ext-install -j"$(nproc)" mbstring opcache pdo_sqlite \
     && a2enmod rewrite \
+    && printf 'ServerName punto-madera.com\n' > /etc/apache2/conf-available/servername.conf \
+    && a2enconf servername \
     && sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' \
         /etc/apache2/sites-available/*.conf \
     && rm -rf /var/lib/apt/lists/*
