@@ -1,3 +1,19 @@
+## Docker
+
+The application can run locally in a single Docker container. The image builds the Vite assets in a Node stage, serves Laravel through Apache/PHP, and stores the SQLite database and Laravel runtime files in a named Docker volume.
+
+```bash
+docker compose --env-file .env.docker.example up --build
+```
+
+Open <http://localhost:8080>. To stop and remove the local container and its test volume:
+
+```bash
+docker compose --env-file .env.docker.example down -v --remove-orphans
+```
+
+Copy `.env.docker.example` to `.env.docker` when you need persistent local Docker settings or a fixed `APP_KEY`, then use `--env-file .env.docker` instead.
+
 Análisis de Competencia SEO para Servicios de Carpintería en Guayaquil, Ecuador
 
 1. Principales Competidores con Presencia Web en Guayaquil
