@@ -1,0 +1,7 @@
+interface:
+  display_name: "Punto Madera Development"
+  short_description: "Laravel/Inertia delivery with mandatory shadcn, KISS, and DRY"
+  default_prompt: "Use $punto-madera-development to implement this project change with mandatory shadcn, codebase-memory, Laravel, KISS, DRY, and verification gates."
+
+policy:
+  allow_implicit_invocation: true

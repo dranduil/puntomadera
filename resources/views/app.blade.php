@@ -45,5 +45,6 @@
     </head>
     <body class="font-sans antialiased">
         @inertia
+        @include('components.tracking')
     </body>
 </html>

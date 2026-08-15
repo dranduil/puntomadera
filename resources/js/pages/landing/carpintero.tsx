@@ -13,12 +13,16 @@ import {
     Timer,
     Wrench,
 } from 'lucide-react';
-import { useMemo, useState } from 'react';
 import { PublicHeader } from '@/components/public-header';
 import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardFooter,
+    CardHeader,
+    CardTitle,
+} from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
 
@@ -136,42 +140,6 @@ export default function CarpinteroLanding({ landing }: Props) {
         landing.hero_subtitle ??
         'Diseñamos, fabricamos e instalamos carpintería para tu hogar o negocio. Cotización rápida por WhatsApp y trabajo prolijo.';
     const currentYear = new Date().getFullYear();
-    const [bookingName, setBookingName] = useState('');
-    const [bookingPhone, setBookingPhone] = useState('');
-    const [bookingService, setBookingService] = useState('Muebles a medida');
-    const [bookingPreferredDate, setBookingPreferredDate] = useState('');
-    const [bookingPreferredTime, setBookingPreferredTime] = useState('');
-    const [bookingMessage, setBookingMessage] = useState('');
-
-    const bookingWhatsappHref = useMemo(() => {
-        const message = [
-            'Hola, quiero agendar una cotización de carpintería en Guayaquil.',
-            '',
-            bookingName ? `Nombre: ${bookingName}` : null,
-            bookingPhone ? `Teléfono / WhatsApp: ${bookingPhone}` : null,
-            bookingService ? `Servicio: ${bookingService}` : null,
-            bookingPreferredDate
-                ? `Fecha preferida: ${bookingPreferredDate}`
-                : null,
-            bookingPreferredTime
-                ? `Hora preferida: ${bookingPreferredTime}`
-                : null,
-            bookingMessage ? `Detalles: ${bookingMessage}` : null,
-        ]
-            .filter(Boolean)
-            .join('\n');
-
-        return `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
-    }, [
-        bookingMessage,
-        bookingName,
-        bookingPhone,
-        bookingPreferredDate,
-        bookingPreferredTime,
-        bookingService,
-        whatsappNumber,
-    ]);
-
     const businessSchema = {
         '@context': 'https://schema.org',
         '@type': 'HomeAndConstructionBusiness',
@@ -547,17 +515,17 @@ export default function CarpinteroLanding({ landing }: Props) {
                                     <h2 className="text-3xl font-semibold tracking-tight">
                                         Agendar
                                     </h2>
-                                    <p className="mt-3 text-muted-foreground">
-                                        Envía una solicitud para agendar tu
-                                        proyecto de carpintería en Guayaquil.
-                                        Podemos visitar, tomar medidas y
-                                        confirmar materiales y tiempos.
+                                    <p className="mt-3 max-w-xl text-muted-foreground">
+                                        Escríbenos directamente por WhatsApp
+                                        para contarnos qué necesitas. Te
+                                        orientamos sobre materiales, medidas y
+                                        tiempos antes de confirmar una visita.
                                     </p>
 
                                     <div className="mt-6 grid gap-3 text-sm text-muted-foreground">
                                         {[
-                                            'Muebles a medida, closets, puertas, cocinas y reparaciones',
-                                            'Cotización clara y tiempos realistas',
+                                            'Muebles, closets, cocinas, puertas y reparaciones',
+                                            'Respuesta directa y cotización clara',
                                             'Guayaquil y alrededores',
                                         ].map((line) => (
                                             <div
@@ -571,135 +539,40 @@ export default function CarpinteroLanding({ landing }: Props) {
                                     </div>
                                 </div>
 
-                                <Card className="p-6 sm:p-8">
-                                    <div className="space-y-4">
-                                        <div className="grid gap-2">
-                                            <Label htmlFor="booking_name">
-                                                Nombre
-                                            </Label>
-                                            <Input
-                                                id="booking_name"
-                                                value={bookingName}
-                                                onChange={(event) =>
-                                                    setBookingName(
-                                                        event.target.value,
-                                                    )
-                                                }
-                                                placeholder="Tu nombre"
-                                            />
-                                        </div>
-
-                                        <div className="grid gap-2">
-                                            <Label htmlFor="booking_phone">
-                                                Teléfono / WhatsApp
-                                            </Label>
-                                            <Input
-                                                id="booking_phone"
-                                                value={bookingPhone}
-                                                onChange={(event) =>
-                                                    setBookingPhone(
-                                                        event.target.value,
-                                                    )
-                                                }
-                                                placeholder="+593 ..."
-                                            />
-                                        </div>
-
-                                        <div className="grid gap-2">
-                                            <Label htmlFor="booking_service">
-                                                Servicio
-                                            </Label>
-                                            <select
-                                                id="booking_service"
-                                                value={bookingService}
-                                                onChange={(event) =>
-                                                    setBookingService(
-                                                        event.target.value,
-                                                    )
-                                                }
-                                                className="h-11 w-full rounded-md border border-input bg-card px-3.5 text-sm shadow-xs outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/30"
-                                            >
-                                                <option value="Muebles a medida">
-                                                    Muebles a medida
-                                                </option>
-                                                <option value="Cocinas y anaqueles">
-                                                    Cocinas y anaqueles
-                                                </option>
-                                                <option value="Closets empotrados">
-                                                    Closets empotrados
-                                                </option>
-                                                <option value="Puertas e instalación">
-                                                    Puertas e instalación
-                                                </option>
-                                                <option value="Reparación de muebles">
-                                                    Reparación de muebles
-                                                </option>
-                                                <option value="Ebanistería y detalles">
-                                                    Ebanistería y detalles
-                                                </option>
-                                            </select>
-                                        </div>
-
-                                        <div className="grid gap-4 sm:grid-cols-2">
-                                            <div className="grid gap-2">
-                                                <Label htmlFor="booking_preferred_date">
-                                                    Fecha preferida
-                                                </Label>
-                                                <Input
-                                                    id="booking_preferred_date"
-                                                    type="date"
-                                                    value={bookingPreferredDate}
-                                                    onChange={(event) =>
-                                                        setBookingPreferredDate(
-                                                            event.target.value,
-                                                        )
-                                                    }
-                                                />
-                                            </div>
-                                            <div className="grid gap-2">
-                                                <Label htmlFor="booking_preferred_time">
-                                                    Hora preferida
-                                                </Label>
-                                                <Input
-                                                    id="booking_preferred_time"
-                                                    value={bookingPreferredTime}
-                                                    onChange={(event) =>
-                                                        setBookingPreferredTime(
-                                                            event.target.value,
-                                                        )
-                                                    }
-                                                    placeholder="Mañana / Tarde"
-                                                />
-                                            </div>
-                                        </div>
-
-                                        <div className="grid gap-2">
-                                            <Label htmlFor="booking_message">
-                                                Detalles (opcional)
-                                            </Label>
-                                            <textarea
-                                                id="booking_message"
-                                                value={bookingMessage}
-                                                onChange={(event) =>
-                                                    setBookingMessage(
-                                                        event.target.value,
-                                                    )
-                                                }
-                                                className="min-h-28 w-full rounded-md border border-input bg-card px-3.5 py-2.5 text-sm shadow-xs outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/30"
-                                                placeholder="Cuéntanos qué necesitas, medidas, fotos o referencias..."
-                                            />
-                                        </div>
-
-                                        <Button asChild className="w-full">
+                                <Card className="border-primary/20 bg-secondary/40">
+                                    <CardHeader>
+                                        <CardTitle>
+                                            Conversemos por WhatsApp
+                                        </CardTitle>
+                                        <CardDescription className="leading-6">
+                                            Cuéntanos qué proyecto tienes y
+                                            coordinamos el siguiente paso sin
+                                            formularios largos.
+                                        </CardDescription>
+                                    </CardHeader>
+                                    <CardContent className="flex items-start gap-3 text-sm text-muted-foreground">
+                                        <MessageCircle className="mt-0.5 size-5 shrink-0 text-primary" />
+                                        <p>
+                                            Puedes enviar fotos, medidas o una
+                                            idea inicial directamente en el
+                                            chat.
+                                        </p>
+                                    </CardContent>
+                                    <CardFooter className="flex-col items-stretch gap-3">
+                                        <Button asChild size="lg">
                                             <a
-                                                href={bookingWhatsappHref}
+                                                href={whatsappHref}
                                                 target="_blank"
                                                 rel="noreferrer"
                                             >
-                                                Enviar por WhatsApp
+                                                Escribir por WhatsApp
+                                                <MessageCircle data-icon="inline-end" />
                                             </a>
                                         </Button>
-                                    </div>
+                                        <p className="text-center text-xs text-muted-foreground">
+                                            Respuesta directa desde Guayaquil.
+                                        </p>
+                                    </CardFooter>
                                 </Card>
                             </div>
                         </div>

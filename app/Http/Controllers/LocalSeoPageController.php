@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\HomeLanding;
+use App\Models\Product;
+use App\Models\Service;
 use Illuminate\Http\Response as HttpResponse;
 use Illuminate\View\View;
 
@@ -115,12 +117,25 @@ class LocalSeoPageController extends Controller
     public function sitemap(): HttpResponse
     {
         $baseUrl = rtrim(config('app.url'), '/');
-        $urls = collect(['/', '/servicios', '/trabajos', '/contacto'])
-            ->merge(collect(array_keys($this->pages()))->map(fn (string $slug) => "/{$slug}"));
+        $urls = collect(['/', '/servicios', '/trabajos', '/contacto', '/tienda'])
+            ->merge(collect(array_keys($this->pages()))->map(fn (string $slug) => "/{$slug}"))
+            ->merge(Service::query()
+                ->where('is_published', true)
+                ->pluck('slug')
+                ->map(fn (string $slug) => "/servicios/{$slug}"))
+            ->merge(Product::query()
+                ->where('is_published', true)
+                ->pluck('slug')
+                ->map(fn (string $slug) => "/tienda/{$slug}"))
+            ->unique()
+            ->values();
 
         $items = $urls
-            ->map(fn (string $path) => $baseUrl.$path)
-            ->map(fn (string $url) => '    <url><loc>'.e($url).'</loc></url>')
+            ->map(function (string $path) use ($baseUrl): string {
+                $url = $baseUrl.($path === '/' ? '' : '/'.ltrim($path, '/'));
+
+                return '    <url><loc>'.e($url).'</loc></url>';
+            })
             ->implode("\n");
 
         $xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"

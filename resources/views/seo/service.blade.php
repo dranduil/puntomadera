@@ -23,29 +23,7 @@
         @vite(['resources/css/app.css'])
     </head>
     <body class="bg-background font-sans text-foreground antialiased">
-        <header class="sticky top-0 z-50 border-b border-border/80 bg-background/90 backdrop-blur">
-            <div class="mx-auto flex h-20 max-w-6xl items-center justify-between px-4">
-                <a href="/" class="flex items-center gap-3 text-primary" aria-label="punto madera">
-                    <span class="relative inline-flex size-11 items-center justify-center rounded-full border border-[#8B6F4E]/45 bg-[#F2EDE6] text-[0.68rem] font-semibold tracking-[0.16em]">
-                        PM
-                        <span class="absolute inset-2 rounded-full border border-[#CDBAA2]/70"></span>
-                    </span>
-                    <span class="hidden leading-none sm:block">
-                        <span class="block text-sm font-light tracking-[0.38em] lowercase">punto madera</span>
-                        <span class="mt-1 block text-[0.58rem] tracking-[0.32em] text-muted-foreground uppercase">Guayaquil · Ecuador</span>
-                    </span>
-                </a>
-                <nav class="hidden items-center gap-6 text-sm font-medium md:flex">
-                    <a href="/" class="text-muted-foreground transition-colors hover:text-primary">Inicio</a>
-                    <a href="/servicios" class="text-muted-foreground transition-colors hover:text-primary">Servicios</a>
-                    <a href="/trabajos" class="text-muted-foreground transition-colors hover:text-primary">Trabajos</a>
-                    <a href="/contacto" class="text-muted-foreground transition-colors hover:text-primary">Contacto</a>
-                </nav>
-                <a href="{{ $whatsappHref }}" target="_blank" rel="noreferrer" class="inline-flex h-10 items-center justify-center gap-2 rounded-md bg-primary px-5 text-sm font-medium text-primary-foreground transition-all duration-200 hover:bg-[#8B6F4E]">
-                    WhatsApp
-                </a>
-            </div>
-        </header>
+        @include('components.public-header', ['whatsappHref' => $whatsappHref])
 
         <main>
             <section class="mx-auto grid max-w-6xl gap-10 px-4 py-12 sm:py-16 lg:grid-cols-[1fr_0.95fr] lg:items-center">
@@ -171,5 +149,7 @@
                 </div>
             </section>
         </main>
+
+        @include('components.tracking')
     </body>
 </html>

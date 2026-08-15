@@ -14,6 +14,15 @@ docker compose --env-file .env.docker.example down -v --remove-orphans
 
 Copy `.env.docker.example` to `.env.docker` when you need persistent local Docker settings or a fixed `APP_KEY`, then use `--env-file .env.docker` instead.
 
+Optional tracking integrations are configured at container runtime through the same env file:
+
+```dotenv
+GOOGLE_ANALYTICS_ID=G-XXXXXXXXXX
+META_PIXEL_ID=123456789012345
+```
+
+Leave either value blank to disable that integration. The sitemap is available at `/sitemap.xml` and includes published services and products.
+
 Análisis de Competencia SEO para Servicios de Carpintería en Guayaquil, Ecuador
 
 1. Principales Competidores con Presencia Web en Guayaquil

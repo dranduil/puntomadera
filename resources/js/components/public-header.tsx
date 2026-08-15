@@ -1,12 +1,5 @@
 import { Link } from '@inertiajs/react';
-import {
-    ChevronDown,
-    Heart,
-    Menu,
-    Search,
-    ShoppingBag,
-    User,
-} from 'lucide-react';
+import { ChevronDown, Menu, Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
     Sheet,
@@ -24,6 +17,12 @@ type Props = {
     landing?: Landing;
     isHome?: boolean;
     whatsappHref?: string;
+};
+
+type ExploreItem = {
+    label: string;
+    href: string;
+    inertia: boolean;
 };
 
 function buildWhatsAppHref(number: string, message: string) {
@@ -45,27 +44,28 @@ export function PublicHeader({ landing, isHome = false, whatsappHref }: Props) {
             'Hola, quiero cotizar con punto-madera.',
         );
 
-    const shopItems = [{ label: 'Tienda', href: '/tienda' }];
-
-    const exploreItems = [
-        { label: 'Servicios', href: '/servicios' },
+    const exploreItems: ExploreItem[] = [
+        { label: 'Servicios', href: '/servicios', inertia: true },
         {
             label: 'Instalación de puertas',
             href: '/instalacion-puertas-guayaquil',
+            inertia: false,
         },
         {
             label: 'Reparación de puertas',
             href: '/reparacion-puertas-guayaquil',
+            inertia: false,
         },
         {
             label: 'Carpintería a medida',
             href: '/carpinteria-a-medida-guayaquil',
+            inertia: false,
         },
-        { label: 'Trabajos', href: '/trabajos' },
-        { label: 'Agendar', href: sectionHref('booking') },
-        { label: 'Proceso', href: sectionHref('proceso') },
-        { label: 'FAQ', href: sectionHref('faq') },
-        { label: 'Contacto', href: '/contacto' },
+        { label: 'Trabajos', href: '/trabajos', inertia: true },
+        { label: 'Agendar', href: sectionHref('booking'), inertia: false },
+        { label: 'Proceso', href: sectionHref('proceso'), inertia: false },
+        { label: 'FAQ', href: sectionHref('faq'), inertia: false },
+        { label: 'Contacto', href: '/contacto', inertia: true },
     ];
 
     return (
@@ -99,29 +99,12 @@ export function PublicHeader({ landing, isHome = false, whatsappHref }: Props) {
                     </Link>
                     <details className="group relative">
                         <summary className="inline-flex cursor-pointer list-none items-center gap-1 text-muted-foreground transition-colors hover:text-primary">
-                            Productos
-                            <ChevronDown className="size-4" />
-                        </summary>
-                        <div className="absolute top-full left-0 z-50 mt-3 min-w-44 rounded-md border border-border/80 bg-background p-2 shadow-lg">
-                            {shopItems.map((item) => (
-                                <Link
-                                    key={item.href}
-                                    href={item.href}
-                                    className="block rounded-sm px-2 py-1.5 text-muted-foreground transition-colors hover:bg-muted/70 hover:text-primary"
-                                >
-                                    {item.label}
-                                </Link>
-                            ))}
-                        </div>
-                    </details>
-                    <details className="group relative">
-                        <summary className="inline-flex cursor-pointer list-none items-center gap-1 text-muted-foreground transition-colors hover:text-primary">
                             Navegar
                             <ChevronDown className="size-4" />
                         </summary>
                         <div className="absolute top-full left-0 z-50 mt-3 min-w-52 rounded-md border border-border/80 bg-background p-2 shadow-lg">
                             {exploreItems.map((item) =>
-                                item.href.startsWith('/') ? (
+                                item.inertia ? (
                                     <Link
                                         key={item.href}
                                         href={item.href}
@@ -147,17 +130,6 @@ export function PublicHeader({ landing, isHome = false, whatsappHref }: Props) {
                     <div className="hidden items-center gap-1 lg:flex">
                         {[
                             { label: 'Buscar', icon: Search, href: '/tienda' },
-                            { label: 'Cuenta', icon: User, href: '/login' },
-                            {
-                                label: 'Favoritos',
-                                icon: Heart,
-                                href: '/tienda',
-                            },
-                            {
-                                label: 'Carrito',
-                                icon: ShoppingBag,
-                                href: '/tienda',
-                            },
                         ].map((item) => (
                             <Button
                                 key={item.label}
@@ -204,30 +176,11 @@ export function PublicHeader({ landing, isHome = false, whatsappHref }: Props) {
                                     </Button>
                                     <details className="rounded-md border border-border/60 p-2">
                                         <summary className="cursor-pointer list-none text-sm font-medium">
-                                            Productos
-                                        </summary>
-                                        <div className="mt-2 grid gap-1">
-                                            {shopItems.map((item) => (
-                                                <Button
-                                                    key={item.href}
-                                                    asChild
-                                                    variant="ghost"
-                                                    className="justify-start"
-                                                >
-                                                    <Link href={item.href}>
-                                                        {item.label}
-                                                    </Link>
-                                                </Button>
-                                            ))}
-                                        </div>
-                                    </details>
-                                    <details className="rounded-md border border-border/60 p-2">
-                                        <summary className="cursor-pointer list-none text-sm font-medium">
                                             Navegar
                                         </summary>
                                         <div className="mt-2 grid gap-1">
                                             {exploreItems.map((item) =>
-                                                item.href.startsWith('/') ? (
+                                                item.inertia ? (
                                                     <Button
                                                         key={item.href}
                                                         asChild

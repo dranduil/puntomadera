@@ -35,4 +35,12 @@ return [
         ],
     ],
 
+    'google_analytics' => [
+        'measurement_id' => env('GOOGLE_ANALYTICS_ID'),
+    ],
+
+    'meta_pixel' => [
+        'id' => env('META_PIXEL_ID'),
+    ],
+
 ];
