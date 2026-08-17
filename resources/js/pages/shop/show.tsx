@@ -42,9 +42,9 @@ export default function ShopShow({ landing, product }: Props) {
               }).format(product.price_cents / 100)
             : 'Cotización personalizada';
 
-    const envWhatsapp = import.meta.env.VITE_WHATSAPP_NUMBER?.trim();
+    const envWhatsapp = import.meta.env.VITE_WHATSAPP_NUMBER?.trim() ?? '593998897813';
     const whatsappNumber = sanitizeWhatsapp(
-        envWhatsapp || landing.whatsapp_number || '593000000000',
+        envWhatsapp || landing.whatsapp_number || '593998897813',
     );
 
     const whatsappHref = useMemo(() => {

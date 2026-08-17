@@ -26,9 +26,9 @@ export default function ContactPage({ landing }: Props) {
     const [phone, setPhone] = useState('');
     const [message, setMessage] = useState('');
 
-    const envWhatsapp = import.meta.env.VITE_WHATSAPP_NUMBER?.trim();
+    const envWhatsapp = import.meta.env.VITE_WHATSAPP_NUMBER?.trim() ?? '593998897813';
     const rawWhatsapp = envWhatsapp || landing.whatsapp_number?.trim();
-    const whatsappNumber = rawWhatsapp ? rawWhatsapp : '593000000000';
+    const whatsappNumber = rawWhatsapp ? rawWhatsapp : '593998897813';
     const displayWhatsapp = envWhatsapp || landing.whatsapp_number;
 
     const composedMessage = [

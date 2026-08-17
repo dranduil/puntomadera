@@ -32,9 +32,9 @@ class LocalSeoPageController extends Controller
         ];
         $whatsappNumber = preg_replace('/[^0-9]/', '', (string) (
             config('services.whatsapp.number')
-            ?: env('VITE_WHATSAPP_NUMBER')
+            ?: env('VITE_WHATSAPP_NUMBER', '593998897813')
             ?: $landingData['whatsapp_number']
-            ?: '593000000000'
+            ?: '593998897813'
         ));
         $whatsappHref = "https://wa.me/{$whatsappNumber}?text=".rawurlencode($page['message']);
 

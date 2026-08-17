@@ -40,9 +40,9 @@ export default function ServiceShow({ landing, service }: Props) {
     const [location, setLocation] = useState('');
     const [details, setDetails] = useState('');
 
-    const envWhatsapp = import.meta.env.VITE_WHATSAPP_NUMBER?.trim();
+    const envWhatsapp = import.meta.env.VITE_WHATSAPP_NUMBER?.trim() ?? '593998897813';
     const rawWhatsapp = envWhatsapp || landing.whatsapp_number?.trim();
-    const whatsappNumber = rawWhatsapp ? rawWhatsapp : '593000000000';
+    const whatsappNumber = rawWhatsapp ? rawWhatsapp : '593998897813';
 
     const composedMessage = useMemo(() => {
         const header =

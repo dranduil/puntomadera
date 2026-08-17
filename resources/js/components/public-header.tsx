@@ -34,9 +34,9 @@ export function PublicHeader({ landing, isHome = false, whatsappHref }: Props) {
     const appName = import.meta.env.VITE_APP_NAME || 'punto madera';
     const sectionHref = (id: string) => (isHome ? `#${id}` : `/#${id}`);
 
-    const envWhatsapp = import.meta.env.VITE_WHATSAPP_NUMBER?.trim();
+    const envWhatsapp = import.meta.env.VITE_WHATSAPP_NUMBER?.trim() ?? '593998897813';
     const rawWhatsapp = envWhatsapp || landing?.whatsapp_number?.trim();
-    const whatsappNumber = rawWhatsapp ? rawWhatsapp : '593000000000';
+    const whatsappNumber = rawWhatsapp ? rawWhatsapp : '593998897813';
     const defaultWhatsappHref =
         whatsappHref ??
         buildWhatsAppHref(

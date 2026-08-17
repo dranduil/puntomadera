@@ -123,9 +123,9 @@ export default function CarpinteroLanding({ landing }: Props) {
         'Daule',
     ];
 
-    const envWhatsapp = import.meta.env.VITE_WHATSAPP_NUMBER?.trim();
+    const envWhatsapp = import.meta.env.VITE_WHATSAPP_NUMBER?.trim() ?? '593998897813';
     const rawWhatsapp = envWhatsapp || landing.whatsapp_number?.trim();
-    const whatsappNumber = (rawWhatsapp ? rawWhatsapp : '593000000000').replace(
+    const whatsappNumber = (rawWhatsapp ? rawWhatsapp : '593998897813').replace(
         /[^0-9]/g,
         '',
     );
