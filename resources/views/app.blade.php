@@ -30,7 +30,13 @@
             }
         </style>
 
-        <title inertia>{{ config('app.name', 'Laravel') }}</title>
+        @php
+            $appName = trim((string) config('app.name', 'Punto Madera'));
+            $appName = $appName === '' || str_contains(strtolower($appName), 'laravel')
+                ? 'Punto Madera'
+                : $appName;
+        @endphp
+        <title inertia>{{ $appName }}</title>
 
         <link rel="icon" href="/favicon.svg" type="image/svg+xml">
         <link rel="icon" href="/favicon.ico" sizes="any">

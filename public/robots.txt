@@ -1,4 +1,8 @@
 User-agent: *
-Disallow:
+Allow: /
+
+# Keep public pages available to answer-engine crawlers.
+User-agent: OAI-SearchBot
+Allow: /
 
 Sitemap: /sitemap.xml

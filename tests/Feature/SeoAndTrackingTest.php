@@ -3,6 +3,27 @@
 use App\Models\Product;
 use App\Models\Service;
 
+test('public document titles never use the Laravel framework fallback', function () {
+    config(['app.name' => 'Laravel']);
+
+    $response = $this->get(route('home'));
+
+    $response->assertSuccessful();
+
+    expect($response->getContent())
+        ->toContain('<title inertia>Punto Madera</title>')
+        ->not->toContain('<title inertia>Laravel</title>');
+});
+
+test('robots explicitly allows OpenAI search crawling', function () {
+    $robots = file_get_contents(public_path('robots.txt'));
+
+    expect($robots)
+        ->toContain('User-agent: OAI-SearchBot')
+        ->toContain('Allow: /')
+        ->toContain('Sitemap: /sitemap.xml');
+});
+
 test('sitemap lists public pages and published catalog records', function () {
     config(['app.url' => 'https://example.test']);
 

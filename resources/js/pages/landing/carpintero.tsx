@@ -24,6 +24,7 @@ import {
     CardTitle,
 } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
+import { getPublicAppName, sanitizePublicTitle } from '@/lib/site';
 import { cn } from '@/lib/utils';
 
 const images = {
@@ -114,7 +115,7 @@ const faqs = [
 ];
 
 export default function CarpinteroLanding({ landing }: Props) {
-    const appName = import.meta.env.VITE_APP_NAME || 'punto madera';
+    const appName = getPublicAppName(import.meta.env.VITE_APP_NAME);
     const siteUrl = import.meta.env.VITE_APP_URL || 'https://puntomadera.ec';
     const canonicalUrl = `${siteUrl.replace(/\/$/, '')}/`;
     const areasServed = landing.areas_served ?? [
@@ -123,7 +124,8 @@ export default function CarpinteroLanding({ landing }: Props) {
         'Daule',
     ];
 
-    const envWhatsapp = import.meta.env.VITE_WHATSAPP_NUMBER?.trim() ?? '593998897813';
+    const envWhatsapp =
+        import.meta.env.VITE_WHATSAPP_NUMBER?.trim() ?? '593998897813';
     const rawWhatsapp = envWhatsapp || landing.whatsapp_number?.trim();
     const whatsappNumber = (rawWhatsapp ? rawWhatsapp : '593998897813').replace(
         /[^0-9]/g,
@@ -131,7 +133,7 @@ export default function CarpinteroLanding({ landing }: Props) {
     );
     const whatsappHref = `https://wa.me/${whatsappNumber}`;
 
-    const seoTitle = landing.seo_title ?? defaultSeo.title;
+    const seoTitle = sanitizePublicTitle(landing.seo_title ?? defaultSeo.title);
     const seoDescription = landing.seo_description ?? defaultSeo.description;
     const heroTitle =
         landing.hero_title ??
@@ -141,9 +143,10 @@ export default function CarpinteroLanding({ landing }: Props) {
         'Diseñamos, fabricamos e instalamos carpintería para tu hogar o negocio. Cotización rápida por WhatsApp y trabajo prolijo.';
     const currentYear = new Date().getFullYear();
     const businessSchema = {
-        '@context': 'https://schema.org',
         '@type': 'HomeAndConstructionBusiness',
+        '@id': `${canonicalUrl}#business`,
         name: `${appName} - Carpinteria en Guayaquil`,
+        description: seoDescription,
         areaServed: [
             { '@type': 'Country', name: 'Ecuador' },
             { '@type': 'City', name: 'Guayaquil' },
@@ -171,11 +174,43 @@ export default function CarpinteroLanding({ landing }: Props) {
             'Reparación de muebles',
         ],
     };
+    const structuredData = {
+        '@context': 'https://schema.org',
+        '@graph': [
+            businessSchema,
+            {
+                '@type': 'WebSite',
+                '@id': `${canonicalUrl}#website`,
+                name: appName,
+                url: canonicalUrl,
+                inLanguage: 'es-EC',
+                publisher: { '@id': `${canonicalUrl}#business` },
+            },
+            {
+                '@type': 'FAQPage',
+                '@id': `${canonicalUrl}#faq`,
+                url: `${canonicalUrl}#faq`,
+                inLanguage: 'es-EC',
+                mainEntity: faqs.map((item) => ({
+                    '@type': 'Question',
+                    name: item.q,
+                    acceptedAnswer: {
+                        '@type': 'Answer',
+                        text: item.a,
+                    },
+                })),
+            },
+        ],
+    };
 
     return (
         <>
             <Head title={seoTitle}>
                 <meta name="description" content={seoDescription} />
+                <meta
+                    name="robots"
+                    content="index,follow,max-image-preview:large"
+                />
                 <meta
                     name="keywords"
                     content="carpinteria en guayaquil, carpintero en guayaquil, muebles a medida guayaquil, closets empotrados guayaquil, ebanisteria guayaquil, carpinteria ecuador"
@@ -195,11 +230,20 @@ export default function CarpinteroLanding({ landing }: Props) {
                 <meta property="og:locale" content="es_EC" />
                 <meta property="og:site_name" content={appName} />
                 <meta property="og:image" content={images.hero} />
+                <meta
+                    property="og:image:alt"
+                    content="Trabajo de carpintería a medida en Guayaquil"
+                />
                 <meta name="twitter:card" content="summary_large_image" />
                 <meta name="twitter:title" content={seoTitle} />
                 <meta name="twitter:description" content={seoDescription} />
+                <link
+                    rel="sitemap"
+                    type="application/xml"
+                    href={`${siteUrl.replace(/\/$/, '')}/sitemap.xml`}
+                />
                 <script type="application/ld+json">
-                    {JSON.stringify(businessSchema)}
+                    {JSON.stringify(structuredData)}
                 </script>
             </Head>
 

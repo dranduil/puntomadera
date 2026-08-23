@@ -4,11 +4,18 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import '../css/app.css';
 import { initializeTheme } from '@/hooks/use-appearance';
+import { getPublicAppName, sanitizePublicTitle } from '@/lib/site';
 
-const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
+const appName = getPublicAppName(import.meta.env.VITE_APP_NAME);
 
 createInertiaApp({
-    title: (title) => (title ? `${title} - ${appName}` : appName),
+    title: (title) => {
+        const safeTitle = title ? sanitizePublicTitle(title) : appName;
+
+        return safeTitle.toLowerCase() === appName.toLowerCase()
+            ? appName
+            : `${safeTitle} - ${appName}`;
+    },
     resolve: (name) =>
         resolvePageComponent(
             `./pages/${name}.tsx`,

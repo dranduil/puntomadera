@@ -5,14 +5,21 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>{{ $page['title'] }}</title>
         <meta name="description" content="{{ $page['metaDescription'] }}">
+        <meta name="robots" content="index,follow,max-image-preview:large">
         <link rel="canonical" href="{{ $canonicalUrl }}">
         <meta property="og:title" content="{{ $page['title'] }}">
         <meta property="og:description" content="{{ $page['metaDescription'] }}">
         <meta property="og:url" content="{{ $canonicalUrl }}">
         <meta property="og:type" content="website">
         <meta property="og:locale" content="es_EC">
+        <meta property="og:site_name" content="{{ str_replace('-', ' ', config('app.name', 'Punto Madera')) }}">
         <meta property="og:image" content="{{ $siteUrl }}{{ $page['heroImage'] }}">
+        <meta property="og:image:alt" content="{{ $page['serviceName'] }} en Guayaquil">
         <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:title" content="{{ $page['title'] }}">
+        <meta name="twitter:description" content="{{ $page['metaDescription'] }}">
+        <meta name="twitter:image" content="{{ $siteUrl }}{{ $page['heroImage'] }}">
+        <link rel="sitemap" type="application/xml" href="{{ $siteUrl }}/sitemap.xml">
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=poppins:300,400,500,600" rel="stylesheet">
         @foreach ($schemas as $schema)
