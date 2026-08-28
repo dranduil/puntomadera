@@ -10,6 +10,27 @@ No concrete implementation error has been identified in the source chat that cre
 
 <!-- The record_error.py script appends dated entries below this line. -->
 
+### 2026-08-28 11:17 UTC — remote-verification
+- Symptom: The remote db:table inspection failed because --counts is not a supported option
+- Cause: I assumed a database command option without checking the deployed Laravel command help
+- Prevention: Inspect php artisan help for deployed command options before using them, and use only verified flags
+- Verification: No data-changing command ran; the remote help output will determine the next read-only check
+
+
+### 2026-08-28 11:16 UTC — remote-verification
+- Symptom: The remote service-count command failed with a PsySH unexpected namespace separator parse error
+- Cause: Nested local-shell, SSH, and container quoting over-escaped the PHP namespace in the Tinker expression
+- Prevention: Prefer php artisan db:table for remote read-only counts; if Tinker is unavoidable, use app("db") without namespace separators and validate the exact remote command quoting
+- Verification: The production migration status command succeeded; the database table inspection will provide the service count without inline PHP
+
+
+### 2026-08-28 10:50 UTC — security
+- Symptom: A diagnostic curl command printed production response headers containing session cookies
+- Cause: The command used curl -D - while only the response body and status were needed
+- Prevention: Use curl -sS -o /dev/null -w for status checks and never print production response headers unless a header is specifically required
+- Verification: Subsequent production checks will request only body content or status output
+
+
 ### 2026-08-28 10:35 UTC — tooling
 - Symptom: Prettier failed while formatting a PHP feature test
 - Cause: The command included tests/Feature/SeoAndTrackingTest.php even though Prettier has no PHP parser
