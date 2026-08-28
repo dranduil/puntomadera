@@ -15,6 +15,7 @@ type Work = {
     worked_on: string | null;
     location: string | null;
     images: string[] | null;
+    image_alts: string[] | null;
 };
 
 type Paginator<T> = {
@@ -30,6 +31,13 @@ type Props = {
     landing: Landing;
     works: Paginator<Work>;
 };
+
+function imageAlt(work: Work, index: number): string {
+    return (
+        work.image_alts?.[index] ??
+        `${work.title}${work.location ? ` en ${work.location}` : ''}`
+    );
+}
 
 export default function WorksIndex({ landing, works }: Props) {
     return (
@@ -68,7 +76,7 @@ export default function WorksIndex({ landing, works }: Props) {
                                         {cover ? (
                                             <img
                                                 src={cover}
-                                                alt={work.title}
+                                                alt={imageAlt(work, 0)}
                                                 className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                                                 loading="lazy"
                                             />
@@ -96,24 +104,25 @@ export default function WorksIndex({ landing, works }: Props) {
                                         )}
                                         {work.images &&
                                             work.images.length > 1 && (
-                                                <div className="mt-4 grid grid-cols-4 gap-2">
-                                                    {work.images
-                                                        .slice(0, 4)
-                                                        .map((url) => (
+                                                <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-4">
+                                                    {work.images.map(
+                                                        (url, index) => (
                                                             <div
-                                                                key={url}
+                                                                key={`${url}-${index}`}
                                                                 className="aspect-square overflow-hidden rounded-md bg-muted"
                                                             >
                                                                 <img
                                                                     src={url}
-                                                                    alt={
-                                                                        work.title
-                                                                    }
+                                                                    alt={imageAlt(
+                                                                        work,
+                                                                        index,
+                                                                    )}
                                                                     className="h-full w-full object-cover"
                                                                     loading="lazy"
                                                                 />
                                                             </div>
-                                                        ))}
+                                                        ),
+                                                    )}
                                                 </div>
                                             )}
                                     </div>

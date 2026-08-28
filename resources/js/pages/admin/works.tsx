@@ -18,6 +18,7 @@ type Work = {
     worked_on: string | null;
     location: string | null;
     images: string[] | null;
+    image_alts: string[] | null;
     is_published: boolean;
 };
 
@@ -40,6 +41,13 @@ const breadcrumbs: BreadcrumbItem[] = [
         href: index(),
     },
 ];
+
+function imageAlt(work: Work, index: number): string {
+    return (
+        work.image_alts?.[index] ??
+        `${work.title}${work.location ? ` en ${work.location}` : ''}`
+    );
+}
 
 export default function WorksAdmin({ works }: Props) {
     return (
@@ -123,7 +131,7 @@ export default function WorksAdmin({ works }: Props) {
 
                                 <div className="grid gap-2 md:col-span-2">
                                     <Label htmlFor="new_images">
-                                        Image URLs (one per line)
+                                        Image URLs or paths (one per line)
                                     </Label>
                                     <textarea
                                         id="new_images"
@@ -132,6 +140,22 @@ export default function WorksAdmin({ works }: Props) {
                                         placeholder="https://...\nhttps://..."
                                     />
                                     <InputError message={errors.images} />
+                                </div>
+
+                                <div className="grid gap-2 md:col-span-2">
+                                    <Label htmlFor="new_image_alts">
+                                        Spanish alt text (one per line)
+                                    </Label>
+                                    <textarea
+                                        id="new_image_alts"
+                                        name="image_alts"
+                                        className="min-h-28 w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-xs outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50"
+                                        placeholder="Puerta de madera instalada en Guayaquil\nCloset a medida con cajones"
+                                    />
+                                    <p className="text-xs text-muted-foreground">
+                                        Mantén el mismo orden que las imágenes.
+                                    </p>
+                                    <InputError message={errors.image_alts} />
                                 </div>
 
                                 <div className="flex items-center gap-2 md:col-span-2">
@@ -182,21 +206,22 @@ export default function WorksAdmin({ works }: Props) {
                                     )}
                                     {work.images && work.images.length > 0 && (
                                         <div className="mt-4 grid grid-cols-6 gap-2">
-                                            {work.images
-                                                .slice(0, 6)
-                                                .map((url) => (
-                                                    <div
-                                                        key={url}
-                                                        className="aspect-square overflow-hidden rounded-md bg-muted"
-                                                    >
-                                                        <img
-                                                            src={url}
-                                                            alt={work.title}
-                                                            className="h-full w-full object-cover"
-                                                            loading="lazy"
-                                                        />
-                                                    </div>
-                                                ))}
+                                            {work.images.map((url, index) => (
+                                                <div
+                                                    key={`${url}-${index}`}
+                                                    className="aspect-square overflow-hidden rounded-md bg-muted"
+                                                >
+                                                    <img
+                                                        src={url}
+                                                        alt={imageAlt(
+                                                            work,
+                                                            index,
+                                                        )}
+                                                        className="h-full w-full object-cover"
+                                                        loading="lazy"
+                                                    />
+                                                </div>
+                                            ))}
                                         </div>
                                     )}
                                 </div>
@@ -309,7 +334,7 @@ export default function WorksAdmin({ works }: Props) {
                                                     <Label
                                                         htmlFor={`images-${work.id}`}
                                                     >
-                                                        Image URLs
+                                                        Image URLs or paths
                                                     </Label>
                                                     <textarea
                                                         id={`images-${work.id}`}
@@ -323,6 +348,33 @@ export default function WorksAdmin({ works }: Props) {
                                                     />
                                                     <InputError
                                                         message={errors.images}
+                                                    />
+                                                </div>
+
+                                                <div className="grid gap-2">
+                                                    <Label
+                                                        htmlFor={`image_alts-${work.id}`}
+                                                    >
+                                                        Spanish alt text
+                                                    </Label>
+                                                    <textarea
+                                                        id={`image_alts-${work.id}`}
+                                                        name="image_alts"
+                                                        defaultValue={
+                                                            work.image_alts?.join(
+                                                                '\n',
+                                                            ) ?? ''
+                                                        }
+                                                        className="min-h-24 w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-xs outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50"
+                                                    />
+                                                    <p className="text-xs text-muted-foreground">
+                                                        Un texto por imagen y en
+                                                        el mismo orden.
+                                                    </p>
+                                                    <InputError
+                                                        message={
+                                                            errors.image_alts
+                                                        }
                                                     />
                                                 </div>
 

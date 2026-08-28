@@ -23,6 +23,20 @@ class UpdateWorkRequest extends FormRequest
             ]);
         }
 
+        $imageAlts = $this->input('image_alts');
+
+        if (is_string($imageAlts)) {
+            $parsed = collect(preg_split('/[\r\n]+/', $imageAlts))
+                ->map(fn ($value) => trim($value))
+                ->filter()
+                ->values()
+                ->all();
+
+            $this->merge([
+                'image_alts' => $parsed,
+            ]);
+        }
+
         $slug = $this->input('slug');
         if (is_string($slug)) {
             $slug = trim($slug);
@@ -46,7 +60,9 @@ class UpdateWorkRequest extends FormRequest
             'worked_on' => ['nullable', 'date'],
             'location' => ['nullable', 'string', 'max:255'],
             'images' => ['nullable', 'array', 'max:30'],
-            'images.*' => ['string', 'url', 'max:2048'],
+            'images.*' => ['string', 'max:2048', 'regex:/^(?:https?:\/\/|\/)/i'],
+            'image_alts' => ['nullable', 'array', 'max:30'],
+            'image_alts.*' => ['string', 'max:255'],
             'is_published' => ['required', 'boolean'],
         ];
     }

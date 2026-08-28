@@ -28,12 +28,12 @@ import { getPublicAppName, sanitizePublicTitle } from '@/lib/site';
 import { cn } from '@/lib/utils';
 
 const images = {
-    hero: 'images/guayaquil.jpg',
-    workshop: 'images/works/service04.jpg',
-    kitchen: 'images/works/service01.jpg',
-    closet: 'images/works/service05.jpg',
-    doors: 'images/works/service03.jpg',
-    parallax: 'images/works/service06.jpg',
+    hero: 'images/works/puerta-caoba-regenerada.png',
+    workshop: 'images/works/punto-madera/punto-madera-42.jpg',
+    kitchen: 'images/works/punto-madera/punto-madera-10.jpg',
+    closet: 'images/works/punto-madera/punto-madera-20.jpg',
+    doors: 'images/works/punto-madera/punto-madera-01.jpg',
+    parallax: 'images/works/punto-madera/punto-madera-43.jpg',
 };
 
 const defaultSeo = {
@@ -232,7 +232,7 @@ export default function CarpinteroLanding({ landing }: Props) {
                 <meta property="og:image" content={images.hero} />
                 <meta
                     property="og:image:alt"
-                    content="Trabajo de carpintería a medida en Guayaquil"
+                    content="Puerta de madera color caoba con acabado profesional en Guayaquil"
                 />
                 <meta name="twitter:card" content="summary_large_image" />
                 <meta name="twitter:title" content={seoTitle} />
@@ -432,17 +432,17 @@ export default function CarpinteroLanding({ landing }: Props) {
                         </div>
                     </section>
 
-                    <section id="trabajos" className="hidden">
+                    <section id="trabajos">
                         <div className="mx-auto max-w-6xl px-4">
                             <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
                                 <div className="max-w-2xl">
                                     <h2 className="text-3xl font-semibold tracking-tight">
-                                        Trabajos recientes (imágenes de ejemplo)
+                                        Trabajos recientes
                                     </h2>
                                     <p className="mt-3 text-muted-foreground">
-                                        Reemplazaremos estas imágenes por tu
-                                        portafolio real. La estructura ya queda
-                                        lista para SEO y conversión.
+                                        Conoce proyectos reales de puertas,
+                                        closets, muebles y acabados realizados
+                                        en Guayaquil.
                                     </p>
                                 </div>
                                 <Button asChild variant="outline">
@@ -493,7 +493,8 @@ export default function CarpinteroLanding({ landing }: Props) {
                                             <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-background/10 to-transparent" />
                                             <div className="absolute right-0 bottom-0 left-0 p-5">
                                                 <div className="text-sm text-muted-foreground">
-                                                    Guayaquil · Proyecto ejemplo
+                                                    Guayaquil · Trabajo
+                                                    realizado
                                                 </div>
                                                 <div className="mt-1 text-lg font-semibold">
                                                     {item.title}

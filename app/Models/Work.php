@@ -13,6 +13,7 @@ class Work extends Model
         'worked_on',
         'location',
         'images',
+        'image_alts',
         'is_published',
     ];
 
@@ -21,6 +22,7 @@ class Work extends Model
         return [
             'worked_on' => 'date',
             'images' => 'array',
+            'image_alts' => 'array',
             'is_published' => 'boolean',
         ];
     }
