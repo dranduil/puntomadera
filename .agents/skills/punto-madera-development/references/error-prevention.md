@@ -10,6 +10,20 @@ No concrete implementation error has been identified in the source chat that cre
 
 <!-- The record_error.py script appends dated entries below this line. -->
 
+### 2026-08-28 11:27 UTC — production-deployment
+- Symptom: docker compose build succeeded but container recreation failed with a generated-container-name conflict
+- Cause: A stale container with the compose replacement name remained on the production host
+- Prevention: Before recreating a production compose service, inspect all exact matching containers with docker ps -a and remove only a verified stale stopped conflict
+- Verification: The new image was built; the existing live container remained running while the conflicting container is being audited
+
+
+### 2026-08-28 11:25 UTC — security
+- Symptom: Inspecting the production checkout remote printed an embedded Git credential
+- Cause: git remote -v exposes credentials stored in the deployment remote URL
+- Prevention: Never run git remote -v on production; inspect only the remote host/repository shape with credentials redacted or omit remote inspection entirely
+- Verification: The credential was not reused or written to the workspace; subsequent deployment checks will avoid printing remote URLs
+
+
 ### 2026-08-28 11:17 UTC — remote-verification
 - Symptom: The remote db:table inspection failed because --counts is not a supported option
 - Cause: I assumed a database command option without checking the deployed Laravel command help
