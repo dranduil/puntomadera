@@ -1,6 +1,5 @@
 <?php
 
-use App\Models\Product;
 use App\Models\Service;
 
 test('public document titles never use the Laravel framework fallback', function () {
@@ -24,7 +23,7 @@ test('robots explicitly allows OpenAI search crawling', function () {
         ->toContain('Sitemap: /sitemap.xml');
 });
 
-test('sitemap lists public pages and published catalog records', function () {
+test('sitemap lists public pages and published services', function () {
     config(['app.url' => 'https://example.test']);
 
     Service::query()->create([
@@ -37,17 +36,6 @@ test('sitemap lists public pages and published catalog records', function () {
         'slug' => 'draft-service',
         'is_published' => false,
     ]);
-    Product::query()->create([
-        'name' => 'Published product',
-        'slug' => 'published-product',
-        'is_published' => true,
-    ]);
-    Product::query()->create([
-        'name' => 'Draft product',
-        'slug' => 'draft-product',
-        'is_published' => false,
-    ]);
-
     $response = $this->get(route('sitemap'));
 
     $response->assertSuccessful()
@@ -59,9 +47,13 @@ test('sitemap lists public pages and published catalog records', function () {
     expect($response->getContent())
         ->toContain('<loc>https://example.test</loc>')
         ->toContain('<loc>https://example.test/servicios/published-service</loc>')
-        ->toContain('<loc>https://example.test/tienda/published-product</loc>')
         ->not->toContain('/servicios/draft-service')
-        ->not->toContain('/tienda/draft-product');
+        ->not->toContain('/tienda');
+});
+
+test('public storefront routes are removed', function () {
+    $this->get('/tienda')->assertNotFound();
+    $this->get('/tienda/repisa-flotante-madera')->assertNotFound();
 });
 
 test('tracking scripts are rendered only when their ids are configured', function () {

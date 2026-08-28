@@ -55,15 +55,6 @@
         </nav>
 
         <div class="flex items-center gap-2">
-            <div class="hidden items-center gap-1 lg:flex">
-                <a href="/tienda" class="inline-flex size-9 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted/70 hover:text-primary" title="Buscar" aria-label="Buscar">
-                    <svg class="size-4 text-[#8B6F4E]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <circle cx="11" cy="11" r="8"></circle>
-                        <path d="m21 21-4.3-4.3"></path>
-                    </svg>
-                </a>
-            </div>
-
             <div class="md:hidden">
                 <details class="group relative">
                     <summary class="inline-flex size-9 cursor-pointer list-none items-center justify-center rounded-md border border-input bg-background shadow-xs">

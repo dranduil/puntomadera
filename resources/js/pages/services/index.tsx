@@ -96,7 +96,7 @@ export default function ServicesIndex({ landing, services }: Props) {
                         <Card className="mt-10 max-w-2xl">
                             <CardHeader>
                                 <CardTitle>
-                                    Estamos preparando este catálogo
+                                    Estamos preparando nuestros servicios
                                 </CardTitle>
                                 <CardDescription className="leading-6">
                                     Cuéntanos qué necesitas y te orientamos

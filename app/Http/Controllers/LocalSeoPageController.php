@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\HomeLanding;
-use App\Models\Product;
 use App\Models\Service;
 use Illuminate\Http\Response as HttpResponse;
 use Illuminate\View\View;
@@ -117,16 +116,12 @@ class LocalSeoPageController extends Controller
     public function sitemap(): HttpResponse
     {
         $baseUrl = rtrim(config('app.url'), '/');
-        $urls = collect(['/', '/servicios', '/trabajos', '/contacto', '/tienda'])
+        $urls = collect(['/', '/servicios', '/trabajos', '/contacto'])
             ->merge(collect(array_keys($this->pages()))->map(fn (string $slug) => "/{$slug}"))
             ->merge(Service::query()
                 ->where('is_published', true)
                 ->pluck('slug')
                 ->map(fn (string $slug) => "/servicios/{$slug}"))
-            ->merge(Product::query()
-                ->where('is_published', true)
-                ->pluck('slug')
-                ->map(fn (string $slug) => "/tienda/{$slug}"))
             ->unique()
             ->values();
 

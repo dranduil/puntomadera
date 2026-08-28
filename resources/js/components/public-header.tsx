@@ -1,5 +1,5 @@
 import { Link } from '@inertiajs/react';
-import { ChevronDown, Menu, Search } from 'lucide-react';
+import { ChevronDown, Menu } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
     Sheet,
@@ -34,7 +34,8 @@ export function PublicHeader({ landing, isHome = false, whatsappHref }: Props) {
     const appName = import.meta.env.VITE_APP_NAME || 'punto madera';
     const sectionHref = (id: string) => (isHome ? `#${id}` : `/#${id}`);
 
-    const envWhatsapp = import.meta.env.VITE_WHATSAPP_NUMBER?.trim() ?? '593998897813';
+    const envWhatsapp =
+        import.meta.env.VITE_WHATSAPP_NUMBER?.trim() ?? '593998897813';
     const rawWhatsapp = envWhatsapp || landing?.whatsapp_number?.trim();
     const whatsappNumber = rawWhatsapp ? rawWhatsapp : '593998897813';
     const defaultWhatsappHref =
@@ -127,24 +128,6 @@ export function PublicHeader({ landing, isHome = false, whatsappHref }: Props) {
                 </nav>
 
                 <div className="flex items-center gap-2">
-                    <div className="hidden items-center gap-1 lg:flex">
-                        {[
-                            { label: 'Buscar', icon: Search, href: '/tienda' },
-                        ].map((item) => (
-                            <Button
-                                key={item.label}
-                                asChild
-                                size="icon"
-                                variant="ghost"
-                                title={item.label}
-                                aria-label={item.label}
-                            >
-                                <Link href={item.href}>
-                                    <item.icon className="size-4 text-[#8B6F4E]" />
-                                </Link>
-                            </Button>
-                        ))}
-                    </div>
                     <div className="md:hidden">
                         <Sheet>
                             <SheetTrigger asChild>

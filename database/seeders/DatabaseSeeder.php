@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\Product;
 use App\Models\Service;
 use App\Models\User;
 use App\Models\Work;
@@ -114,68 +113,6 @@ class DatabaseSeeder extends Seeder
             Service::query()->updateOrCreate(
                 ['slug' => $service['slug']],
                 $service,
-            );
-        }
-
-        $products = [
-            [
-                'name' => 'Repisa flotante de madera',
-                'slug' => 'repisa-flotante-madera',
-                'sku' => 'PM-PRD-001',
-                'summary' => 'Repisa flotante para sala, dormitorio u oficina.',
-                'description' => 'Repisa de madera con soportes ocultos y acabado sellado para uso interior.',
-                'price_cents' => 4900,
-                'currency' => 'USD',
-                'stock_qty' => 20,
-                'image_path' => 'images/works/service04.jpg',
-                'is_featured' => true,
-                'is_published' => true,
-            ],
-            [
-                'name' => 'Mesa lateral compacta',
-                'slug' => 'mesa-lateral-compacta',
-                'sku' => 'PM-PRD-002',
-                'summary' => 'Mesa lateral compacta para espacios pequenos.',
-                'description' => 'Mesa lateral en madera y melamina, facil de integrar en sala o dormitorio.',
-                'price_cents' => 6900,
-                'currency' => 'USD',
-                'stock_qty' => 15,
-                'image_path' => 'images/works/service01.jpg',
-                'is_featured' => true,
-                'is_published' => true,
-            ],
-            [
-                'name' => 'Escritorio minimal 120cm',
-                'slug' => 'escritorio-minimal-120cm',
-                'sku' => 'PM-PRD-003',
-                'summary' => 'Escritorio para home office con cubierta resistente.',
-                'description' => 'Escritorio minimal de 120 cm con estructura firme y pasacables opcional.',
-                'price_cents' => 9900,
-                'currency' => 'USD',
-                'stock_qty' => 10,
-                'image_path' => 'images/works/service06.jpg',
-                'is_featured' => true,
-                'is_published' => true,
-            ],
-            [
-                'name' => 'Panel decorativo listonado',
-                'slug' => 'panel-decorativo-listonado',
-                'sku' => 'PM-PRD-004',
-                'summary' => 'Panel listonado para pared interior.',
-                'description' => 'Panel decorativo listonado para acento visual en sala, TV o cabecero.',
-                'price_cents' => 8900,
-                'currency' => 'USD',
-                'stock_qty' => 12,
-                'image_path' => 'images/works/service05.jpg',
-                'is_featured' => false,
-                'is_published' => true,
-            ],
-        ];
-
-        foreach ($products as $product) {
-            Product::query()->updateOrCreate(
-                ['slug' => $product['slug']],
-                $product,
             );
         }
 

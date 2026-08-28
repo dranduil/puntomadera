@@ -11,7 +11,6 @@ use App\Http\Controllers\HomeLandingController;
 use App\Http\Controllers\LocalSeoPageController;
 use App\Http\Controllers\ServiceBookingController;
 use App\Http\Controllers\ServiceController;
-use App\Http\Controllers\ShopController;
 use App\Http\Controllers\WorkController;
 use App\Http\Middleware\AdminOnly;
 use Illuminate\Support\Facades\Route;
@@ -32,8 +31,6 @@ Route::get('/carpinteria-a-medida-guayaquil', [LocalSeoPageController::class, 's
 
 Route::get('/contacto', [ContactPageController::class, 'show'])->name('contact.show');
 Route::get('/trabajos', [WorkController::class, 'index'])->name('works.index');
-Route::get('/tienda', [ShopController::class, 'index'])->name('shop.index');
-Route::get('/tienda/{product:slug}', [ShopController::class, 'show'])->name('shop.show');
 Route::get('/servicios', [ServiceController::class, 'index'])->name('services.index');
 Route::get('/servicios/{service:slug}', [ServiceController::class, 'show'])->name('services.show');
 

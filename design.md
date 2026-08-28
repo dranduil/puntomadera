@@ -214,34 +214,32 @@ Style:
 - Minimal horizontal navbar
 - Logo on the left
 - Menu links centered or right-aligned
-- Icons for search, account, cart, and wishlist
+- A simple menu icon where needed on smaller screens
 - Light background with subtle shadow or border
 
 Example links:
 
 - Inicio
-- Productos
-- Proyectos
-- Nosotros
+- Servicios
+- Trabajos
 - Contacto
 
 ---
 
-### Cards
+### Service and project cards
 
-Product cards should use:
+Service and project cards should use:
 
 - Rounded corners: 8px to 12px
 - Light background: `#FAF8F5`
 - Thin border: `#E4D8CA`
-- Large product image
+- Large project image when available
 - Small category label
-- Product name
-- Price
+- Service or project name
+- Short description
 - Arrow icon for details
-- Optional favorite icon
 
-Card style should be clean and quiet. Let the wood textures and product photos carry the emotion.
+Card style should be clean and quiet. Let the wood textures and project photos carry the emotion.
 
 ---
 
@@ -418,14 +416,13 @@ Avoid fast, flashy, or chaotic motion.
 Recommended homepage structure:
 
 1. Hero
-2. Featured products
-3. Custom furniture / made-to-measure section
-4. Projects gallery
-5. Material quality section
-6. About Punto Madera
-7. Testimonials
-8. Newsletter
-9. Footer
+2. Custom furniture / made-to-measure section
+3. Projects gallery
+4. Material quality section
+5. About Punto Madera
+6. Testimonials
+7. Contact / quotation
+8. Footer
 
 ---
 
@@ -452,8 +449,8 @@ Footer should include:
 
 - Logo
 - Short brand description
-- Product links
-- Company links
+- Service and project links
+- Contact links
 - Contact info
 - Newsletter field
 - Social icons

@@ -21,7 +21,7 @@ GOOGLE_ANALYTICS_ID=G-XXXXXXXXXX
 META_PIXEL_ID=123456789012345
 ```
 
-Leave either value blank to disable that integration. The sitemap is available at `/sitemap.xml` and includes published services and products.
+Leave either value blank to disable that integration. The sitemap is available at `/sitemap.xml` and includes published services and public project pages.
 
 Análisis de Competencia SEO para Servicios de Carpintería en Guayaquil, Ecuador
 
