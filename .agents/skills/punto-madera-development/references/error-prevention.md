@@ -10,6 +10,13 @@ No concrete implementation error has been identified in the source chat that cre
 
 <!-- The record_error.py script appends dated entries below this line. -->
 
+### 2026-08-28 10:35 UTC — tooling
+- Symptom: Prettier failed while formatting a PHP feature test
+- Cause: The command included tests/Feature/SeoAndTrackingTest.php even though Prettier has no PHP parser
+- Prevention: Run Prettier only for frontend file extensions and use Pint for PHP files
+- Verification: Frontend file formatted successfully; PHP formatting will be verified with Pint
+
+
 ### 2026-08-28 09:27 UTC — local-verification
 - Symptom: The prevention-log reread command failed because exec_command was given a nonexistent working directory.
 - Cause: The project path was mistyped as /Volumes/Steevenlacerna/Projects instead of /Volumes/SteevenSSD/Projects.

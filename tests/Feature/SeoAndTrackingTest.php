@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Service;
+use Inertia\Testing\AssertableInertia as Assert;
 
 test('public document titles never use the Laravel framework fallback', function () {
     config(['app.name' => 'Laravel']);
@@ -54,6 +55,14 @@ test('sitemap lists public pages and published services', function () {
 test('public storefront routes are removed', function () {
     $this->get('/tienda')->assertNotFound();
     $this->get('/tienda/repisa-flotante-madera')->assertNotFound();
+});
+
+test('contact page is available for WhatsApp quotations', function () {
+    $this->get(route('contact.show'))
+        ->assertSuccessful()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('contact/index'),
+        );
 });
 
 test('tracking scripts are rendered only when their ids are configured', function () {
