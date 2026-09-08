@@ -5,4 +5,4 @@ Allow: /
 User-agent: OAI-SearchBot
 Allow: /
 
-Sitemap: /sitemap.xml
+Sitemap: https://punto-madera.com/sitemap.xml

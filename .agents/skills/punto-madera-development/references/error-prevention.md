@@ -10,6 +10,13 @@ No concrete implementation error has been identified in the source chat that cre
 
 <!-- The record_error.py script appends dated entries below this line. -->
 
+### 2026-09-08 15:30 UTC — routing-test
+- Symptom: Domain route did not redirect www host in focused test
+- Cause: Host-based route matching was not exercised reliably by the test request
+- Prevention: Use explicit canonical-host middleware and test it with an absolute URL or direct Request
+- Verification: Focused SEO test passes with the canonical redirect assertion
+
+
 ### 2026-08-28 11:27 UTC — production-deployment
 - Symptom: docker compose build succeeded but container recreation failed with a generated-container-name conflict
 - Cause: A stale container with the compose replacement name remained on the production host

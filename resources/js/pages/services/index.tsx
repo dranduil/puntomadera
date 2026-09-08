@@ -30,9 +30,34 @@ type Props = {
 };
 
 export default function ServicesIndex({ landing, services }: Props) {
+    const siteUrl = import.meta.env.VITE_APP_URL || 'https://punto-madera.com';
+    const canonicalUrl = `${siteUrl.replace(/\/$/, '')}/servicios`;
+    const seoTitle = 'Servicios de carpintería en Guayaquil | Punto Madera';
+    const seoDescription =
+        'Servicios de carpintería en Guayaquil: muebles a medida, closets, anaqueles de cocina, puertas, reparaciones y ebanistería.';
+
     return (
         <>
-            <Head title="Servicios" />
+            <Head title={seoTitle}>
+                <meta head-key="description" name="description" content={seoDescription} />
+                <meta head-key="robots" name="robots" content="index,follow,max-image-preview:large" />
+                <link head-key="canonical" rel="canonical" href={canonicalUrl} />
+                <meta head-key="og:title" property="og:title" content={seoTitle} />
+                <meta head-key="og:description" property="og:description" content={seoDescription} />
+                <meta head-key="og:url" property="og:url" content={canonicalUrl} />
+                <meta head-key="og:type" property="og:type" content="website" />
+                <meta head-key="og:locale" property="og:locale" content="es_EC" />
+                <meta head-key="og:site_name" property="og:site_name" content="Punto Madera" />
+                <meta head-key="twitter:card" name="twitter:card" content="summary_large_image" />
+                <meta head-key="twitter:title" name="twitter:title" content={seoTitle} />
+                <meta head-key="twitter:description" name="twitter:description" content={seoDescription} />
+                <link
+                    head-key="sitemap"
+                    rel="sitemap"
+                    type="application/xml"
+                    href={`${siteUrl.replace(/\/$/, '')}/sitemap.xml`}
+                />
+            </Head>
 
             <div className="min-h-screen bg-background text-foreground">
                 <PublicHeader

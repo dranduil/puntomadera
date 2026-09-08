@@ -116,8 +116,9 @@ const faqs = [
 
 export default function CarpinteroLanding({ landing }: Props) {
     const appName = getPublicAppName(import.meta.env.VITE_APP_NAME);
-    const siteUrl = import.meta.env.VITE_APP_URL || 'https://puntomadera.ec';
+    const siteUrl = import.meta.env.VITE_APP_URL || 'https://punto-madera.com';
     const canonicalUrl = `${siteUrl.replace(/\/$/, '')}/`;
+    const heroImageUrl = `${siteUrl.replace(/\/$/, '')}/${images.hero.replace(/^\//, '')}`;
     const areasServed = landing.areas_served ?? [
         'Guayaquil',
         'Samborondón',
@@ -206,8 +207,9 @@ export default function CarpinteroLanding({ landing }: Props) {
     return (
         <>
             <Head title={seoTitle}>
-                <meta name="description" content={seoDescription} />
+                <meta head-key="description" name="description" content={seoDescription} />
                 <meta
+                    head-key="robots"
                     name="robots"
                     content="index,follow,max-image-preview:large"
                 />
@@ -219,25 +221,28 @@ export default function CarpinteroLanding({ landing }: Props) {
                 <meta name="geo.placename" content="Guayaquil, Ecuador" />
                 <meta name="geo.position" content="-2.170998;-79.922356" />
                 <meta name="ICBM" content="-2.170998, -79.922356" />
-                <link rel="canonical" href={canonicalUrl} />
+                <link head-key="canonical" rel="canonical" href={canonicalUrl} />
                 <meta
+                    head-key="og:title"
                     property="og:title"
                     content="Carpintero en Guayaquil | Carpintería a domicilio"
                 />
-                <meta property="og:description" content={seoDescription} />
-                <meta property="og:url" content={canonicalUrl} />
-                <meta property="og:type" content="website" />
-                <meta property="og:locale" content="es_EC" />
-                <meta property="og:site_name" content={appName} />
-                <meta property="og:image" content={images.hero} />
+                <meta head-key="og:description" property="og:description" content={seoDescription} />
+                <meta head-key="og:url" property="og:url" content={canonicalUrl} />
+                <meta head-key="og:type" property="og:type" content="website" />
+                <meta head-key="og:locale" property="og:locale" content="es_EC" />
+                <meta head-key="og:site_name" property="og:site_name" content={appName} />
+                <meta head-key="og:image" property="og:image" content={heroImageUrl} />
                 <meta
+                    head-key="og:image:alt"
                     property="og:image:alt"
                     content="Puerta de madera color caoba con acabado profesional en Guayaquil"
                 />
-                <meta name="twitter:card" content="summary_large_image" />
-                <meta name="twitter:title" content={seoTitle} />
-                <meta name="twitter:description" content={seoDescription} />
+                <meta head-key="twitter:card" name="twitter:card" content="summary_large_image" />
+                <meta head-key="twitter:title" name="twitter:title" content={seoTitle} />
+                <meta head-key="twitter:description" name="twitter:description" content={seoDescription} />
                 <link
+                    head-key="sitemap"
                     rel="sitemap"
                     type="application/xml"
                     href={`${siteUrl.replace(/\/$/, '')}/sitemap.xml`}

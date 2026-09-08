@@ -11,8 +11,51 @@ test('public document titles never use the Laravel framework fallback', function
     $response->assertSuccessful();
 
     expect($response->getContent())
-        ->toContain('<title inertia>Punto Madera</title>')
+        ->toContain('<title inertia>Carpintero en Guayaquil | Muebles a medida, closets y puertas</title>')
         ->not->toContain('<title inertia>Laravel</title>');
+});
+
+test('homepage exposes crawler metadata for the canonical host', function () {
+    config(['app.url' => 'https://punto-madera.com']);
+
+    $response = $this->get(route('home'));
+
+    $response->assertSuccessful();
+
+    expect($response->getContent())
+        ->toContain('<title inertia>Carpintero en Guayaquil | Muebles a medida, closets y puertas</title>')
+        ->toContain('<meta inertia="description" name="description"')
+        ->toContain('<link inertia="canonical" rel="canonical" href="https://punto-madera.com/">')
+        ->toContain('<meta inertia="og:url" property="og:url" content="https://punto-madera.com/">')
+        ->toContain('href="https://punto-madera.com/sitemap.xml"');
+});
+
+test('www public requests redirect to the canonical host', function () {
+    $response = $this->get('http://www.punto-madera.com/carpinteria-a-medida-guayaquil?utm_source=search');
+
+    $response->assertRedirect('https://punto-madera.com/carpinteria-a-medida-guayaquil?utm_source=search');
+});
+
+test('service detail pages expose searchable metadata', function () {
+    config(['app.url' => 'https://punto-madera.com']);
+
+    $service = Service::query()->create([
+        'name' => 'Muebles a medida en Guayaquil',
+        'slug' => 'muebles-a-medida-guayaquil',
+        'summary' => 'Diseño y fabricación de muebles a medida en Guayaquil.',
+        'description' => 'Soluciones personalizadas para hogares y negocios.',
+        'image_path' => 'images/works/service01.jpg',
+        'is_published' => true,
+    ]);
+
+    $response = $this->get(route('services.show', ['service' => $service]));
+
+    $response->assertSuccessful();
+
+    expect($response->getContent())
+        ->toContain('<title inertia>Muebles a medida en Guayaquil | Punto Madera Guayaquil</title>')
+        ->toContain('https://punto-madera.com/servicios/muebles-a-medida-guayaquil')
+        ->toContain('Diseño y fabricación de muebles a medida en Guayaquil.');
 });
 
 test('robots explicitly allows OpenAI search crawling', function () {
@@ -21,7 +64,7 @@ test('robots explicitly allows OpenAI search crawling', function () {
     expect($robots)
         ->toContain('User-agent: OAI-SearchBot')
         ->toContain('Allow: /')
-        ->toContain('Sitemap: /sitemap.xml');
+        ->toContain('Sitemap: https://punto-madera.com/sitemap.xml');
 });
 
 test('sitemap lists public pages and published services', function () {

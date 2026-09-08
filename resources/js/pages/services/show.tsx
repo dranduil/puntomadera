@@ -43,6 +43,34 @@ export default function ServiceShow({ landing, service }: Props) {
     const envWhatsapp = import.meta.env.VITE_WHATSAPP_NUMBER?.trim() ?? '593998897813';
     const rawWhatsapp = envWhatsapp || landing.whatsapp_number?.trim();
     const whatsappNumber = rawWhatsapp ? rawWhatsapp : '593998897813';
+    const siteUrl = import.meta.env.VITE_APP_URL || 'https://punto-madera.com';
+    const siteOrigin = siteUrl.replace(/\/$/, '');
+    const canonicalUrl = `${siteOrigin}/servicios/${service.slug}`;
+    const seoTitle = `${service.name} | Punto Madera Guayaquil`;
+    const seoDescription =
+        service.summary?.trim() ||
+        service.description?.trim() ||
+        `Servicio de ${service.name} en Guayaquil.`;
+    const imageUrl = service.image_path
+        ? /^https?:\/\//i.test(service.image_path)
+            ? service.image_path
+            : `${siteOrigin}/${service.image_path.replace(/^\//, '')}`
+        : null;
+    const serviceSchema = {
+        '@context': 'https://schema.org',
+        '@type': 'Service',
+        '@id': `${canonicalUrl}#service`,
+        name: service.name,
+        description: seoDescription,
+        serviceType: service.name,
+        areaServed: { '@type': 'City', name: 'Guayaquil' },
+        provider: {
+            '@type': 'HomeAndConstructionBusiness',
+            name: 'Punto Madera',
+            url: siteOrigin,
+        },
+        url: canonicalUrl,
+    };
 
     const composedMessage = useMemo(() => {
         const header =
@@ -65,7 +93,42 @@ export default function ServiceShow({ landing, service }: Props) {
 
     return (
         <>
-            <Head title={`Servicio - ${service.name}`} />
+            <Head title={seoTitle}>
+                <meta head-key="description" name="description" content={seoDescription} />
+                <meta head-key="robots" name="robots" content="index,follow,max-image-preview:large" />
+                <link head-key="canonical" rel="canonical" href={canonicalUrl} />
+                <meta head-key="og:title" property="og:title" content={seoTitle} />
+                <meta head-key="og:description" property="og:description" content={seoDescription} />
+                <meta head-key="og:url" property="og:url" content={canonicalUrl} />
+                <meta head-key="og:type" property="og:type" content="website" />
+                <meta head-key="og:locale" property="og:locale" content="es_EC" />
+                <meta head-key="og:site_name" property="og:site_name" content="Punto Madera" />
+                {imageUrl && (
+                    <>
+                        <meta head-key="og:image" property="og:image" content={imageUrl} />
+                        <meta
+                            head-key="og:image:alt"
+                            property="og:image:alt"
+                            content={`${service.name} en Guayaquil`}
+                        />
+                    </>
+                )}
+                <meta head-key="twitter:card" name="twitter:card" content="summary_large_image" />
+                <meta head-key="twitter:title" name="twitter:title" content={seoTitle} />
+                <meta head-key="twitter:description" name="twitter:description" content={seoDescription} />
+                {imageUrl && (
+                    <meta head-key="twitter:image" name="twitter:image" content={imageUrl} />
+                )}
+                <link
+                    head-key="sitemap"
+                    rel="sitemap"
+                    type="application/xml"
+                    href={`${siteOrigin}/sitemap.xml`}
+                />
+                <script head-key="schema" type="application/ld+json">
+                    {JSON.stringify(serviceSchema)}
+                </script>
+            </Head>
 
             <div className="min-h-screen bg-background text-foreground">
                 <PublicHeader
