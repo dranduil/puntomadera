@@ -7,6 +7,7 @@ import {
     LayoutGrid,
     Mail,
     Shield,
+    Star,
     Wrench,
 } from 'lucide-react';
 import AppLogo from '@/components/app-logo';
@@ -26,6 +27,7 @@ import { dashboard } from '@/routes';
 import { index as adminBookings } from '@/routes/admin/bookings';
 import { index as adminContacts } from '@/routes/admin/contacts';
 import { edit as adminHome } from '@/routes/admin/home';
+import { index as adminReviews } from '@/routes/admin/reviews';
 import { index as adminServices } from '@/routes/admin/services';
 import { index as adminWorks } from '@/routes/admin/works';
 import type { NavItem } from '@/types';
@@ -68,6 +70,11 @@ export function AppSidebar() {
                       title: 'Admin - Contacts',
                       href: adminContacts(),
                       icon: Mail,
+                  },
+                  {
+                      title: 'Admin - Reviews',
+                      href: adminReviews(),
+                      icon: Star,
                   },
                   {
                       title: 'Admin - Services',

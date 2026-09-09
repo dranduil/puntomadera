@@ -10,6 +10,34 @@ No concrete implementation error has been identified in the source chat that cre
 
 <!-- The record_error.py script appends dated entries below this line. -->
 
+### 2026-09-09 06:20 UTC — formatting
+- Symptom: The repository-wide format check flagged the new public reviews page along with three pre-existing pages.
+- Cause: The new TSX page had not yet been run through Prettier; unrelated existing landing and service pages were already unformatted.
+- Prevention: Run Prettier on only changed frontend files and report unrelated baseline format warnings separately.
+- Verification: Format the new page and run a changed-file-only Prettier check plus lint and build.
+
+
+### 2026-09-09 06:19 UTC — local-verification
+- Symptom: Local Chrome smoke test returned a missing customer_reviews table error.
+- Cause: The development SQLite database had not applied the new review migration.
+- Prevention: Run the pending local migrations before browser-smoke testing a newly added database-backed route.
+- Verification: Apply php artisan migrate and reload /resenas in Chrome.
+
+
+### 2026-09-09 06:18 UTC — frontend-import-order
+- Symptom: The first lint pass failed on the new reviews pages.
+- Cause: The admin page retained an unused Separator import and the public page placed public-header before input-error, contrary to the repository import order.
+- Prevention: Remove unused UI imports and keep aliased imports ordered consistently with neighboring Inertia pages before running ESLint.
+- Verification: Patch both imports and rerun npm run lint:check.
+
+
+### 2026-09-09 06:18 UTC — local-verification
+- Symptom: Focused review page test returned 500 because the new Inertia entrypoint was absent from the Vite manifest.
+- Cause: The PHP feature test rendered the full app shell before the frontend build had included resources/js/pages/reviews/index.tsx.
+- Prevention: Run the frontend build or use the repository build manifest before full-page Inertia tests that introduce a new page entrypoint.
+- Verification: The Vite build will be generated and the focused ReviewsTest rerun.
+
+
 ### 2026-09-08 15:30 UTC — routing-test
 - Symptom: Domain route did not redirect www host in focused test
 - Cause: Host-based route matching was not exercised reliably by the test request

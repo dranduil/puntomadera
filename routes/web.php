@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\ContactMessageAdminController;
 use App\Http\Controllers\Admin\HomeLandingAdminController;
+use App\Http\Controllers\Admin\ReviewAdminController;
 use App\Http\Controllers\Admin\ServiceAdminController;
 use App\Http\Controllers\Admin\ServiceBookingAdminController;
 use App\Http\Controllers\Admin\WorkAdminController;
@@ -9,6 +10,8 @@ use App\Http\Controllers\ContactMessageController;
 use App\Http\Controllers\ContactPageController;
 use App\Http\Controllers\HomeLandingController;
 use App\Http\Controllers\LocalSeoPageController;
+use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\ReviewPhotoController;
 use App\Http\Controllers\ServiceBookingController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\WorkController;
@@ -31,6 +34,13 @@ Route::get('/carpinteria-a-medida-guayaquil', [LocalSeoPageController::class, 's
 
 Route::get('/contacto', [ContactPageController::class, 'show'])->name('contact.show');
 Route::get('/trabajos', [WorkController::class, 'index'])->name('works.index');
+Route::get('/resenas', [ReviewController::class, 'index'])->name('reviews.index');
+Route::post('/resenas', [ReviewController::class, 'store'])
+    ->middleware('throttle:5,10')
+    ->name('reviews.store');
+Route::get('/resenas/{review}/foto/{photo}', [ReviewPhotoController::class, 'show'])
+    ->where('photo', '[^/]+')
+    ->name('reviews.photo');
 Route::get('/servicios', [ServiceController::class, 'index'])->name('services.index');
 Route::get('/servicios/{service:slug}', [ServiceController::class, 'show'])->name('services.show');
 
@@ -49,6 +59,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         Route::get('contacts', [ContactMessageAdminController::class, 'index'])->name('admin.contacts.index');
         Route::patch('contacts/{contact}', [ContactMessageAdminController::class, 'update'])->name('admin.contacts.update');
+
+        Route::get('reviews', [ReviewAdminController::class, 'index'])->name('admin.reviews.index');
+        Route::patch('reviews/{review}', [ReviewAdminController::class, 'update'])->name('admin.reviews.update');
 
         Route::get('services', [ServiceAdminController::class, 'index'])->name('admin.services.index');
         Route::post('services', [ServiceAdminController::class, 'store'])->name('admin.services.store');

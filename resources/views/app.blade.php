@@ -60,6 +60,9 @@
                 <meta inertia="twitter:image" name="twitter:image" content="{{ $seo['image'] }}">
             @endif
             <link inertia="sitemap" rel="sitemap" type="application/xml" href="{{ rtrim((string) config('app.url', 'http://localhost'), '/') }}/sitemap.xml">
+            @if (!empty($seo['jsonLd']))
+                <script inertia="schema" type="application/ld+json">{!! json_encode($seo['jsonLd'], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) !!}</script>
+            @endif
         @endif
 
         <link rel="icon" href="/favicon.svg" type="image/svg+xml">

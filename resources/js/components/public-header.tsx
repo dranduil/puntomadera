@@ -67,6 +67,7 @@ export function PublicHeader({ landing, isHome = false, whatsappHref }: Props) {
         { label: 'Proceso', href: sectionHref('proceso'), inertia: false },
         { label: 'FAQ', href: sectionHref('faq'), inertia: false },
         { label: 'Contacto', href: '/contacto', inertia: true },
+        { label: 'Opiniones', href: '/resenas', inertia: true },
     ];
 
     return (

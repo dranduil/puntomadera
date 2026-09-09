@@ -116,7 +116,7 @@ class LocalSeoPageController extends Controller
     public function sitemap(): HttpResponse
     {
         $baseUrl = rtrim(config('app.url'), '/');
-        $urls = collect(['/', '/servicios', '/trabajos', '/contacto'])
+        $urls = collect(['/', '/servicios', '/trabajos', '/resenas', '/contacto'])
             ->merge(collect(array_keys($this->pages()))->map(fn (string $slug) => "/{$slug}"))
             ->merge(Service::query()
                 ->where('is_published', true)
