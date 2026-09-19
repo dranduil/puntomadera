@@ -72,8 +72,8 @@ export function PublicHeader({ landing, isHome = false, whatsappHref }: Props) {
     ];
 
     return (
-        <header className="sticky top-0 z-50 border-b border-border/80 bg-background/90 backdrop-blur supports-[backdrop-filter]:bg-background/80">
-            <div className="mx-auto flex h-20 max-w-6xl items-center justify-between px-4">
+        <header className="sticky top-0 z-50 border-b border-border/60 bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/85">
+            <div className="mx-auto flex h-24 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
                 <Link
                     href="/"
                     className="flex items-center gap-3 text-primary"
@@ -93,7 +93,7 @@ export function PublicHeader({ landing, isHome = false, whatsappHref }: Props) {
                     </span>
                 </Link>
 
-                <nav className="hidden items-center gap-7 text-sm font-medium md:flex">
+                <nav className="hidden items-center gap-8 text-sm font-medium md:flex">
                     <Link
                         href="/"
                         className="text-muted-foreground transition-colors hover:text-primary"
@@ -134,7 +134,7 @@ export function PublicHeader({ landing, isHome = false, whatsappHref }: Props) {
                         <Sheet>
                             <SheetTrigger asChild>
                                 <Button variant="outline" size="icon">
-                                    <Menu className="size-4" />
+                                    <Menu aria-hidden="true" />
                                 </Button>
                             </SheetTrigger>
                             <SheetContent side="right" className="w-80">

@@ -13,6 +13,7 @@ import {
     Timer,
     Wrench,
 } from 'lucide-react';
+import AppLogoIcon from '@/components/app-logo-icon';
 import { PublicHeader } from '@/components/public-header';
 import { Button } from '@/components/ui/button';
 import {
@@ -29,11 +30,12 @@ import { cn } from '@/lib/utils';
 
 const images = {
     hero: 'images/works/puerta-caoba-regenerada.png',
+    editorialHero: 'images/editorial/workshop-hero.jpg',
+    materials: 'images/editorial/materials-process.jpg',
     workshop: 'images/works/punto-madera/punto-madera-42.jpg',
     kitchen: 'images/works/punto-madera/punto-madera-10.jpg',
     closet: 'images/works/punto-madera/punto-madera-20.jpg',
     doors: 'images/works/punto-madera/punto-madera-01.jpg',
-    parallax: 'images/works/punto-madera/punto-madera-43.jpg',
 };
 
 const defaultSeo = {
@@ -306,27 +308,18 @@ export default function CarpinteroLanding({ landing }: Props) {
                 />
 
                 <main>
-                    <section className="relative overflow-hidden">
-                        <div
-                            className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-                            style={{ backgroundImage: `url(${images.hero})` }}
-                            aria-hidden="true"
-                        />
-                        <div
-                            className="absolute inset-0 bg-gradient-to-b from-background/40 via-background/70 to-background"
-                            aria-hidden="true"
-                        />
-                        <div className="relative mx-auto max-w-6xl px-4 py-16 sm:py-20 lg:py-24">
-                            <div className="max-w-2xl">
-                                <div className="inline-flex items-center gap-2 rounded-full border border-border/70 bg-background/80 px-3 py-1 text-xs text-muted-foreground backdrop-blur">
-                                    <MapPin className="size-3.5" />
-                                    Guayaquil, Ecuador · Servicio a domicilio
+                    <section className="border-b border-border/60 bg-card">
+                        <div className="mx-auto grid max-w-7xl items-stretch lg:grid-cols-[0.88fr_1.12fr]">
+                            <div className="flex flex-col justify-center px-4 py-16 sm:px-8 sm:py-20 lg:px-12 lg:py-24 xl:px-16">
+                                <div className="flex items-center gap-2 text-xs font-medium tracking-[0.18em] text-muted-foreground uppercase">
+                                    <span className="h-px w-8 bg-primary" />
+                                    Guayaquil, Ecuador
                                 </div>
 
-                                <h1 className="mt-5 text-4xl leading-tight font-semibold tracking-tight text-balance sm:text-5xl">
+                                <h1 className="mt-6 max-w-xl text-4xl leading-[1.08] font-medium tracking-tight text-balance sm:text-5xl lg:text-6xl">
                                     {heroTitle}
                                 </h1>
-                                <p className="mt-4 text-base text-pretty text-muted-foreground sm:text-lg">
+                                <p className="mt-6 max-w-lg text-base leading-7 text-pretty text-muted-foreground sm:text-lg">
                                     {heroSubtitle}
                                 </p>
 
@@ -338,7 +331,7 @@ export default function CarpinteroLanding({ landing }: Props) {
                                             rel="noreferrer"
                                         >
                                             Cotizar ahora
-                                            <ChevronRight className="size-4" />
+                                            <ChevronRight data-icon="inline-end" />
                                         </a>
                                     </Button>
                                     <Button asChild size="lg" variant="outline">
@@ -346,10 +339,11 @@ export default function CarpinteroLanding({ landing }: Props) {
                                     </Button>
                                 </div>
 
-                                <div className="mt-10 grid grid-cols-1 gap-3 sm:grid-cols-3">
+                                <div className="mt-12 grid max-w-xl grid-cols-3 gap-4 pt-5">
+                                    <Separator className="col-span-3" />
                                     {[
                                         {
-                                            title: 'Tiempo estimado',
+                                            title: 'Respuesta',
                                             value: '24–48h',
                                             icon: Timer,
                                         },
@@ -359,40 +353,60 @@ export default function CarpinteroLanding({ landing }: Props) {
                                             icon: MapPin,
                                         },
                                         {
-                                            title: 'Acabado',
-                                            value: 'Prolijo',
+                                            title: 'Enfoque',
+                                            value: 'A medida',
                                             icon: ShieldCheck,
                                         },
                                     ].map((kpi) => (
-                                        <Card
+                                        <div
                                             key={kpi.title}
-                                            className="border-border/70 bg-background/70 p-4 backdrop-blur"
+                                            className="min-w-0"
                                         >
-                                            <div className="flex items-start gap-3">
-                                                <span className="inline-flex size-9 items-center justify-center rounded-md bg-secondary text-secondary-foreground">
-                                                    <kpi.icon className="size-4" />
-                                                </span>
-                                                <div>
-                                                    <div className="text-xs text-muted-foreground">
-                                                        {kpi.title}
-                                                    </div>
-                                                    <div className="mt-1 font-semibold">
-                                                        {kpi.value}
-                                                    </div>
-                                                </div>
+                                            <kpi.icon
+                                                className="size-4 text-primary"
+                                                aria-hidden="true"
+                                            />
+                                            <div className="mt-3 text-sm font-semibold">
+                                                {kpi.value}
                                             </div>
-                                        </Card>
+                                            <div className="mt-1 text-xs text-muted-foreground">
+                                                {kpi.title}
+                                            </div>
+                                        </div>
                                     ))}
                                 </div>
                             </div>
+
+                            <figure className="relative min-h-[28rem] overflow-hidden lg:min-h-[42rem]">
+                                <img
+                                    src={images.editorialHero}
+                                    alt="Taller luminoso de carpintería con muestras de madera y banco de trabajo"
+                                    className="absolute inset-0 h-full w-full object-cover"
+                                    width="1536"
+                                    height="1024"
+                                    fetchPriority="high"
+                                    decoding="async"
+                                />
+                                <figcaption className="absolute right-4 bottom-4 left-4 flex items-center justify-between gap-4 rounded-lg border border-white/40 bg-background/85 px-4 py-3 text-xs text-muted-foreground backdrop-blur sm:right-6 sm:bottom-6 sm:left-6">
+                                    <span>
+                                        Diseño, fabricación e instalación
+                                    </span>
+                                    <span className="hidden sm:inline">
+                                        Punto Madera · Guayaquil
+                                    </span>
+                                </figcaption>
+                            </figure>
                         </div>
                     </section>
 
-                    <section id="servicios" className="py-16 sm:py-20">
+                    <section
+                        id="servicios"
+                        className="bg-background py-20 sm:py-28"
+                    >
                         <div className="mx-auto max-w-6xl px-4">
                             <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
                                 <div className="max-w-3xl">
-                                    <h2 className="text-3xl font-semibold tracking-tight">
+                                    <h2 className="text-3xl font-medium tracking-tight sm:text-4xl">
                                         Servicios de carpintería en Guayaquil
                                     </h2>
                                     <p className="mt-3 text-muted-foreground">
@@ -406,7 +420,7 @@ export default function CarpinteroLanding({ landing }: Props) {
                                 <Button asChild variant="outline">
                                     <a href="/servicios">
                                         Ver servicios
-                                        <ChevronRight className="size-4" />
+                                        <ChevronRight data-icon="inline-end" />
                                     </a>
                                 </Button>
                             </div>
@@ -415,7 +429,7 @@ export default function CarpinteroLanding({ landing }: Props) {
                                 {services.map((s) => (
                                     <Card
                                         key={s.title}
-                                        className="group p-6 transition-colors hover:bg-accent/40"
+                                        className="group rounded-xl border-border/70 bg-card p-6 shadow-none transition-colors hover:bg-muted/35"
                                     >
                                         <div className="flex items-start gap-4">
                                             <span className="inline-flex size-11 items-center justify-center rounded-lg bg-secondary text-secondary-foreground transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
@@ -445,7 +459,7 @@ export default function CarpinteroLanding({ landing }: Props) {
                                 ))}
                             </div>
 
-                            <div className="mt-10 grid gap-6 rounded-lg border border-border/70 bg-secondary/55 p-6 sm:grid-cols-2 sm:p-8">
+                            <div className="mt-12 grid gap-6 rounded-2xl border border-border/70 bg-muted/35 p-6 sm:grid-cols-2 sm:p-8">
                                 <div>
                                     <h3 className="text-xl font-semibold">
                                         Zonas atendidas
@@ -463,7 +477,7 @@ export default function CarpinteroLanding({ landing }: Props) {
                                                 rel="noreferrer"
                                             >
                                                 Agendar visita
-                                                <ChevronRight className="size-4" />
+                                                <ChevronRight data-icon="inline-end" />
                                             </a>
                                         </Button>
                                         <Button asChild variant="outline">
@@ -494,7 +508,7 @@ export default function CarpinteroLanding({ landing }: Props) {
                         </div>
                     </section>
 
-                    <section id="trabajos">
+                    <section id="trabajos" className="bg-card py-20 sm:py-28">
                         <div className="mx-auto max-w-6xl px-4">
                             <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
                                 <div className="max-w-2xl">
@@ -510,7 +524,7 @@ export default function CarpinteroLanding({ landing }: Props) {
                                 <Button asChild variant="outline">
                                     <a href="/trabajos">
                                         Ver trabajos
-                                        <ChevronRight className="size-4" />
+                                        <ChevronRight data-icon="inline-end" />
                                     </a>
                                 </Button>
                             </div>
@@ -570,56 +584,72 @@ export default function CarpinteroLanding({ landing }: Props) {
                     </section>
 
                     <section
-                        className="relative overflow-hidden py-16 sm:py-20"
-                        aria-label="Banner parallax"
+                        className="border-y border-border/60 bg-background py-20 sm:py-28"
+                        aria-label="Materiales y forma de trabajo"
                     >
-                        <div
-                            className="absolute inset-0 bg-cover bg-center bg-no-repeat md:bg-fixed"
-                            style={{
-                                backgroundImage: `url(${images.parallax})`,
-                            }}
-                            aria-hidden="true"
-                        />
-                        <div
-                            className="absolute inset-0 bg-background/70"
-                            aria-hidden="true"
-                        />
-                        <div className="relative mx-auto max-w-6xl px-4">
-                            <Card className="border-border/70 bg-background/70 p-8 backdrop-blur">
-                                <div className="grid gap-8 md:grid-cols-3">
+                        <div className="mx-auto grid max-w-6xl gap-10 px-4 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
+                            <div className="overflow-hidden rounded-2xl border border-border/70 bg-muted">
+                                <img
+                                    src={images.materials}
+                                    alt="Muestras de madera, cinta métrica y plano de un mueble a medida"
+                                    className="aspect-[4/3] h-full w-full object-cover"
+                                    width="1448"
+                                    height="1086"
+                                    loading="lazy"
+                                    decoding="async"
+                                />
+                            </div>
+                            <div className="max-w-xl">
+                                <div className="flex items-center gap-2 text-xs font-medium tracking-[0.18em] text-muted-foreground uppercase">
+                                    <span className="h-px w-8 bg-primary" />
+                                    Una forma clara de trabajar
+                                </div>
+                                <h2 className="mt-5 text-3xl font-medium tracking-tight sm:text-4xl">
+                                    Materiales pensados para el uso real
+                                </h2>
+                                <p className="mt-5 text-base leading-7 text-muted-foreground">
+                                    Te ayudamos a elegir entre melamina y madera
+                                    según el ambiente, el presupuesto y el uso
+                                    diario. Definimos medidas, herrajes y
+                                    tiempos antes de fabricar.
+                                </p>
+                                <div className="mt-8 grid gap-4 sm:grid-cols-3">
                                     {[
                                         {
                                             title: 'Cotización clara',
-                                            text: 'Detallamos materiales, herrajes y tiempos para evitar sorpresas.',
+                                            text: 'Materiales y tiempos definidos.',
                                         },
                                         {
                                             title: 'Instalación limpia',
-                                            text: 'Protección del área y ajuste final para que todo quede perfecto.',
+                                            text: 'Protección y ajuste final.',
                                         },
                                         {
                                             title: 'Enfoque local',
-                                            text: 'Guayaquil, Ecuador: lenguaje, materiales y soluciones reales para tu zona.',
+                                            text: 'Guayaquil y alrededores.',
                                         },
                                     ].map((item) => (
-                                        <div key={item.title}>
-                                            <div className="text-lg font-semibold">
+                                        <div
+                                            key={item.title}
+                                            className="border-t border-border/70 pt-4"
+                                        >
+                                            <div className="text-sm font-semibold">
                                                 {item.title}
                                             </div>
-                                            <p className="mt-2 text-sm text-muted-foreground">
+                                            <p className="mt-2 text-sm leading-6 text-muted-foreground">
                                                 {item.text}
                                             </p>
                                         </div>
                                     ))}
                                 </div>
-                            </Card>
+                            </div>
                         </div>
                     </section>
 
-                    <section id="booking" className="py-16 sm:py-20">
+                    <section id="booking" className="bg-card py-20 sm:py-28">
                         <div className="mx-auto max-w-6xl px-4">
                             <div className="grid gap-10 lg:grid-cols-2 lg:items-start">
                                 <div>
-                                    <h2 className="text-3xl font-semibold tracking-tight">
+                                    <h2 className="text-3xl font-medium tracking-tight sm:text-4xl">
                                         Agendar
                                     </h2>
                                     <p className="mt-3 max-w-xl text-muted-foreground">
@@ -646,7 +676,7 @@ export default function CarpinteroLanding({ landing }: Props) {
                                     </div>
                                 </div>
 
-                                <Card className="border-primary/20 bg-secondary/40">
+                                <Card className="border-border/70 bg-background shadow-none">
                                     <CardHeader>
                                         <CardTitle>
                                             Conversemos por WhatsApp
@@ -685,9 +715,12 @@ export default function CarpinteroLanding({ landing }: Props) {
                         </div>
                     </section>
 
-                    <section id="proceso" className="py-16 sm:py-20">
+                    <section
+                        id="proceso"
+                        className="bg-background py-20 sm:py-28"
+                    >
                         <div className="mx-auto max-w-6xl px-4">
-                            <h2 className="text-3xl font-semibold tracking-tight">
+                            <h2 className="text-3xl font-medium tracking-tight sm:text-4xl">
                                 Proceso simple, resultados pro
                             </h2>
                             <p className="mt-3 max-w-3xl text-muted-foreground">
@@ -720,8 +753,11 @@ export default function CarpinteroLanding({ landing }: Props) {
                                         text: 'Montaje, nivelación, ajuste final y entrega del proyecto.',
                                     },
                                 ].map((p) => (
-                                    <Card key={p.step} className="p-6">
-                                        <div className="text-xs font-semibold text-muted-foreground">
+                                    <Card
+                                        key={p.step}
+                                        className="rounded-xl border-border/70 bg-card p-6 shadow-none"
+                                    >
+                                        <div className="text-xs font-semibold tracking-[0.16em] text-primary">
                                             {p.step}
                                         </div>
                                         <div className="mt-2 text-base font-semibold">
@@ -742,7 +778,7 @@ export default function CarpinteroLanding({ landing }: Props) {
                                         rel="noreferrer"
                                     >
                                         Empezar por WhatsApp
-                                        <ChevronRight className="size-4" />
+                                        <ChevronRight data-icon="inline-end" />
                                     </a>
                                 </Button>
                                 <Button asChild size="lg" variant="outline">
@@ -752,10 +788,10 @@ export default function CarpinteroLanding({ landing }: Props) {
                         </div>
                     </section>
 
-                    <section id="faq" className="py-16 sm:py-20">
+                    <section id="faq" className="bg-card py-20 sm:py-28">
                         <div className="mx-auto max-w-6xl px-4">
                             <div className="max-w-3xl">
-                                <h2 className="text-3xl font-semibold tracking-tight">
+                                <h2 className="text-3xl font-medium tracking-tight sm:text-4xl">
                                     Preguntas frecuentes
                                 </h2>
                                 <p className="mt-3 text-muted-foreground">
@@ -766,7 +802,10 @@ export default function CarpinteroLanding({ landing }: Props) {
 
                             <div className="mt-10 grid gap-4 md:grid-cols-2">
                                 {faqs.map((item) => (
-                                    <Card key={item.q} className="p-6">
+                                    <Card
+                                        key={item.q}
+                                        className="rounded-xl border-border/70 bg-background p-6 shadow-none"
+                                    >
                                         <div className="text-base font-semibold">
                                             {item.q}
                                         </div>
@@ -779,11 +818,14 @@ export default function CarpinteroLanding({ landing }: Props) {
                         </div>
                     </section>
 
-                    <section id="contacto" className="py-16 sm:py-20">
+                    <section
+                        id="contacto"
+                        className="bg-background py-20 sm:py-28"
+                    >
                         <div className="mx-auto max-w-6xl px-4">
                             <div className="grid gap-10 lg:grid-cols-2 lg:items-center">
                                 <div>
-                                    <h2 className="text-3xl font-semibold tracking-tight">
+                                    <h2 className="text-3xl font-medium tracking-tight sm:text-4xl">
                                         Contáctanos
                                     </h2>
                                     <p className="mt-3 text-muted-foreground">
@@ -827,7 +869,7 @@ export default function CarpinteroLanding({ landing }: Props) {
                                                 rel="noreferrer"
                                             >
                                                 WhatsApp
-                                                <ChevronRight className="size-4" />
+                                                <ChevronRight data-icon="inline-end" />
                                             </a>
                                         </Button>
                                         <Button
@@ -840,13 +882,16 @@ export default function CarpinteroLanding({ landing }: Props) {
                                     </div>
                                 </div>
 
-                                <Card className="overflow-hidden p-0">
+                                <Card className="overflow-hidden border-border/70 bg-card p-0 shadow-none">
                                     <div className="relative">
-                                        <div
-                                            className="h-48 bg-cover bg-center bg-no-repeat"
-                                            style={{
-                                                backgroundImage: `url(${images.kitchen})`,
-                                            }}
+                                        <img
+                                            src={images.kitchen}
+                                            alt="Cocina con anaqueles de madera fabricados a medida en Guayaquil"
+                                            className="h-48 w-full object-cover"
+                                            width="1200"
+                                            height="800"
+                                            loading="lazy"
+                                            decoding="async"
                                         />
                                         <div className="p-6 sm:p-8">
                                             <div className="text-sm font-semibold">
@@ -865,7 +910,7 @@ export default function CarpinteroLanding({ landing }: Props) {
                                                         rel="noreferrer"
                                                     >
                                                         WhatsApp
-                                                        <ChevronRight className="size-4" />
+                                                        <ChevronRight data-icon="inline-end" />
                                                     </a>
                                                 </Button>
                                                 <Button
@@ -875,7 +920,7 @@ export default function CarpinteroLanding({ landing }: Props) {
                                                 >
                                                     <a href="/contacto">
                                                         Página de contacto
-                                                        <ChevronRight className="size-4" />
+                                                        <ChevronRight data-icon="inline-end" />
                                                     </a>
                                                 </Button>
                                             </div>
@@ -916,21 +961,21 @@ export default function CarpinteroLanding({ landing }: Props) {
                     </a>
                 </Button>
 
-                <footer className="border-t border-border/60 bg-background py-12">
+                <footer className="border-t border-border/60 bg-card py-12">
                     <div className="mx-auto max-w-6xl px-4">
                         <div className="grid gap-10 md:grid-cols-12">
                             <div className="md:col-span-5">
                                 <div className="flex items-center gap-3 text-primary">
-                                    <span className="relative inline-flex size-11 items-center justify-center rounded-full border border-[#8B6F4E]/45 bg-[#F2EDE6] text-[0.68rem] font-semibold tracking-[0.16em]">
-                                        PM
-                                        <span className="absolute inset-2 rounded-full border border-[#CDBAA2]/70" />
-                                    </span>
+                                    <AppLogoIcon
+                                        className="size-11 shrink-0 text-primary"
+                                        aria-hidden="true"
+                                    />
                                     <span>
                                         <span className="block text-sm font-light tracking-[0.38em] lowercase">
                                             {appName.replace('-', ' ')}
                                         </span>
                                         <span className="mt-1 block text-[0.58rem] tracking-[0.32em] text-muted-foreground uppercase">
-                                            Guayaquil · Ecuador
+                                            Guayaquil, Ecuador
                                         </span>
                                     </span>
                                 </div>
@@ -949,13 +994,13 @@ export default function CarpinteroLanding({ landing }: Props) {
                                             rel="noreferrer"
                                         >
                                             WhatsApp
-                                            <ChevronRight className="size-4" />
+                                            <ChevronRight data-icon="inline-end" />
                                         </a>
                                     </Button>
                                     <Button asChild variant="outline">
                                         <a href="/contacto">
                                             Contacto
-                                            <ChevronRight className="size-4" />
+                                            <ChevronRight data-icon="inline-end" />
                                         </a>
                                     </Button>
                                 </div>
@@ -1038,7 +1083,8 @@ export default function CarpinteroLanding({ landing }: Props) {
                             </div>
                         </div>
 
-                        <div className="mt-10 flex flex-col gap-2 border-t border-border/60 pt-6 text-xs text-muted-foreground md:flex-row md:items-center md:justify-between">
+                        <Separator className="mt-10" />
+                        <div className="flex flex-col gap-2 pt-6 text-xs text-muted-foreground md:flex-row md:items-center md:justify-between">
                             <div>
                                 © {currentYear} {appName}. Todos los derechos
                                 reservados.
