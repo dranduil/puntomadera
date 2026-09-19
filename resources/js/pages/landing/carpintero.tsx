@@ -956,7 +956,7 @@ export default function CarpinteroLanding({ landing }: Props) {
                     className="fixed right-6 bottom-6 z-50 shadow-lg"
                 >
                     <a href={whatsappHref} target="_blank" rel="noreferrer">
-                        <MessageCircle className="size-4" />
+                        <MessageCircle data-icon="inline-start" />
                         WhatsApp
                     </a>
                 </Button>

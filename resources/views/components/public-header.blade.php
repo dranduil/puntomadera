@@ -1,93 +1,61 @@
 @php
     $appName = str_replace('-', ' ', config('app.name', 'punto madera'));
-    $exploreItems = [
+    $navItems = [
+        ['label' => 'Inicio', 'href' => '/'],
         ['label' => 'Servicios', 'href' => '/servicios'],
-        [
-            'label' => 'Instalación de puertas',
-            'href' => '/instalacion-puertas-guayaquil',
-        ],
-        [
-            'label' => 'Reparación de puertas',
-            'href' => '/reparacion-puertas-guayaquil',
-        ],
-        [
-            'label' => 'Carpintería a medida',
-            'href' => '/carpinteria-a-medida-guayaquil',
-        ],
         ['label' => 'Trabajos', 'href' => '/trabajos'],
-        ['label' => 'Agendar', 'href' => '/#booking'],
-        ['label' => 'Proceso', 'href' => '/#proceso'],
-        ['label' => 'FAQ', 'href' => '/#faq'],
+        ['label' => 'Opiniones', 'href' => '/resenas'],
         ['label' => 'Contacto', 'href' => '/contacto'],
+    ];
+    $moreItems = [
+        ['label' => 'Instalación de puertas', 'href' => '/instalacion-puertas-guayaquil'],
+        ['label' => 'Reparación de puertas', 'href' => '/reparacion-puertas-guayaquil'],
+        ['label' => 'Carpintería a medida', 'href' => '/carpinteria-a-medida-guayaquil'],
     ];
 @endphp
 
-<header class="sticky top-0 z-50 border-b border-border/80 bg-background/90 backdrop-blur supports-[backdrop-filter]:bg-background/80">
-    <div class="mx-auto flex h-20 max-w-6xl items-center justify-between px-4">
-        <a href="/" class="flex items-center gap-3 text-primary" aria-label="punto madera">
-            <span class="relative inline-flex size-11 items-center justify-center rounded-full border border-[#8B6F4E]/45 bg-[#F2EDE6] text-[0.68rem] font-semibold tracking-[0.16em]">
-                PM
-                <span class="absolute inset-2 rounded-full border border-[#CDBAA2]/70"></span>
-            </span>
+<header class="sticky top-0 z-50 border-b border-border/60 bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/85">
+    <div class="mx-auto flex h-24 max-w-7xl items-center justify-between gap-6 px-4 sm:px-6 lg:px-8">
+        <a href="/" class="flex shrink-0 items-center gap-3 text-primary" aria-label="punto madera">
+            <img src="/favicon.svg" alt="" class="size-11" width="44" height="44">
             <span class="hidden leading-none sm:block">
                 <span class="block text-sm font-light tracking-[0.38em] lowercase">{{ $appName }}</span>
-                <span class="mt-1 block text-[0.58rem] tracking-[0.32em] text-muted-foreground uppercase">Guayaquil · Ecuador</span>
+                <span class="mt-1 block text-[0.58rem] tracking-[0.32em] text-muted-foreground uppercase">Guayaquil, Ecuador</span>
             </span>
         </a>
 
-        <nav class="hidden items-center gap-7 text-sm font-medium md:flex">
-            <a href="/" class="text-muted-foreground transition-colors hover:text-primary">Inicio</a>
-            <details class="group relative">
-                <summary class="inline-flex cursor-pointer list-none items-center gap-1 text-muted-foreground transition-colors hover:text-primary">
-                    Navegar
-                    <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <path d="m6 9 6 6 6-6"></path>
-                    </svg>
-                </summary>
-                <div class="absolute top-full left-0 z-50 mt-3 min-w-52 rounded-md border border-border/80 bg-background p-2 shadow-lg">
-                    @foreach ($exploreItems as $item)
-                        <a href="{{ $item['href'] }}" class="block rounded-sm px-2 py-1.5 text-muted-foreground transition-colors hover:bg-muted/70 hover:text-primary">
-                            {{ $item['label'] }}
-                        </a>
-                    @endforeach
-                </div>
-            </details>
+        <nav aria-label="Navegación principal" class="hidden items-center gap-7 text-sm font-medium lg:flex">
+            @foreach ($navItems as $item)
+                <a href="{{ $item['href'] }}" class="text-muted-foreground transition-colors hover:text-primary">{{ $item['label'] }}</a>
+            @endforeach
         </nav>
 
         <div class="flex items-center gap-2">
-            <div class="md:hidden">
-                <details class="group relative">
-                    <summary class="inline-flex size-9 cursor-pointer list-none items-center justify-center rounded-md border border-input bg-background shadow-xs">
-                        <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-label="Abrir menú">
-                            <path d="M4 6h16"></path>
-                            <path d="M4 12h16"></path>
-                            <path d="M4 18h16"></path>
-                        </svg>
-                    </summary>
-                    <div class="absolute top-full right-0 z-50 mt-3 w-80 rounded-md border border-border/80 bg-background p-4 shadow-lg">
-                        <div class="grid gap-2 text-sm">
-                            <a href="/" class="rounded-md px-3 py-2 text-muted-foreground transition-colors hover:bg-muted/70 hover:text-primary">Inicio</a>
-                            <details class="rounded-md border border-border/60 p-2">
-                                <summary class="cursor-pointer list-none px-1 text-sm font-medium">Navegar</summary>
-                                <div class="mt-2 grid gap-1">
-                                    @foreach ($exploreItems as $item)
-                                        <a href="{{ $item['href'] }}" class="rounded-sm px-2 py-1.5 text-muted-foreground transition-colors hover:bg-muted/70 hover:text-primary">
-                                            {{ $item['label'] }}
-                                        </a>
-                                    @endforeach
-                                </div>
-                            </details>
-                            <div class="mt-4 grid gap-2">
-                                <a href="{{ $whatsappHref }}" target="_blank" rel="noreferrer" class="inline-flex h-10 items-center justify-center rounded-md bg-primary px-5 text-sm font-medium text-primary-foreground transition-all duration-200 hover:bg-[#8B6F4E]">WhatsApp</a>
-                                <a href="/contacto" class="inline-flex h-10 items-center justify-center rounded-md border border-[#8B6F4E] px-5 text-sm font-medium text-primary transition-all duration-200 hover:bg-secondary">Contacto</a>
-                            </div>
+            <details class="relative lg:hidden">
+                <summary class="inline-flex size-10 cursor-pointer list-none items-center justify-center rounded-md border border-input bg-background shadow-xs" aria-label="Abrir menú">
+                    <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M4 6h16"></path>
+                        <path d="M4 12h16"></path>
+                        <path d="M4 18h16"></path>
+                    </svg>
+                </summary>
+                <div class="absolute top-full right-0 z-50 mt-3 w-80 rounded-xl border border-border/70 bg-card p-4 shadow-lg">
+                    <nav aria-label="Navegación móvil" class="grid gap-1 text-sm">
+                        @foreach ($navItems as $item)
+                            <a href="{{ $item['href'] }}" class="rounded-md px-3 py-2.5 text-muted-foreground transition-colors hover:bg-muted hover:text-primary">{{ $item['label'] }}</a>
+                        @endforeach
+                        <div class="my-3 border-t border-border/60 pt-3">
+                            <div class="px-3 pb-2 text-xs font-medium tracking-[0.16em] text-muted-foreground uppercase">Más páginas</div>
+                            @foreach ($moreItems as $item)
+                                <a href="{{ $item['href'] }}" class="block rounded-md px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-primary">{{ $item['label'] }}</a>
+                            @endforeach
                         </div>
-                    </div>
-                </details>
-            </div>
+                        <a href="{{ $whatsappHref }}" target="_blank" rel="noreferrer" class="inline-flex h-11 items-center justify-center gap-2 rounded-md bg-primary px-5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90">Cotizar por WhatsApp <span aria-hidden="true">↗</span></a>
+                    </nav>
+                </div>
+            </details>
 
-            <a href="{{ $whatsappHref }}" target="_blank" rel="noreferrer" class="hidden h-10 items-center justify-center rounded-md bg-primary px-5 text-sm font-medium text-primary-foreground transition-all duration-200 hover:bg-[#8B6F4E] sm:inline-flex">Cotizar por WhatsApp</a>
-            <a href="/contacto" class="hidden h-10 items-center justify-center rounded-md border border-[#8B6F4E] px-5 text-sm font-medium text-primary transition-all duration-200 hover:bg-secondary sm:inline-flex">Contacto</a>
+            <a href="{{ $whatsappHref }}" target="_blank" rel="noreferrer" class="hidden h-11 items-center justify-center gap-2 rounded-md bg-primary px-5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 sm:inline-flex">Cotizar por WhatsApp <span aria-hidden="true">↗</span></a>
         </div>
     </div>
 </header>
