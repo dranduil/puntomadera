@@ -84,6 +84,23 @@ test('custom carpentry page targets furniture design intent', function () {
         ->toContain('<link rel="canonical" href="https://punto-madera.com/carpinteria-a-medida-guayaquil">');
 });
 
+test('server rendered seo pages share the public shell and footer', function () {
+    foreach ([
+        'seo.doors.installation',
+        'seo.doors.repair',
+        'seo.custom.carpentry',
+    ] as $routeName) {
+        $response = $this->get(route($routeName));
+
+        $response->assertSuccessful();
+
+        expect($response->getContent())
+            ->toContain('Navegación principal')
+            ->toContain('Muebles a medida, closets empotrados, cocinas, puertas y reparaciones.')
+            ->toContain('Todos los derechos reservados.');
+    }
+});
+
 test('auth pages are excluded from search indexing', function () {
     $response = $this->get(route('login'));
 

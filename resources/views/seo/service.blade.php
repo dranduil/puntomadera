@@ -159,6 +159,7 @@
             </section>
         </main>
 
+        @include('components.public-footer', ['landing' => $landing, 'whatsappHref' => $whatsappHref])
         @include('components.tracking')
     </body>
 </html>
