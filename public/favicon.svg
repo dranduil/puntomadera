@@ -1,17 +1,13 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="none">
+  <title>Punto Madera</title>
   <defs>
-    <linearGradient id="wood" x1="6" y1="6" x2="58" y2="58" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#7A4E2F"/>
-      <stop offset="1" stop-color="#A56A3E"/>
-    </linearGradient>
+    <pattern id="wood-grain" width="24" height="160" patternUnits="userSpaceOnUse">
+      <path d="M7 0c-3 23 5 33 0 57s5 34 0 58 3 31 0 45" stroke="#A9825E" stroke-width="2" fill="none"/>
+      <path d="M16 0c4 18-3 38 2 57s-4 36 0 58-2 33 1 45" stroke="#A9825E" stroke-width="1.6" fill="none"/>
+    </pattern>
   </defs>
-
-  <rect x="4" y="4" width="56" height="56" rx="14" fill="url(#wood)"/>
-
-  <path d="M11 23c7-5 16-7 25-7 7 0 13 2 18 6" stroke="#D9AE87" stroke-opacity=".28" stroke-width="2"/>
-  <path d="M10 31c8-4 17-6 26-5 7 0 13 2 18 5" stroke="#D9AE87" stroke-opacity=".28" stroke-width="2"/>
-  <path d="M10 39c8-3 17-4 26-3 7 0 13 2 18 4" stroke="#D9AE87" stroke-opacity=".28" stroke-width="2"/>
-
-  <path d="M16 46V18H28C33.4 18 37 21.2 37 26C37 30.8 33.4 34 28 34H22V46H16ZM22 29H27.4C29.8 29 31 27.8 31 26C31 24.2 29.8 23 27.4 23H22V29Z" fill="#F7E7D4"/>
-  <path d="M39 46V18H45L50 27L55 18H61V46H55V28.2L50 37.5L45 28.2V46H39Z" fill="#F7E7D4"/>
+  <rect x="8" y="8" width="240" height="240" rx="56" fill="#FAF8F5"/>
+  <path d="M62 205V48" stroke="#3B2C20" stroke-width="15" stroke-linecap="square"/>
+  <circle cx="122" cy="103" r="67" fill="url(#wood-grain)" stroke="#3B2C20" stroke-width="15"/>
+  <path d="M154 205v-53c0-29 21-51 47-51s47 22 47 51v53" stroke="#3B2C20" stroke-width="15" stroke-linecap="square"/>
 </svg>

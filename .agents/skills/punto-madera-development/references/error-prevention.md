@@ -10,6 +10,20 @@ No concrete implementation error has been identified in the source chat that cre
 
 <!-- The record_error.py script appends dated entries below this line. -->
 
+### 2026-09-19 18:24 UTC — tooling
+- Symptom: The final repository check reported zsh: command not found: git even though the repository and Git installation were healthy
+- Cause: The shell PATH did not resolve the Homebrew Git binary in that command invocation
+- Prevention: When a standard executable unexpectedly disappears from PATH, resolve it with command -v and rerun using the verified absolute path before diagnosing the repository
+- Verification: /usr/bin/git diff --check completed successfully
+
+
+### 2026-09-19 18:21 UTC — tooling
+- Symptom: The SVG-to-PNG conversion check failed before completion with zsh: read-only variable: status
+- Cause: The shell script used the reserved zsh read-only variable name status for an exit-code variable
+- Prevention: Use task-specific variable names such as conversion_exit_code instead of common shell special parameters
+- Verification: Rerun the conversion using conversion_exit_code and inspect the generated PNG with file and view_image
+
+
 ### 2026-09-19 18:05 UTC — seo-test
 - Symptom: The new works metadata test expected the canonical URL to use localhost
 - Cause: The test environment default APP_URL resolves to richardwebsite.test

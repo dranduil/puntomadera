@@ -1,5 +1,6 @@
 import { Link } from '@inertiajs/react';
 import { ChevronDown, Menu } from 'lucide-react';
+import AppLogoIcon from '@/components/app-logo-icon';
 import { Button } from '@/components/ui/button';
 import {
     Sheet,
@@ -78,16 +79,16 @@ export function PublicHeader({ landing, isHome = false, whatsappHref }: Props) {
                     className="flex items-center gap-3 text-primary"
                     aria-label="punto madera"
                 >
-                    <span className="relative inline-flex size-11 items-center justify-center rounded-full border border-[#8B6F4E]/45 bg-[#F2EDE6] text-[0.68rem] font-semibold tracking-[0.16em]">
-                        PM
-                        <span className="absolute inset-2 rounded-full border border-[#CDBAA2]/70" />
-                    </span>
+                    <AppLogoIcon
+                        className="size-11 shrink-0 text-primary"
+                        aria-hidden="true"
+                    />
                     <span className="hidden leading-none sm:block">
                         <span className="block text-sm font-light tracking-[0.38em] lowercase">
                             {appName.replace('-', ' ')}
                         </span>
                         <span className="mt-1 block text-[0.58rem] tracking-[0.32em] text-muted-foreground uppercase">
-                            Guayaquil · Ecuador
+                            Guayaquil, Ecuador
                         </span>
                     </span>
                 </Link>
@@ -141,12 +142,18 @@ export function PublicHeader({ landing, isHome = false, whatsappHref }: Props) {
                                     Navigation
                                 </SheetTitle>
                                 <SheetHeader className="text-left">
-                                    <div>
-                                        <div className="font-light tracking-[0.32em] text-primary lowercase">
-                                            {appName.replace('-', ' ')}
-                                        </div>
-                                        <div className="mt-1 text-xs tracking-[0.22em] text-muted-foreground uppercase">
-                                            Guayaquil · Ecuador
+                                    <div className="flex items-center gap-3">
+                                        <AppLogoIcon
+                                            className="size-9 shrink-0 text-primary"
+                                            aria-hidden="true"
+                                        />
+                                        <div>
+                                            <div className="font-light tracking-[0.32em] text-primary lowercase">
+                                                {appName.replace('-', ' ')}
+                                            </div>
+                                            <div className="mt-1 text-xs tracking-[0.22em] text-muted-foreground uppercase">
+                                                Guayaquil, Ecuador
+                                            </div>
                                         </div>
                                     </div>
                                 </SheetHeader>

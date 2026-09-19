@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 500" fill="none">
+  <title>Punto Madera — Carpintería en Guayaquil</title>
+  <defs>
+    <pattern id="wood-grain" width="24" height="160" patternUnits="userSpaceOnUse">
+      <path d="M7 0c-3 23 5 33 0 57s5 34 0 58 3 31 0 45" stroke="#A9825E" stroke-width="2" fill="none"/>
+      <path d="M16 0c4 18-3 38 2 57s-4 36 0 58-2 33 1 45" stroke="#A9825E" stroke-width="1.6" fill="none"/>
+    </pattern>
+  </defs>
+  <g stroke="#3B2C20" stroke-width="15" stroke-linecap="square">
+    <path d="M220 248V55"/>
+    <circle cx="280" cy="110" r="76" fill="url(#wood-grain)"/>
+    <path d="M340 248v-58c0-48 37-85 84-85s84 37 84 85v58"/>
+  </g>
+  <text x="360" y="355" text-anchor="middle" fill="#3B2C20" font-family="Poppins, ui-sans-serif, sans-serif" font-size="58" font-weight="300" letter-spacing="10">punto madera</text>
+  <path d="M70 421h96M554 421h96" stroke="#A9825E" stroke-width="2"/>
+  <text x="360" y="428" text-anchor="middle" fill="#A9825E" font-family="Poppins, ui-sans-serif, sans-serif" font-size="18" font-weight="500" letter-spacing="6">GUAYAQUIL, ECUADOR</text>
+</svg>
