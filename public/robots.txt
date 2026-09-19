@@ -1,5 +1,6 @@
 User-agent: *
 Allow: /
+Disallow: /_boost/
 
 # Keep public pages available to answer-engine crawlers.
 User-agent: OAI-SearchBot

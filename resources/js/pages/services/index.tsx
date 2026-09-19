@@ -32,25 +32,70 @@ type Props = {
 export default function ServicesIndex({ landing, services }: Props) {
     const siteUrl = import.meta.env.VITE_APP_URL || 'https://punto-madera.com';
     const canonicalUrl = `${siteUrl.replace(/\/$/, '')}/servicios`;
-    const seoTitle = 'Servicios de carpintería en Guayaquil | Punto Madera';
+    const seoTitle =
+        'Servicios de carpintería en Guayaquil | Muebles, closets y puertas';
     const seoDescription =
-        'Servicios de carpintería en Guayaquil: muebles a medida, closets, anaqueles de cocina, puertas, reparaciones y ebanistería.';
+        'Muebles a medida, closets, anaqueles de cocina, instalación y reparación de puertas en Guayaquil. Revisa el proceso y cotiza por WhatsApp.';
 
     return (
         <>
             <Head title={seoTitle}>
-                <meta head-key="description" name="description" content={seoDescription} />
-                <meta head-key="robots" name="robots" content="index,follow,max-image-preview:large" />
-                <link head-key="canonical" rel="canonical" href={canonicalUrl} />
-                <meta head-key="og:title" property="og:title" content={seoTitle} />
-                <meta head-key="og:description" property="og:description" content={seoDescription} />
-                <meta head-key="og:url" property="og:url" content={canonicalUrl} />
+                <meta
+                    head-key="description"
+                    name="description"
+                    content={seoDescription}
+                />
+                <meta
+                    head-key="robots"
+                    name="robots"
+                    content="index,follow,max-image-preview:large"
+                />
+                <link
+                    head-key="canonical"
+                    rel="canonical"
+                    href={canonicalUrl}
+                />
+                <meta
+                    head-key="og:title"
+                    property="og:title"
+                    content={seoTitle}
+                />
+                <meta
+                    head-key="og:description"
+                    property="og:description"
+                    content={seoDescription}
+                />
+                <meta
+                    head-key="og:url"
+                    property="og:url"
+                    content={canonicalUrl}
+                />
                 <meta head-key="og:type" property="og:type" content="website" />
-                <meta head-key="og:locale" property="og:locale" content="es_EC" />
-                <meta head-key="og:site_name" property="og:site_name" content="Punto Madera" />
-                <meta head-key="twitter:card" name="twitter:card" content="summary_large_image" />
-                <meta head-key="twitter:title" name="twitter:title" content={seoTitle} />
-                <meta head-key="twitter:description" name="twitter:description" content={seoDescription} />
+                <meta
+                    head-key="og:locale"
+                    property="og:locale"
+                    content="es_EC"
+                />
+                <meta
+                    head-key="og:site_name"
+                    property="og:site_name"
+                    content="Punto Madera"
+                />
+                <meta
+                    head-key="twitter:card"
+                    name="twitter:card"
+                    content="summary_large_image"
+                />
+                <meta
+                    head-key="twitter:title"
+                    name="twitter:title"
+                    content={seoTitle}
+                />
+                <meta
+                    head-key="twitter:description"
+                    name="twitter:description"
+                    content={seoDescription}
+                />
                 <link
                     head-key="sitemap"
                     rel="sitemap"
@@ -70,12 +115,27 @@ export default function ServicesIndex({ landing, services }: Props) {
                             Carpintería a medida
                         </div>
                         <h1 className="mt-3 text-4xl font-semibold tracking-tight">
-                            Servicios
+                            Servicios de carpintería en Guayaquil
                         </h1>
                         <p className="mt-4 text-base leading-7 text-muted-foreground">
-                            Soluciones cálidas y funcionales para muebles,
-                            cocinas, closets, puertas y detalles interiores.
+                            Muebles a medida, cocinas, closets, puertas y
+                            reparaciones para hogares y negocios. Revisa cada
+                            servicio y cotiza por WhatsApp.
                         </p>
+                        <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+                            <Button asChild>
+                                <Link href="/contacto">
+                                    Cotizar por WhatsApp
+                                    <ChevronRight data-icon="inline-end" />
+                                </Link>
+                            </Button>
+                            <Button asChild variant="outline">
+                                <Link href="/trabajos">
+                                    Ver proyectos reales
+                                    <ChevronRight data-icon="inline-end" />
+                                </Link>
+                            </Button>
+                        </div>
                     </div>
 
                     {services.length > 0 ? (

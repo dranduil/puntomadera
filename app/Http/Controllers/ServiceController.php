@@ -20,8 +20,8 @@ class ServiceController extends Controller
                 'whatsapp_number' => null,
             ],
             'seo' => [
-                'title' => 'Servicios de carpintería en Guayaquil | Punto Madera',
-                'description' => 'Servicios de carpintería en Guayaquil: muebles a medida, closets, anaqueles de cocina, puertas, reparaciones y ebanistería.',
+                'title' => 'Servicios de carpintería en Guayaquil | Muebles, closets y puertas',
+                'description' => 'Muebles a medida, closets, anaqueles de cocina, instalación y reparación de puertas en Guayaquil. Revisa el proceso y cotiza por WhatsApp.',
                 'canonical' => "{$siteUrl}/servicios",
             ],
             'services' => Service::query()

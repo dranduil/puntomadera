@@ -10,6 +10,13 @@ No concrete implementation error has been identified in the source chat that cre
 
 <!-- The record_error.py script appends dated entries below this line. -->
 
+### 2026-09-19 18:05 UTC — seo-test
+- Symptom: The new works metadata test expected the canonical URL to use localhost
+- Cause: The test environment default APP_URL resolves to richardwebsite.test
+- Prevention: Assert canonical URLs against the named route or explicitly configure app.url before comparing host-specific values
+- Verification: Focused SeoAndTrackingTest and WorksTest passed 15 tests and 78 assertions
+
+
 ### 2026-09-09 06:20 UTC — formatting
 - Symptom: The repository-wide format check flagged the new public reviews page along with three pre-existing pages.
 - Cause: The new TSX page had not yet been run through Prettier; unrelated existing landing and service pages were already unformatted.

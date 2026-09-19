@@ -93,7 +93,7 @@
                         <div class="text-xs font-medium tracking-[0.28em] text-muted-foreground uppercase">Proceso</div>
                         <h2 class="mt-3 text-3xl font-medium text-primary">Cómo trabajamos el servicio</h2>
                         <p class="mt-4 text-sm leading-7 text-muted-foreground">
-                            Una página útil para personas y para buscadores debe explicar el servicio con claridad: alcance, zona, materiales, proceso y forma de contacto. Esa misma información está visible aquí y también organizada en datos estructurados.
+                            Definimos alcance, medidas, materiales y acabado antes de fabricar o instalar. Atendemos Guayaquil y zonas cercanas con comunicación directa para que el proyecto avance con expectativas claras.
                         </p>
                         <div class="mt-6 flex flex-wrap gap-2">
                             @foreach ($areasServed as $area)

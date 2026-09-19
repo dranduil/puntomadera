@@ -24,9 +24,9 @@ class HomeLandingController extends Controller
         ];
         $siteUrl = rtrim((string) config('app.url', 'http://localhost'), '/') ?: 'http://localhost';
         $seoTitle = trim((string) ($landingData['seo_title'] ?? ''))
-            ?: 'Carpintero en Guayaquil | Muebles a medida, closets y puertas';
+            ?: 'Carpintero en Guayaquil | Muebles, closets y puertas a medida';
         $seoDescription = trim((string) ($landingData['seo_description'] ?? ''))
-            ?: 'Carpintería a domicilio en Guayaquil, Ecuador. Muebles a medida, anaqueles de cocina, closets empotrados, instalación y reparación de puertas. Cotiza hoy por WhatsApp.';
+            ?: 'Carpintero en Guayaquil para muebles a medida, closets, cocinas y puertas. Cotiza por WhatsApp instalación, reparación y acabados para tu hogar o negocio.';
 
         return Inertia::render('landing/carpintero', [
             'landing' => $landingData,

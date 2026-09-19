@@ -149,8 +149,8 @@ class LocalSeoPageController extends Controller
         return [
             'instalacion-puertas-guayaquil' => [
                 'slug' => 'instalacion-puertas-guayaquil',
-                'title' => 'Instalación de puertas en Guayaquil | Obra nueva y acabados',
-                'metaDescription' => 'Instalación profesional de puertas para obra nueva en Guayaquil. Medición, nivelación, marcos, bisagras, cerraduras y acabado limpio para interiores y exteriores.',
+                'title' => 'Instalación de puertas en Guayaquil | Alineadas y listas para usar',
+                'metaDescription' => 'Instalamos puertas en Guayaquil con medición, nivelación, marcos, bisagras y cerraduras. Entrega limpia, cierre correcto y cotización por WhatsApp.',
                 'serviceName' => 'Instalación de puertas en Guayaquil',
                 'h1' => 'Instalación de puertas para obra nueva en Guayaquil',
                 'eyebrow' => 'Puertas · Obra nueva · Guayaquil',
@@ -251,10 +251,10 @@ class LocalSeoPageController extends Controller
             ],
             'carpinteria-a-medida-guayaquil' => [
                 'slug' => 'carpinteria-a-medida-guayaquil',
-                'title' => 'Carpintería a medida en Guayaquil | Interior y exterior',
-                'metaDescription' => 'Carpintería a medida en Guayaquil para muebles interiores, exteriores, detalles en madera, closets, repisas, paneles, puertas y soluciones personalizadas.',
+                'title' => 'Diseño de muebles a medida en Guayaquil | Carpintería personalizada',
+                'metaDescription' => 'Diseño y fabricación de muebles a medida en Guayaquil: closets, repisas, paneles, puertas y soluciones para interiores y exteriores. Cotiza por WhatsApp.',
                 'serviceName' => 'Carpintería a medida en Guayaquil',
-                'h1' => 'Carpintería a medida para interiores y exteriores en Guayaquil',
+                'h1' => 'Diseño de muebles a medida para interiores y exteriores en Guayaquil',
                 'eyebrow' => 'Madera · Diseño funcional · A medida',
                 'intro' => 'Diseñamos y fabricamos trabajos personalizados en madera y derivados para interiores y exteriores: muebles, repisas, paneles, detalles decorativos, soluciones para patios, puertas, closets y piezas funcionales que se adaptan al espacio real.',
                 'intent' => 'Para personas que buscan un carpintero con criterio de diseño, medidas claras y fabricación cuidada.',
@@ -295,9 +295,10 @@ class LocalSeoPageController extends Controller
                     ],
                 ],
                 'relatedLinks' => [
+                    ['label' => 'Muebles a medida', 'href' => '/servicios/muebles-a-medida-guayaquil'],
                     ['label' => 'Instalación de puertas', 'href' => '/instalacion-puertas-guayaquil'],
                     ['label' => 'Trabajos recientes', 'href' => '/trabajos'],
-                    ['label' => 'Servicios', 'href' => '/servicios'],
+                    ['label' => 'Contacto', 'href' => '/contacto'],
                 ],
             ],
         ];

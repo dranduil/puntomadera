@@ -11,7 +11,7 @@ test('public document titles never use the Laravel framework fallback', function
     $response->assertSuccessful();
 
     expect($response->getContent())
-        ->toContain('<title inertia>Carpintero en Guayaquil | Muebles a medida, closets y puertas</title>')
+        ->toContain('<title inertia>Carpintero en Guayaquil | Muebles, closets y puertas a medida</title>')
         ->not->toContain('<title inertia>Laravel</title>');
 });
 
@@ -23,11 +23,74 @@ test('homepage exposes crawler metadata for the canonical host', function () {
     $response->assertSuccessful();
 
     expect($response->getContent())
-        ->toContain('<title inertia>Carpintero en Guayaquil | Muebles a medida, closets y puertas</title>')
+        ->toContain('<title inertia>Carpintero en Guayaquil | Muebles, closets y puertas a medida</title>')
         ->toContain('<meta inertia="description" name="description"')
+        ->toContain('Carpintero en Guayaquil para muebles a medida, closets, cocinas y puertas.')
         ->toContain('<link inertia="canonical" rel="canonical" href="https://punto-madera.com/">')
         ->toContain('<meta inertia="og:url" property="og:url" content="https://punto-madera.com/">')
         ->toContain('href="https://punto-madera.com/sitemap.xml"');
+});
+
+test('works page exposes descriptive metadata and cleans page one canonical', function () {
+    config(['app.url' => 'https://punto-madera.com']);
+
+    $response = $this->get('/trabajos?page=1');
+
+    $response->assertSuccessful();
+
+    expect($response->getContent())
+        ->toContain('<title inertia>Trabajos de carpintería en Guayaquil | Proyectos reales | Punto Madera</title>')
+        ->toContain('<meta inertia="description" name="description"')
+        ->toContain('<link inertia="canonical" rel="canonical" href="https://punto-madera.com/trabajos">')
+        ->not->toContain('href="https://punto-madera.com/trabajos?page=1"');
+});
+
+test('services index exposes a stronger local conversion snippet', function () {
+    config(['app.url' => 'https://punto-madera.com']);
+
+    $response = $this->get(route('services.index'));
+
+    $response->assertSuccessful();
+
+    expect($response->getContent())
+        ->toContain('<title inertia>Servicios de carpintería en Guayaquil | Muebles, closets y puertas</title>')
+        ->toContain('Revisa el proceso y cotiza por WhatsApp.')
+        ->toContain('<link inertia="canonical" rel="canonical" href="https://punto-madera.com/servicios">');
+});
+
+test('door installation page exposes outcome and WhatsApp metadata', function () {
+    config(['app.url' => 'https://punto-madera.com']);
+
+    $response = $this->get(route('seo.doors.installation'));
+
+    $response->assertSuccessful();
+
+    expect($response->getContent())
+        ->toContain('<title>Instalación de puertas en Guayaquil | Alineadas y listas para usar</title>')
+        ->toContain('Entrega limpia, cierre correcto y cotización por WhatsApp.')
+        ->toContain('<link rel="canonical" href="https://punto-madera.com/instalacion-puertas-guayaquil">');
+});
+
+test('custom carpentry page targets furniture design intent', function () {
+    config(['app.url' => 'https://punto-madera.com']);
+
+    $response = $this->get(route('seo.custom.carpentry'));
+
+    $response->assertSuccessful();
+
+    expect($response->getContent())
+        ->toContain('<title>Diseño de muebles a medida en Guayaquil | Carpintería personalizada</title>')
+        ->toContain('Diseño y fabricación de muebles a medida en Guayaquil')
+        ->toContain('<link rel="canonical" href="https://punto-madera.com/carpinteria-a-medida-guayaquil">');
+});
+
+test('auth pages are excluded from search indexing', function () {
+    $response = $this->get(route('login'));
+
+    $response->assertSuccessful();
+
+    expect($response->getContent())
+        ->toContain('<meta inertia="robots" name="robots" content="noindex,follow">');
 });
 
 test('www public requests redirect to the canonical host', function () {
@@ -64,6 +127,7 @@ test('robots explicitly allows OpenAI search crawling', function () {
     expect($robots)
         ->toContain('User-agent: OAI-SearchBot')
         ->toContain('Allow: /')
+        ->toContain('Disallow: /_boost/')
         ->toContain('Sitemap: https://punto-madera.com/sitemap.xml');
 });
 

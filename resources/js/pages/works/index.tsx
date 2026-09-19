@@ -27,8 +27,15 @@ type Paginator<T> = {
     }>;
 };
 
+type Seo = {
+    title: string;
+    description: string;
+    canonical: string;
+};
+
 type Props = {
     landing: Landing;
+    seo: Seo;
     works: Paginator<Work>;
 };
 
@@ -39,10 +46,75 @@ function imageAlt(work: Work, index: number): string {
     );
 }
 
-export default function WorksIndex({ landing, works }: Props) {
+export default function WorksIndex({ landing, seo, works }: Props) {
+    const siteUrl = new URL(seo.canonical).origin;
+
     return (
         <>
-            <Head title="Trabajos" />
+            <Head title={seo.title}>
+                <meta
+                    head-key="description"
+                    name="description"
+                    content={seo.description}
+                />
+                <meta
+                    head-key="robots"
+                    name="robots"
+                    content="index,follow,max-image-preview:large"
+                />
+                <link
+                    head-key="canonical"
+                    rel="canonical"
+                    href={seo.canonical}
+                />
+                <meta
+                    head-key="og:title"
+                    property="og:title"
+                    content={seo.title}
+                />
+                <meta
+                    head-key="og:description"
+                    property="og:description"
+                    content={seo.description}
+                />
+                <meta
+                    head-key="og:url"
+                    property="og:url"
+                    content={seo.canonical}
+                />
+                <meta head-key="og:type" property="og:type" content="website" />
+                <meta
+                    head-key="og:locale"
+                    property="og:locale"
+                    content="es_EC"
+                />
+                <meta
+                    head-key="og:site_name"
+                    property="og:site_name"
+                    content="Punto Madera"
+                />
+                <meta
+                    head-key="twitter:card"
+                    name="twitter:card"
+                    content="summary_large_image"
+                />
+                <meta
+                    head-key="twitter:title"
+                    name="twitter:title"
+                    content={seo.title}
+                />
+                <meta
+                    head-key="twitter:description"
+                    name="twitter:description"
+                    content={seo.description}
+                />
+                <link
+                    head-key="sitemap"
+                    rel="sitemap"
+                    type="application/xml"
+                    href={`${siteUrl}/sitemap.xml`}
+                />
+            </Head>
 
             <div className="min-h-screen bg-background text-foreground">
                 <PublicHeader
@@ -55,11 +127,12 @@ export default function WorksIndex({ landing, works }: Props) {
                             Proyectos
                         </div>
                         <h1 className="mt-3 text-4xl font-semibold tracking-tight">
-                            Trabajos recientes
+                            Trabajos de carpintería en Guayaquil
                         </h1>
                         <p className="mt-4 text-base leading-7 text-muted-foreground">
-                            Galería de trabajos reales con madera, melamina,
-                            closets, cocinas, puertas y reparaciones.
+                            Galería de proyectos reales con madera, melamina,
+                            muebles a medida, closets, cocinas, puertas y
+                            reparaciones realizadas en Guayaquil.
                         </p>
                     </div>
 

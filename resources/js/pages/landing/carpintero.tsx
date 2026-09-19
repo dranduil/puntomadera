@@ -1,4 +1,4 @@
-import { Head } from '@inertiajs/react';
+import { Head, Link } from '@inertiajs/react';
 import {
     Check,
     ChevronRight,
@@ -37,9 +37,9 @@ const images = {
 };
 
 const defaultSeo = {
-    title: 'Carpintero en Guayaquil | Muebles a medida, closets y puertas',
+    title: 'Carpintero en Guayaquil | Muebles, closets y puertas a medida',
     description:
-        'Carpintería a domicilio en Guayaquil, Ecuador. Muebles a medida, anaqueles de cocina, closets empotrados, instalación y reparación de puertas. Cotiza hoy por WhatsApp.',
+        'Carpintero en Guayaquil para muebles a medida, closets, cocinas y puertas. Cotiza por WhatsApp instalación, reparación y acabados para tu hogar o negocio.',
 };
 
 type Landing = {
@@ -59,36 +59,42 @@ type Props = {
 const services = [
     {
         title: 'Muebles a medida',
+        href: '/carpinteria-a-medida-guayaquil',
         description:
-            'Diseño y fabricación de muebles personalizados en melamina o madera, según tu espacio.',
+            'Diseño de muebles a medida en melamina o madera, según tu espacio.',
         icon: Ruler,
     },
     {
         title: 'Cocinas y anaqueles',
+        href: '/servicios/closets-anaqueles-cocina-guayaquil',
         description:
             'Anaqueles de cocina, cajonería y herrajes. Distribución pensada para uso diario.',
         icon: Home,
     },
     {
         title: 'Closets empotrados',
+        href: '/servicios/closets-anaqueles-cocina-guayaquil',
         description:
             'Closets a medida con puertas corredizas o abatibles, con acabados prolijos.',
         icon: Hammer,
     },
     {
         title: 'Puertas e instalación',
+        href: '/instalacion-puertas-guayaquil',
         description:
             'Instalación de puertas interiores y principales, ajuste, bisagras y cerraduras.',
         icon: Wrench,
     },
     {
         title: 'Reparación de muebles',
+        href: '/servicios/reparacion-muebles-madera-guayaquil',
         description:
             'Reparación y mantenimiento: bisagras, rieles, nivelación, refuerzos y acabado.',
         icon: Sparkles,
     },
     {
         title: 'Ebanistería y detalles',
+        href: '/servicios/ebanisteria-fina-acabados-personalizados-guayaquil',
         description:
             'Trabajos finos, remates, molduras y soluciones personalizadas para tu hogar.',
         icon: ShieldCheck,
@@ -207,7 +213,11 @@ export default function CarpinteroLanding({ landing }: Props) {
     return (
         <>
             <Head title={seoTitle}>
-                <meta head-key="description" name="description" content={seoDescription} />
+                <meta
+                    head-key="description"
+                    name="description"
+                    content={seoDescription}
+                />
                 <meta
                     head-key="robots"
                     name="robots"
@@ -221,26 +231,62 @@ export default function CarpinteroLanding({ landing }: Props) {
                 <meta name="geo.placename" content="Guayaquil, Ecuador" />
                 <meta name="geo.position" content="-2.170998;-79.922356" />
                 <meta name="ICBM" content="-2.170998, -79.922356" />
-                <link head-key="canonical" rel="canonical" href={canonicalUrl} />
+                <link
+                    head-key="canonical"
+                    rel="canonical"
+                    href={canonicalUrl}
+                />
                 <meta
                     head-key="og:title"
                     property="og:title"
-                    content="Carpintero en Guayaquil | Carpintería a domicilio"
+                    content={seoTitle}
                 />
-                <meta head-key="og:description" property="og:description" content={seoDescription} />
-                <meta head-key="og:url" property="og:url" content={canonicalUrl} />
+                <meta
+                    head-key="og:description"
+                    property="og:description"
+                    content={seoDescription}
+                />
+                <meta
+                    head-key="og:url"
+                    property="og:url"
+                    content={canonicalUrl}
+                />
                 <meta head-key="og:type" property="og:type" content="website" />
-                <meta head-key="og:locale" property="og:locale" content="es_EC" />
-                <meta head-key="og:site_name" property="og:site_name" content={appName} />
-                <meta head-key="og:image" property="og:image" content={heroImageUrl} />
+                <meta
+                    head-key="og:locale"
+                    property="og:locale"
+                    content="es_EC"
+                />
+                <meta
+                    head-key="og:site_name"
+                    property="og:site_name"
+                    content={appName}
+                />
+                <meta
+                    head-key="og:image"
+                    property="og:image"
+                    content={heroImageUrl}
+                />
                 <meta
                     head-key="og:image:alt"
                     property="og:image:alt"
                     content="Puerta de madera color caoba con acabado profesional en Guayaquil"
                 />
-                <meta head-key="twitter:card" name="twitter:card" content="summary_large_image" />
-                <meta head-key="twitter:title" name="twitter:title" content={seoTitle} />
-                <meta head-key="twitter:description" name="twitter:description" content={seoDescription} />
+                <meta
+                    head-key="twitter:card"
+                    name="twitter:card"
+                    content="summary_large_image"
+                />
+                <meta
+                    head-key="twitter:title"
+                    name="twitter:title"
+                    content={seoTitle}
+                />
+                <meta
+                    head-key="twitter:description"
+                    name="twitter:description"
+                    content={seoDescription}
+                />
                 <link
                     head-key="sitemap"
                     rel="sitemap"
@@ -382,6 +428,17 @@ export default function CarpinteroLanding({ landing }: Props) {
                                                 <p className="mt-2 text-sm text-muted-foreground">
                                                     {s.description}
                                                 </p>
+                                                <Button
+                                                    asChild
+                                                    variant="link"
+                                                    size="sm"
+                                                    className="mt-3 px-0"
+                                                >
+                                                    <Link href={s.href}>
+                                                        Ver servicio
+                                                        <ChevronRight data-icon="inline-end" />
+                                                    </Link>
+                                                </Button>
                                             </div>
                                         </div>
                                     </Card>
@@ -461,22 +518,22 @@ export default function CarpinteroLanding({ landing }: Props) {
                             <div className="mt-10 grid gap-4 md:auto-rows-[240px] md:grid-cols-12">
                                 {[
                                     {
-                                        title: 'Cocina con anaqueles',
+                                        title: 'Cocina con anaqueles a medida',
                                         image: images.kitchen,
                                         className: 'md:col-span-7',
                                     },
                                     {
-                                        title: 'Closet empotrado',
+                                        title: 'Closet empotrado a medida',
                                         image: images.closet,
                                         className: 'md:col-span-5',
                                     },
                                     {
-                                        title: 'Puertas y ajustes',
+                                        title: 'Instalación y ajuste de puertas',
                                         image: images.doors,
                                         className: 'md:col-span-5',
                                     },
                                     {
-                                        title: 'Taller y acabados',
+                                        title: 'Taller de madera y acabados',
                                         image: images.workshop,
                                         className: 'md:col-span-7',
                                     },

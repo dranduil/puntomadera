@@ -37,6 +37,7 @@
                 : $appName;
         @endphp
         @php($seo = $page['props']['seo'] ?? null)
+        @php($isAuthPage = str_starts_with((string) ($page['component'] ?? ''), 'auth/'))
         <title inertia>{{ is_array($seo) ? ($seo['title'] ?? $appName) : $appName }}</title>
 
         @if (is_array($seo))
@@ -63,6 +64,8 @@
             @if (!empty($seo['jsonLd']))
                 <script inertia="schema" type="application/ld+json">{!! json_encode($seo['jsonLd'], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) !!}</script>
             @endif
+        @elseif ($isAuthPage)
+            <meta inertia="robots" name="robots" content="noindex,follow">
         @endif
 
         <link rel="icon" href="/favicon.svg" type="image/svg+xml">
