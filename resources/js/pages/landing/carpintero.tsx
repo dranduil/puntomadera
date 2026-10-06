@@ -58,6 +58,7 @@ const services = [
     {
         title: 'Muebles a medida',
         href: '/carpinteria-a-medida-guayaquil',
+        navigation: 'document',
         description:
             'Diseño de muebles a medida en melamina o madera, según tu espacio.',
         image: '/images/service-icons/muebles-a-medida.png',
@@ -65,6 +66,7 @@ const services = [
     {
         title: 'Cocinas y anaqueles',
         href: '/servicios/closets-anaqueles-cocina-guayaquil',
+        navigation: 'inertia',
         description:
             'Anaqueles de cocina, cajonería y herrajes. Distribución pensada para uso diario.',
         image: '/images/service-icons/cocinas-anaqueles.png',
@@ -72,6 +74,7 @@ const services = [
     {
         title: 'Closets empotrados',
         href: '/servicios/closets-anaqueles-cocina-guayaquil',
+        navigation: 'inertia',
         description:
             'Closets a medida con puertas corredizas o abatibles, con acabados prolijos.',
         image: '/images/service-icons/closets-empotrados.png',
@@ -79,6 +82,7 @@ const services = [
     {
         title: 'Puertas e instalación',
         href: '/instalacion-puertas-guayaquil',
+        navigation: 'document',
         description:
             'Instalación de puertas interiores y principales, ajuste, bisagras y cerraduras.',
         image: '/images/service-icons/puertas-instalacion.png',
@@ -86,6 +90,7 @@ const services = [
     {
         title: 'Reparación de muebles',
         href: '/servicios/reparacion-muebles-madera-guayaquil',
+        navigation: 'inertia',
         description:
             'Reparación y mantenimiento: bisagras, rieles, nivelación, refuerzos y acabado.',
         image: '/images/service-icons/reparacion-muebles.png',
@@ -93,6 +98,7 @@ const services = [
     {
         title: 'Ebanistería y detalles',
         href: '/servicios/ebanisteria-fina-acabados-personalizados-guayaquil',
+        navigation: 'inertia',
         description:
             'Trabajos finos, remates, molduras y soluciones personalizadas para tu hogar.',
         image: '/images/service-icons/ebanisteria-detalles.png',
@@ -448,10 +454,18 @@ export default function CarpinteroLanding({ landing }: Props) {
                                                     size="sm"
                                                     className="mt-3 px-0"
                                                 >
-                                                    <Link href={s.href}>
-                                                        Ver servicio
-                                                        <ChevronRight data-icon="inline-end" />
-                                                    </Link>
+                                                    {s.navigation ===
+                                                    'document' ? (
+                                                        <a href={s.href}>
+                                                            Ver servicio
+                                                            <ChevronRight data-icon="inline-end" />
+                                                        </a>
+                                                    ) : (
+                                                        <Link href={s.href}>
+                                                            Ver servicio
+                                                            <ChevronRight data-icon="inline-end" />
+                                                        </Link>
+                                                    )}
                                                 </Button>
                                             </div>
                                         </div>
