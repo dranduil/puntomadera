@@ -14,7 +14,7 @@
         <meta property="og:locale" content="es_EC">
         <meta property="og:site_name" content="{{ str_replace('-', ' ', config('app.name', 'Punto Madera')) }}">
         <meta property="og:image" content="{{ $siteUrl }}{{ $page['heroImage'] }}">
-        <meta property="og:image:alt" content="{{ $page['serviceName'] }} en Guayaquil">
+        <meta property="og:image:alt" content="{{ $page['heroImageAlt'] ?? ($page['serviceName'].' en Guayaquil') }}">
         <meta name="twitter:card" content="summary_large_image">
         <meta name="twitter:title" content="{{ $page['title'] }}">
         <meta name="twitter:description" content="{{ $page['metaDescription'] }}">
@@ -52,28 +52,58 @@
                         <a href="{{ $whatsappHref }}" target="_blank" rel="noreferrer" class="inline-flex h-11 items-center justify-center rounded-md bg-primary px-6 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90">
                             {{ $page['primaryCta'] }}
                         </a>
-                        <a href="/contacto" class="inline-flex h-11 items-center justify-center rounded-md border border-input px-6 text-sm font-medium text-primary transition-colors hover:bg-muted">
-                            Enviar detalles
-                        </a>
+                        @if (!empty($page['quoteOnly']))
+                            <a href="{{ $whatsappHref }}" target="_blank" rel="noreferrer" class="inline-flex h-11 items-center justify-center rounded-md border border-input px-6 text-sm font-medium text-primary transition-colors hover:bg-muted">
+                                Enviar fotos y medidas
+                            </a>
+                        @else
+                            <a href="/contacto" class="inline-flex h-11 items-center justify-center rounded-md border border-input px-6 text-sm font-medium text-primary transition-colors hover:bg-muted">
+                                Enviar detalles
+                            </a>
+                        @endif
                     </div>
                 </div>
 
                 <div class="relative min-h-[320px] overflow-hidden rounded-2xl border border-border/70 bg-muted sm:min-h-[430px]">
-                    <img src="{{ $page['heroImage'] }}" alt="{{ $page['serviceName'] }}" class="absolute inset-0 h-full w-full object-cover" width="1200" height="900" fetchpriority="high">
+                    <img src="{{ $page['heroImage'] }}" alt="{{ $page['heroImageAlt'] ?? $page['serviceName'] }}" class="absolute inset-0 h-full w-full object-cover" width="{{ $page['heroImageWidth'] ?? 1200 }}" height="{{ $page['heroImageHeight'] ?? 900 }}" fetchpriority="high">
                     <div class="absolute inset-0 bg-primary/20"></div>
                     <div class="absolute right-4 bottom-4 left-4 rounded-lg border border-white/35 bg-background/90 p-4 backdrop-blur">
-                        <div class="text-sm font-medium text-primary">Servicio local en Guayaquil</div>
+                        <div class="text-sm font-medium text-primary">{{ $page['heroCaptionTitle'] ?? 'Servicio local en Guayaquil' }}</div>
                         <div class="mt-1 text-xs leading-5 text-muted-foreground">
-                            Medición, fabricación, reparación e instalación con comunicación directa por WhatsApp.
+                            {{ $page['heroCaption'] ?? 'Medición, fabricación, reparación e instalación con comunicación directa por WhatsApp.' }}
                         </div>
                     </div>
                 </div>
                 </div>
             </section>
 
+            @if (!empty($page['gallery']))
+                <section class="border-b border-border/60 bg-background py-16 sm:py-20">
+                    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                        <h2 class="text-3xl font-medium tracking-tight text-primary sm:text-4xl">{{ $page['galleryTitle'] ?? 'Opciones para tu proyecto' }}</h2>
+                        <div class="mt-8 grid gap-6 md:grid-cols-2">
+                            @foreach ($page['gallery'] as $image)
+                                <figure class="overflow-hidden rounded-2xl border border-border/70 bg-card">
+                                    <div class="aspect-[3/2] overflow-hidden bg-muted">
+                                        <img src="{{ $image['src'] }}" alt="{{ $image['alt'] }}" class="h-full w-full object-cover" width="1536" height="1024" loading="lazy">
+                                    </div>
+                                    <figcaption class="p-5 sm:p-6">
+                                        <h3 class="text-lg font-medium text-primary">{{ $image['title'] }}</h3>
+                                        <p class="mt-2 text-sm leading-6 text-muted-foreground">{{ $image['description'] }}</p>
+                                    </figcaption>
+                                </figure>
+                            @endforeach
+                        </div>
+                        @if (!empty($page['galleryNote']))
+                            <p class="mt-5 text-xs leading-5 text-muted-foreground">{{ $page['galleryNote'] }}</p>
+                        @endif
+                    </div>
+                </section>
+            @endif
+
             <section class="border-y border-border/60 bg-background py-20 sm:py-28">
                 <div class="mx-auto grid max-w-7xl gap-5 px-4 sm:px-6 lg:grid-cols-3 lg:px-8">
-                    @foreach ([['Qué hacemos', $page['services']], ['Problemas que resolvemos', $page['problems']], ['Materiales y detalles', $page['materials']]] as [$title, $items])
+                    @foreach ([[$page['servicesTitle'] ?? 'Qué hacemos', $page['services']], [$page['problemsTitle'] ?? 'Problemas que resolvemos', $page['problems']], [$page['materialsTitle'] ?? 'Materiales y detalles', $page['materials']]] as [$title, $items])
                         <article class="rounded-2xl border border-border/70 bg-card p-6 shadow-none">
                             <h2 class="text-xl font-medium tracking-tight text-primary">{{ $title }}</h2>
                             <div class="mt-5 grid gap-3">
@@ -93,9 +123,9 @@
                 <div class="mx-auto grid max-w-7xl gap-12 px-4 sm:px-6 lg:grid-cols-[0.9fr_1.1fr] lg:items-start lg:px-8">
                     <div>
                         <div class="text-xs font-medium tracking-[0.28em] text-muted-foreground uppercase">Proceso</div>
-                        <h2 class="mt-4 text-3xl font-medium tracking-tight text-primary sm:text-4xl">Cómo trabajamos el servicio</h2>
+                        <h2 class="mt-4 text-3xl font-medium tracking-tight text-primary sm:text-4xl">{{ $page['processHeading'] ?? 'Cómo trabajamos el servicio' }}</h2>
                         <p class="mt-4 text-sm leading-7 text-muted-foreground">
-                            Definimos alcance, medidas, materiales y acabado antes de fabricar o instalar. Atendemos Guayaquil y zonas cercanas con comunicación directa para que el proyecto avance con expectativas claras.
+                            {{ $page['processIntro'] ?? 'Definimos alcance, medidas, materiales y acabado antes de fabricar o instalar. Atendemos Guayaquil y zonas cercanas con comunicación directa para que el proyecto avance con expectativas claras.' }}
                         </p>
                         <div class="mt-6 flex flex-wrap gap-2">
                             @foreach ($areasServed as $area)
@@ -135,17 +165,21 @@
             <section class="bg-card py-20 sm:py-28">
                 <div class="mx-auto grid max-w-7xl gap-8 px-4 sm:px-6 lg:grid-cols-[1fr_0.8fr] lg:items-center lg:px-8">
                     <div>
-                        <h2 class="text-3xl font-medium tracking-tight text-primary sm:text-4xl">Cotiza con contexto claro</h2>
+                        <h2 class="text-3xl font-medium tracking-tight text-primary sm:text-4xl">{{ $page['ctaTitle'] ?? 'Cotiza con contexto claro' }}</h2>
                         <p class="mt-4 text-sm leading-7 text-muted-foreground">
-                            Envía fotos, medidas aproximadas, ubicación y una descripción corta. Con eso podemos orientar mejor el alcance del trabajo, materiales y tiempos.
+                            {{ $page['ctaDescription'] ?? 'Envía fotos, medidas aproximadas, ubicación y una descripción corta. Con eso podemos orientar mejor el alcance del trabajo, materiales y tiempos.' }}
                         </p>
                         <div class="mt-7 flex flex-col gap-3 sm:flex-row">
-                            <a href="{{ $whatsappHref }}" target="_blank" rel="noreferrer" class="inline-flex h-11 items-center justify-center rounded-md bg-primary px-6 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90">WhatsApp</a>
-                            <a href="/trabajos" class="inline-flex h-11 items-center justify-center rounded-md border border-input px-6 text-sm font-medium text-primary transition-colors hover:bg-muted">Ver trabajos</a>
+                            <a href="{{ $whatsappHref }}" target="_blank" rel="noreferrer" class="inline-flex h-11 items-center justify-center rounded-md bg-primary px-6 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90">{{ $page['finalCta'] ?? 'WhatsApp' }}</a>
+                            @if (!empty($page['quoteOnly']))
+                                <a href="{{ $whatsappHref }}" target="_blank" rel="noreferrer" class="inline-flex h-11 items-center justify-center rounded-md border border-input px-6 text-sm font-medium text-primary transition-colors hover:bg-muted">Enviar fotos y medidas</a>
+                            @else
+                                <a href="/trabajos" class="inline-flex h-11 items-center justify-center rounded-md border border-input px-6 text-sm font-medium text-primary transition-colors hover:bg-muted">Ver trabajos</a>
+                            @endif
                         </div>
                     </div>
                     <aside class="rounded-2xl border border-border/70 bg-background p-6 shadow-none">
-                        <div class="text-sm font-medium text-primary">Servicios relacionados</div>
+                        <div class="text-sm font-medium text-primary">{{ $page['relatedLinksTitle'] ?? 'Servicios relacionados' }}</div>
                         <div class="mt-4 grid gap-2">
                             @foreach ($page['relatedLinks'] as $link)
                                 <a href="{{ $link['href'] }}" class="flex h-11 items-center justify-between rounded-md border border-input px-4 text-sm font-medium text-primary transition-colors hover:bg-muted">

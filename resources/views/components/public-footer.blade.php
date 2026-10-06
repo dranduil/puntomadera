@@ -44,6 +44,7 @@
                     <a href="/instalacion-puertas-guayaquil" class="text-muted-foreground transition-colors hover:text-foreground">Instalación de puertas</a>
                     <a href="/reparacion-puertas-guayaquil" class="text-muted-foreground transition-colors hover:text-foreground">Reparación de puertas</a>
                     <a href="/carpinteria-a-medida-guayaquil" class="text-muted-foreground transition-colors hover:text-foreground">Carpintería a medida</a>
+                    <a href="/puertas-madera-chapas-guayaquil" class="text-muted-foreground transition-colors hover:text-foreground">Puertas, chapas y accesorios</a>
                 </div>
             </div>
 

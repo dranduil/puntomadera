@@ -71,6 +71,23 @@ test('door installation page exposes outcome and WhatsApp metadata', function ()
         ->toContain('<link rel="canonical" href="https://punto-madera.com/instalacion-puertas-guayaquil">');
 });
 
+test('door product page presents quote-only offers and illustrative images', function () {
+    config(['app.url' => 'https://punto-madera.com']);
+
+    $response = $this->get(route('seo.doors.products'));
+
+    $response->assertSuccessful();
+
+    expect($response->getContent())
+        ->toContain('<title>Puertas de madera, chapas y accesorios en Guayaquil | Punto Madera</title>')
+        ->toContain('<link rel="canonical" href="https://punto-madera.com/puertas-madera-chapas-guayaquil">')
+        ->toContain('te enviamos la cotización por WhatsApp antes de avanzar')
+        ->toContain('href="https://wa.me/')
+        ->toContain('/images/doors-cotizacion/puerta-laqueada-referencia.jpg')
+        ->toContain('/images/doors-cotizacion/chapas-herrajes-referencia.jpg')
+        ->toContain('Imágenes ilustrativas generadas para presentar opciones');
+});
+
 test('custom carpentry page targets furniture design intent', function () {
     config(['app.url' => 'https://punto-madera.com']);
 
@@ -88,6 +105,7 @@ test('server rendered seo pages share the public shell and footer', function () 
     foreach ([
         'seo.doors.installation',
         'seo.doors.repair',
+        'seo.doors.products',
         'seo.custom.carpentry',
     ] as $routeName) {
         $response = $this->get(route($routeName));
@@ -97,6 +115,7 @@ test('server rendered seo pages share the public shell and footer', function () 
         expect($response->getContent())
             ->toContain('Navegación principal')
             ->toContain('Muebles a medida, closets empotrados, cocinas, puertas y reparaciones.')
+            ->toContain('href="/puertas-madera-chapas-guayaquil"')
             ->toContain('Todos los derechos reservados.');
     }
 });
@@ -171,6 +190,7 @@ test('sitemap lists public pages and published services', function () {
 
     expect($response->getContent())
         ->toContain('<loc>https://example.test</loc>')
+        ->toContain('<loc>https://example.test/puertas-madera-chapas-guayaquil</loc>')
         ->toContain('<loc>https://example.test/servicios/published-service</loc>')
         ->not->toContain('/servicios/draft-service')
         ->not->toContain('/tienda');

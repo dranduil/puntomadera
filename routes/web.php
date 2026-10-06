@@ -31,6 +31,9 @@ Route::get('/reparacion-puertas-guayaquil', [LocalSeoPageController::class, 'sho
 Route::get('/carpinteria-a-medida-guayaquil', [LocalSeoPageController::class, 'show'])
     ->defaults('slug', 'carpinteria-a-medida-guayaquil')
     ->name('seo.custom.carpentry');
+Route::get('/puertas-madera-chapas-guayaquil', [LocalSeoPageController::class, 'show'])
+    ->defaults('slug', 'puertas-madera-chapas-guayaquil')
+    ->name('seo.doors.products');
 
 Route::get('/contacto', [ContactPageController::class, 'show'])->name('contact.show');
 Route::get('/trabajos', [WorkController::class, 'index'])->name('works.index');

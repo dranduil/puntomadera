@@ -11,6 +11,7 @@
         ['label' => 'Instalación de puertas', 'href' => '/instalacion-puertas-guayaquil'],
         ['label' => 'Reparación de puertas', 'href' => '/reparacion-puertas-guayaquil'],
         ['label' => 'Carpintería a medida', 'href' => '/carpinteria-a-medida-guayaquil'],
+        ['label' => 'Puertas, chapas y accesorios', 'href' => '/puertas-madera-chapas-guayaquil'],
     ];
 @endphp
 
