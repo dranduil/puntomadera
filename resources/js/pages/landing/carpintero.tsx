@@ -748,36 +748,63 @@ export default function CarpinteroLanding({ landing }: Props) {
                                         step: '01',
                                         title: 'Mensaje',
                                         text: 'Envía foto, idea y medidas. Si no tienes, agendamos visita.',
+                                        image: '/images/process-icons/mensaje.png',
+                                        imageAlt:
+                                            'Teléfono con una referencia de carpintería y detalles inspirados en Las Peñas',
                                     },
                                     {
                                         step: '02',
                                         title: 'Medidas',
                                         text: 'Levantamiento en sitio y confirmación de materiales y herrajes.',
+                                        image: '/images/process-icons/medidas.png',
+                                        imageAlt:
+                                            'Cinta métrica, regla y plano sobre una pieza de madera',
                                     },
                                     {
                                         step: '03',
                                         title: 'Fabricación',
                                         text: 'Corte, armado y acabado en taller con control de detalles.',
+                                        image: '/images/process-icons/fabricacion.png',
+                                        imageAlt:
+                                            'Cepillo de carpintería y viruta sobre madera con un acento local',
                                     },
                                     {
                                         step: '04',
                                         title: 'Instalación',
                                         text: 'Montaje, nivelación, ajuste final y entrega del proyecto.',
+                                        image: '/images/process-icons/instalacion.png',
+                                        imageAlt:
+                                            'Puerta de madera alineada con nivel y detalles de arquitectura guayaquileña',
                                     },
                                 ].map((p) => (
                                     <Card
                                         key={p.step}
-                                        className="rounded-xl border-border/70 bg-card p-6 shadow-none"
+                                        className="h-full gap-3 rounded-xl border-border/70 bg-card p-6 shadow-none"
                                     >
-                                        <div className="text-xs font-semibold tracking-[0.16em] text-primary">
-                                            {p.step}
-                                        </div>
-                                        <div className="mt-2 text-base font-semibold">
-                                            {p.title}
-                                        </div>
-                                        <p className="mt-2 text-sm text-muted-foreground">
-                                            {p.text}
-                                        </p>
+                                        <CardHeader className="gap-3 px-0">
+                                            <div className="flex items-center justify-between">
+                                                <span className="text-xs font-semibold tracking-[0.16em] text-primary">
+                                                    {p.step}
+                                                </span>
+                                                <img
+                                                    src={p.image}
+                                                    alt={p.imageAlt}
+                                                    width="96"
+                                                    height="96"
+                                                    loading="lazy"
+                                                    decoding="async"
+                                                    className="size-20 object-contain"
+                                                />
+                                            </div>
+                                            <CardTitle className="text-base">
+                                                {p.title}
+                                            </CardTitle>
+                                        </CardHeader>
+                                        <CardContent className="px-0">
+                                            <CardDescription className="leading-6">
+                                                {p.text}
+                                            </CardDescription>
+                                        </CardContent>
                                     </Card>
                                 ))}
                             </div>

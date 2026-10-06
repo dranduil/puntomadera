@@ -10,6 +10,13 @@ No concrete implementation error has been identified in the source chat that cre
 
 <!-- The record_error.py script appends dated entries below this line. -->
 
+### 2026-10-06 08:10 UTC — tooling
+- Symptom: The local browser smoke check failed when I called a non-existent Playwright locator method scrollIntoViewIfNeeded
+- Cause: The CUA browser API exposes documented tab scrolling and locator actions but not Playwright's scrollIntoViewIfNeeded method
+- Prevention: Before browser automation, use the CUA documentation and scroll with tab.scroll(target, direction, pages); do not assume methods from full Playwright are exposed
+- Verification: Used documented tab.scroll, visually checked the four-card process section, confirmed all four PNGs loaded at 512px and browser console had no errors
+
+
 ### 2026-09-19 18:24 UTC — tooling
 - Symptom: The final repository check reported zsh: command not found: git even though the repository and Git installation were healthy
 - Cause: The shell PATH did not resolve the Homebrew Git binary in that command invocation
