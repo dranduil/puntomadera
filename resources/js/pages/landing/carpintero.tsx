@@ -2,16 +2,11 @@ import { Head, Link } from '@inertiajs/react';
 import {
     Check,
     ChevronRight,
-    Hammer,
-    Home,
     MapPin,
     MessageCircle,
     Phone,
-    Ruler,
     ShieldCheck,
-    Sparkles,
     Timer,
-    Wrench,
 } from 'lucide-react';
 import AppLogoIcon from '@/components/app-logo-icon';
 import { PublicHeader } from '@/components/public-header';
@@ -25,6 +20,7 @@ import {
     CardTitle,
 } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
+import { formatServiceAreas, resolveServiceAreas } from '@/lib/service-areas';
 import { getPublicAppName, sanitizePublicTitle } from '@/lib/site';
 import { cn } from '@/lib/utils';
 
@@ -41,7 +37,7 @@ const images = {
 const defaultSeo = {
     title: 'Carpintero en Guayaquil | Muebles, closets y puertas a medida',
     description:
-        'Carpintero en Guayaquil para muebles a medida, closets, cocinas y puertas. Cotiza por WhatsApp instalación, reparación y acabados para tu hogar o negocio.',
+        'Carpintero en Guayaquil, Urdesa, Vía a la Costa, Samborondón y Daule. Muebles a medida, closets, cocinas, puertas y reparaciones por WhatsApp.',
 };
 
 type Landing = {
@@ -64,42 +60,42 @@ const services = [
         href: '/carpinteria-a-medida-guayaquil',
         description:
             'Diseño de muebles a medida en melamina o madera, según tu espacio.',
-        icon: Ruler,
+        image: '/images/service-icons/muebles-a-medida.png',
     },
     {
         title: 'Cocinas y anaqueles',
         href: '/servicios/closets-anaqueles-cocina-guayaquil',
         description:
             'Anaqueles de cocina, cajonería y herrajes. Distribución pensada para uso diario.',
-        icon: Home,
+        image: '/images/service-icons/cocinas-anaqueles.png',
     },
     {
         title: 'Closets empotrados',
         href: '/servicios/closets-anaqueles-cocina-guayaquil',
         description:
             'Closets a medida con puertas corredizas o abatibles, con acabados prolijos.',
-        icon: Hammer,
+        image: '/images/service-icons/closets-empotrados.png',
     },
     {
         title: 'Puertas e instalación',
         href: '/instalacion-puertas-guayaquil',
         description:
             'Instalación de puertas interiores y principales, ajuste, bisagras y cerraduras.',
-        icon: Wrench,
+        image: '/images/service-icons/puertas-instalacion.png',
     },
     {
         title: 'Reparación de muebles',
         href: '/servicios/reparacion-muebles-madera-guayaquil',
         description:
             'Reparación y mantenimiento: bisagras, rieles, nivelación, refuerzos y acabado.',
-        icon: Sparkles,
+        image: '/images/service-icons/reparacion-muebles.png',
     },
     {
         title: 'Ebanistería y detalles',
         href: '/servicios/ebanisteria-fina-acabados-personalizados-guayaquil',
         description:
             'Trabajos finos, remates, molduras y soluciones personalizadas para tu hogar.',
-        icon: ShieldCheck,
+        image: '/images/service-icons/ebanisteria-detalles.png',
     },
 ];
 
@@ -127,11 +123,7 @@ export default function CarpinteroLanding({ landing }: Props) {
     const siteUrl = import.meta.env.VITE_APP_URL || 'https://punto-madera.com';
     const canonicalUrl = `${siteUrl.replace(/\/$/, '')}/`;
     const heroImageUrl = `${siteUrl.replace(/\/$/, '')}/${images.hero.replace(/^\//, '')}`;
-    const areasServed = landing.areas_served ?? [
-        'Guayaquil',
-        'Samborondón',
-        'Daule',
-    ];
+    const areasServed = resolveServiceAreas(landing.areas_served);
 
     const envWhatsapp =
         import.meta.env.VITE_WHATSAPP_NUMBER?.trim() ?? '593998897813';
@@ -159,7 +151,7 @@ export default function CarpinteroLanding({ landing }: Props) {
         areaServed: [
             { '@type': 'Country', name: 'Ecuador' },
             { '@type': 'City', name: 'Guayaquil' },
-            ...areasServed.map((name) => ({ '@type': 'City', name })),
+            ...areasServed.map((name) => ({ '@type': 'Place', name })),
         ],
         address: {
             '@type': 'PostalAddress',
@@ -432,8 +424,16 @@ export default function CarpinteroLanding({ landing }: Props) {
                                         className="group rounded-xl border-border/70 bg-card p-6 shadow-none transition-colors hover:bg-muted/35"
                                     >
                                         <div className="flex items-start gap-4">
-                                            <span className="inline-flex size-11 items-center justify-center rounded-lg bg-secondary text-secondary-foreground transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
-                                                <s.icon className="size-5" />
+                                            <span className="inline-flex size-20 shrink-0 items-center justify-center rounded-xl bg-secondary/60 p-1 transition-colors group-hover:bg-secondary">
+                                                <img
+                                                    src={s.image}
+                                                    alt={`Ilustración 3D de ${s.title.toLowerCase()}`}
+                                                    width="80"
+                                                    height="80"
+                                                    loading="lazy"
+                                                    decoding="async"
+                                                    className="size-full object-contain"
+                                                />
                                             </span>
                                             <div>
                                                 <h3 className="text-base font-semibold">
@@ -465,9 +465,7 @@ export default function CarpinteroLanding({ landing }: Props) {
                                         Zonas atendidas
                                     </h3>
                                     <p className="mt-2 text-sm text-muted-foreground">
-                                        Guayaquil y alrededores: Samborondón,
-                                        Vía a la Costa, Urdesa, Norte y Sur,
-                                        según agenda.
+                                        {`${formatServiceAreas(areasServed)}. Visitas coordinadas según disponibilidad del sector.`}
                                     </p>
                                     <div className="mt-6 flex flex-col gap-3 sm:flex-row">
                                         <Button asChild>
@@ -625,7 +623,7 @@ export default function CarpinteroLanding({ landing }: Props) {
                                         },
                                         {
                                             title: 'Enfoque local',
-                                            text: 'Guayaquil y alrededores.',
+                                            text: `Atendemos ${formatServiceAreas(areasServed)}.`,
                                         },
                                     ].map((item) => (
                                         <div
@@ -663,7 +661,7 @@ export default function CarpinteroLanding({ landing }: Props) {
                                         {[
                                             'Muebles, closets, cocinas, puertas y reparaciones',
                                             'Respuesta directa y cotización clara',
-                                            'Guayaquil y alrededores',
+                                            `Cobertura: ${formatServiceAreas(areasServed)}`,
                                         ].map((line) => (
                                             <div
                                                 key={line}
@@ -829,16 +827,14 @@ export default function CarpinteroLanding({ landing }: Props) {
                                         Contáctanos
                                     </h2>
                                     <p className="mt-3 text-muted-foreground">
-                                        Envíanos un mensaje o contáctanos por
-                                        WhatsApp para carpintería en Guayaquil,
-                                        Ecuador.
+                                        {`Envíanos un mensaje o contáctanos por WhatsApp para carpintería en ${formatServiceAreas(areasServed)}.`}
                                     </p>
 
                                     <div className="mt-8 grid gap-4">
                                         {[
                                             'Carpintero Guayaquil · respuesta rápida',
                                             'Muebles a medida, closets, puertas y reparaciones',
-                                            'Guayaquil y alrededores',
+                                            `Cobertura: ${formatServiceAreas(areasServed)}`,
                                         ].map((line) => (
                                             <div
                                                 key={line}

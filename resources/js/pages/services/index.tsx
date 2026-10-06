@@ -12,9 +12,11 @@ import {
     CardTitle,
 } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
+import { formatServiceAreas, resolveServiceAreas } from '@/lib/service-areas';
 
 type Landing = {
     whatsapp_number: string | null;
+    areas_served?: string[] | null;
 };
 
 type Service = {
@@ -52,9 +54,10 @@ export default function ServicesIndex({ landing, services }: Props) {
     const seoTitle =
         'Servicios de carpintería en Guayaquil | Muebles, closets y puertas';
     const seoDescription =
-        'Muebles a medida, closets, anaqueles de cocina, instalación y reparación de puertas en Guayaquil. Revisa el proceso y cotiza por WhatsApp.';
+        'Muebles, closets, cocinas y puertas en Guayaquil, Urdesa, Vía a la Costa, Samborondón y Daule. Revisa servicios y cotiza por WhatsApp.';
     const featuredService = services[0];
     const featuredImageUrl = resolveImagePath(featuredService?.image_path);
+    const areasServed = resolveServiceAreas(landing.areas_served);
 
     return (
         <>
@@ -190,6 +193,15 @@ export default function ServicesIndex({ landing, services }: Props) {
                                             cobertura local
                                         </div>
                                     </div>
+                                </div>
+                                <div className="mt-6 flex max-w-xl items-start gap-3 rounded-xl border border-border/70 bg-background/70 p-4">
+                                    <MapPin className="mt-0.5 size-4 shrink-0 text-primary" />
+                                    <p className="text-sm leading-6 text-muted-foreground">
+                                        <span className="font-medium text-foreground">
+                                            Zonas atendidas:{' '}
+                                        </span>
+                                        {`${formatServiceAreas(areasServed)}. Visitas según disponibilidad del sector.`}
+                                    </p>
                                 </div>
                             </div>
 

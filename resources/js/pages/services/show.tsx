@@ -21,10 +21,12 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { Textarea } from '@/components/ui/textarea';
+import { formatServiceAreas, resolveServiceAreas } from '@/lib/service-areas';
 
 type Landing = {
     whatsapp_number: string | null;
     contact_phone: string | null;
+    areas_served?: string[] | null;
 };
 
 type Service = {
@@ -53,6 +55,7 @@ export default function ServiceShow({ landing, service }: Props) {
     const [phone, setPhone] = useState('');
     const [location, setLocation] = useState('');
     const [details, setDetails] = useState('');
+    const areasServed = resolveServiceAreas(landing.areas_served);
 
     const envWhatsapp =
         import.meta.env.VITE_WHATSAPP_NUMBER?.trim() ?? '593998897813';
@@ -83,7 +86,7 @@ export default function ServiceShow({ landing, service }: Props) {
         name: service.name,
         description: seoDescription,
         serviceType: service.name,
-        areaServed: { '@type': 'City', name: 'Guayaquil' },
+        areaServed: areasServed.map((name) => ({ '@type': 'Place', name })),
         provider: {
             '@type': 'HomeAndConstructionBusiness',
             name: 'Punto Madera',
@@ -235,6 +238,14 @@ export default function ServiceShow({ landing, service }: Props) {
                                     <Badge variant="secondary">
                                         Instalación local
                                     </Badge>
+                                </div>
+                                <div className="mt-6 max-w-xl rounded-xl border border-border/70 bg-background/70 p-4">
+                                    <div className="text-xs font-medium tracking-[0.14em] text-muted-foreground uppercase">
+                                        Zonas atendidas
+                                    </div>
+                                    <p className="mt-2 text-sm leading-6 text-muted-foreground">
+                                        {`${formatServiceAreas(areasServed)}. Visitas según disponibilidad del sector.`}
+                                    </p>
                                 </div>
                             </div>
 

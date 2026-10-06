@@ -18,9 +18,11 @@ import {
     CardTitle,
 } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
+import { formatServiceAreas, resolveServiceAreas } from '@/lib/service-areas';
 
 type Landing = {
     whatsapp_number: string | null;
+    areas_served?: string[] | null;
 };
 
 type Props = {
@@ -39,6 +41,7 @@ const contactPoints = [
 ];
 
 export default function ContactPage({ landing }: Props) {
+    const areasServed = resolveServiceAreas(landing.areas_served);
     const envWhatsapp =
         import.meta.env.VITE_WHATSAPP_NUMBER?.trim() ?? '593998897813';
     const rawWhatsapp = envWhatsapp || landing.whatsapp_number?.trim();
@@ -55,7 +58,7 @@ export default function ContactPage({ landing }: Props) {
     const canonicalUrl = `${siteUrl.replace(/\/$/, '')}/contacto`;
     const seoTitle = 'Cotizar carpintería en Guayaquil | Punto Madera';
     const seoDescription =
-        'Cotiza muebles a medida, closets, puertas y reparaciones de carpintería en Guayaquil. Envíanos fotos y medidas por WhatsApp.';
+        'Cotiza muebles, closets, puertas y reparaciones en Guayaquil, Urdesa, Vía a la Costa, Samborondón y Daule. Escríbenos por WhatsApp.';
 
     return (
         <>
@@ -230,7 +233,13 @@ export default function ContactPage({ landing }: Props) {
                                                 Zona de atención
                                             </div>
                                             <div className="mt-1 text-sm text-muted-foreground">
-                                                Guayaquil y alrededores
+                                                {formatServiceAreas(
+                                                    areasServed,
+                                                )}
+                                            </div>
+                                            <div className="mt-1 text-xs text-muted-foreground">
+                                                Visitas según disponibilidad del
+                                                sector.
                                             </div>
                                         </div>
                                     </div>

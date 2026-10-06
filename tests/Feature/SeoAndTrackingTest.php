@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\HomeLanding;
 use App\Models\Service;
 use Inertia\Testing\AssertableInertia as Assert;
 
@@ -58,6 +59,24 @@ test('services index exposes a stronger local conversion snippet', function () {
         ->toContain('<link inertia="canonical" rel="canonical" href="https://punto-madera.com/servicios">');
 });
 
+test('public contact and service pages receive the configured coverage areas', function () {
+    $areas = [
+        'Guayaquil (Norte y Sur)',
+        'Urdesa',
+        'Vía a la Costa',
+        'Samborondón',
+        'Daule',
+    ];
+
+    HomeLanding::query()->create(['areas_served' => $areas]);
+
+    foreach ([route('home'), route('services.index'), route('contact.show')] as $url) {
+        $this->get($url)->assertInertia(fn (Assert $page) => $page
+            ->where('landing.areas_served', $areas),
+        );
+    }
+});
+
 test('door installation page exposes outcome and WhatsApp metadata', function () {
     config(['app.url' => 'https://punto-madera.com']);
 
@@ -68,6 +87,9 @@ test('door installation page exposes outcome and WhatsApp metadata', function ()
     expect($response->getContent())
         ->toContain('<title>Instalación de puertas en Guayaquil | Alineadas y listas para usar</title>')
         ->toContain('Entrega limpia, cierre correcto y cotización por WhatsApp.')
+        ->toContain('Guayaquil (Norte y Sur)')
+        ->toContain('Samborondón')
+        ->toContain('Vía a la Costa')
         ->toContain('<link rel="canonical" href="https://punto-madera.com/instalacion-puertas-guayaquil">');
 });
 

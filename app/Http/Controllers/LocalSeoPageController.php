@@ -22,13 +22,22 @@ class LocalSeoPageController extends Controller
         ];
         $siteUrl = rtrim(config('app.url'), '/');
         $canonicalUrl = "{$siteUrl}/{$slug}";
-        $areasServed = $landingData['areas_served'] ?? [
-            'Guayaquil',
-            'Samborondón',
-            'Daule',
-            'Vía a la Costa',
-            'Urdesa',
-        ];
+        $areasServed = collect($landingData['areas_served'] ?? [])
+            ->map(fn (string $area) => trim($area))
+            ->filter()
+            ->unique()
+            ->values()
+            ->all();
+
+        if ($areasServed === []) {
+            $areasServed = [
+                'Guayaquil (Norte y Sur)',
+                'Urdesa',
+                'Vía a la Costa',
+                'Samborondón',
+                'Daule',
+            ];
+        }
         $whatsappNumber = preg_replace('/[^0-9]/', '', (string) (
             config('services.whatsapp.number')
             ?: env('VITE_WHATSAPP_NUMBER', '593998897813')
@@ -52,7 +61,7 @@ class LocalSeoPageController extends Controller
                     'addressCountry' => 'EC',
                 ],
                 'areaServed' => collect($areasServed)->map(fn (string $name) => [
-                    '@type' => 'City',
+                    '@type' => 'Place',
                     'name' => $name,
                 ])->values(),
             ],
@@ -64,7 +73,7 @@ class LocalSeoPageController extends Controller
                 'description' => $page['metaDescription'],
                 'provider' => ['@id' => "{$siteUrl}/#business"],
                 'areaServed' => collect($areasServed)->map(fn (string $name) => [
-                    '@type' => 'City',
+                    '@type' => 'Place',
                     'name' => $name,
                 ])->values(),
                 'serviceType' => $page['serviceName'],
