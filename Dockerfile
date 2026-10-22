@@ -27,7 +27,7 @@ RUN composer install \
     --optimize-autoloader \
     --no-scripts
 
-FROM php:8.4-cli-bookworm AS frontend
+FROM php:8.4.27-cli-bookworm@sha256:496b5e02fe9fe44fcfb715023b931048111dc4e0bc719789d83c906be9f04b05 AS frontend
 
 WORKDIR /app
 
@@ -54,7 +54,7 @@ RUN touch database/database.sqlite
 
 RUN npm run build
 
-FROM php:8.4-apache-bookworm AS runtime
+FROM php:8.4.27-apache-bookworm@sha256:e653ff90d7f6e2e6f81eddb07c864f1eae224ccbf5143f82a44f25e2f110e320 AS runtime
 
 ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
 
