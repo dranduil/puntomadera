@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\ServiceZoneAdminController;
 use App\Http\Controllers\Admin\WorkAdminController;
 use App\Http\Controllers\ContactMessageController;
 use App\Http\Controllers\ContactPageController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HomeLandingController;
 use App\Http\Controllers\LocalSeoPageController;
 use App\Http\Controllers\MoneyPageController;
@@ -88,7 +89,7 @@ Route::post('/bookings', [ServiceBookingController::class, 'store'])->name('book
 Route::post('/contact', [ContactMessageController::class, 'store'])->name('contact.store');
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::inertia('dashboard', 'dashboard')->name('dashboard');
+    Route::get('dashboard', DashboardController::class)->name('dashboard');
 
     Route::prefix('admin')->middleware(AdminOnly::class)->group(function () {
         Route::get('home', [HomeLandingAdminController::class, 'edit'])->name('admin.home.edit');

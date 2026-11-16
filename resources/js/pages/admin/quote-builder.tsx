@@ -997,7 +997,7 @@ export default function QuoteBuilder({
                 </form>
 
                 {meta && (
-                    <div className="grid gap-4 md:grid-cols-2 lg:mr-[364px]">
+                    <div className="grid gap-4 lg:mr-[364px]">
                         <Card>
                             <CardHeader>
                                 <CardTitle>Registrar pago</CardTitle>
@@ -1009,7 +1009,7 @@ export default function QuoteBuilder({
                                 <Form
                                     {...paid.form(meta.id)}
                                     options={{ preserveScroll: true }}
-                                    className="grid gap-3 sm:grid-cols-2"
+                                    className="grid grid-cols-2 gap-3"
                                 >
                                     {({
                                         processing: saving,
@@ -1064,7 +1064,7 @@ export default function QuoteBuilder({
                                                 type="submit"
                                                 variant="outline"
                                                 disabled={saving}
-                                                className="w-fit"
+                                                className="col-span-2 w-fit"
                                             >
                                                 Marcar pagada
                                             </Button>
