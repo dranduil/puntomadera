@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CatalogItem;
 use App\Models\HomeLanding;
 use App\Models\Service;
 use App\Models\Work;
@@ -33,6 +34,13 @@ class LocalSeoPageController extends Controller
         ));
         $whatsappHref = "https://wa.me/{$whatsappNumber}?text=".rawurlencode($page['message']);
         $quoteHref = '/cotizar'.(empty($page['quoteService']) ? '' : '?servicio='.$page['quoteService']);
+        $products = empty($page['productsService']) ? [] : CatalogItem::query()
+            ->public()
+            ->whereHas('service', fn ($query) => $query->where('slug', $page['productsService']))
+            ->where(fn ($query) => $query->where('kind', 'producto')->orWhere('includes_material', true))
+            ->get()
+            ->map(fn (CatalogItem $item) => [...$item->toPublicArray(), 'quote_href' => '/cotizar?item='.$item->slug])
+            ->all();
 
         $schemas = [
             ['@context' => 'https://schema.org'] + BusinessSchema::node($siteUrl, $landingData),
@@ -90,6 +98,7 @@ class LocalSeoPageController extends Controller
             'areasServed' => $areasServed,
             'whatsappHref' => $whatsappHref,
             'quoteHref' => $quoteHref,
+            'products' => $products,
             'schemas' => $schemas,
         ]);
     }
@@ -100,7 +109,7 @@ class LocalSeoPageController extends Controller
 
         // path => last modification. Only pages backed by real timestamps get a
         // <lastmod>; guessed dates would teach Google to ignore the field.
-        $urls = collect(['/', '/cotizar', '/servicios', '/trabajos', '/resenas', '/contacto'])
+        $urls = collect(['/', '/cotizar', '/casa-nueva-guayaquil', '/empresas', '/servicios', '/trabajos', '/resenas', '/contacto'])
             ->merge(collect(array_keys($this->pages()))->map(fn (string $slug) => "/{$slug}"))
             ->mapWithKeys(fn (string $path) => [$path => null]);
 
@@ -303,6 +312,7 @@ class LocalSeoPageController extends Controller
             'puertas-madera-chapas-guayaquil' => [
                 'slug' => 'puertas-madera-chapas-guayaquil',
                 'quoteService' => 'instalacion-reparacion-puertas-madera-guayaquil',
+                'productsService' => 'instalacion-reparacion-puertas-madera-guayaquil',
                 'title' => 'Puertas de madera, chapas y accesorios en Guayaquil | Punto Madera',
                 'metaDescription' => 'Cotiza puertas de madera, acabados laqueados, chapas, manijas, bisagras y accesorios en Guayaquil. Modelos, compatibilidad y disponibilidad se confirman por WhatsApp.',
                 'serviceName' => 'Puertas, chapas y accesorios en Guayaquil',

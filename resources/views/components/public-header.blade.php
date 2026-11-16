@@ -8,6 +8,8 @@
         ['label' => 'Contacto', 'href' => '/contacto'],
     ];
     $moreItems = [
+        ['label' => 'Casa nueva', 'href' => '/casa-nueva-guayaquil'],
+        ['label' => 'Empresas y Airbnb', 'href' => '/empresas'],
         ['label' => 'Instalación de puertas', 'href' => '/instalacion-puertas-guayaquil'],
         ['label' => 'Reparación de puertas', 'href' => '/reparacion-puertas-guayaquil'],
         ['label' => 'Carpintería a medida', 'href' => '/carpinteria-a-medida-guayaquil'],

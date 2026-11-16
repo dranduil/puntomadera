@@ -41,6 +41,9 @@
             <div class="md:col-span-2">
                 <div class="text-sm font-semibold">Páginas</div>
                 <div class="mt-4 grid gap-2 text-sm">
+                    <a href="/cotizar" class="text-muted-foreground transition-colors hover:text-foreground">Pedir cotización</a>
+                    <a href="/casa-nueva-guayaquil" class="text-muted-foreground transition-colors hover:text-foreground">Casa nueva</a>
+                    <a href="/empresas" class="text-muted-foreground transition-colors hover:text-foreground">Empresas y Airbnb</a>
                     <a href="/instalacion-puertas-guayaquil" class="text-muted-foreground transition-colors hover:text-foreground">Instalación de puertas</a>
                     <a href="/reparacion-puertas-guayaquil" class="text-muted-foreground transition-colors hover:text-foreground">Reparación de puertas</a>
                     <a href="/carpinteria-a-medida-guayaquil" class="text-muted-foreground transition-colors hover:text-foreground">Carpintería a medida</a>

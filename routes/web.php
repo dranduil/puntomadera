@@ -17,6 +17,7 @@ use App\Http\Controllers\ContactMessageController;
 use App\Http\Controllers\ContactPageController;
 use App\Http\Controllers\HomeLandingController;
 use App\Http\Controllers\LocalSeoPageController;
+use App\Http\Controllers\MoneyPageController;
 use App\Http\Controllers\QuotePublicController;
 use App\Http\Controllers\QuoteRequestController;
 use App\Http\Controllers\ReviewController;
@@ -49,6 +50,9 @@ Route::get('/carpinteria-a-medida-guayaquil', [LocalSeoPageController::class, 's
 Route::get('/puertas-madera-chapas-guayaquil', [LocalSeoPageController::class, 'show'])
     ->defaults('slug', 'puertas-madera-chapas-guayaquil')
     ->name('seo.doors.products');
+
+Route::get('/casa-nueva-guayaquil', [MoneyPageController::class, 'casaNueva'])->name('money.casa-nueva');
+Route::get('/empresas', [MoneyPageController::class, 'empresas'])->name('money.empresas');
 
 Route::get('/contacto', [ContactPageController::class, 'show'])->name('contact.show');
 Route::get('/trabajos', [WorkController::class, 'index'])->name('works.index');

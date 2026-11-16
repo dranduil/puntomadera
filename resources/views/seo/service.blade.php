@@ -95,6 +95,39 @@
                 </section>
             @endif
 
+            @if (!empty($products))
+                <section id="productos" class="border-b border-border/60 bg-card py-16 sm:py-20">
+                    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                        <div class="max-w-3xl">
+                            <div class="text-xs font-medium tracking-[0.28em] text-muted-foreground uppercase">Productos con instalación</div>
+                            <h2 class="mt-4 text-3xl font-medium tracking-tight text-primary sm:text-4xl">Elige tu puerta o cerradura y la instalamos</h2>
+                            <p class="mt-4 text-sm leading-7 text-muted-foreground">El precio depende de la medida, el modelo y la disponibilidad. Elige lo que necesitas y te enviamos la cotización por WhatsApp.</p>
+                        </div>
+                        <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                            @foreach ($products as $product)
+                                <article class="flex flex-col overflow-hidden rounded-xl border border-border/70 bg-background">
+                                    @if ($product['image_url'])
+                                        <div class="aspect-[3/2] overflow-hidden bg-muted">
+                                            <img src="{{ $product['image_url'] }}" alt="{{ $product['name'] }}" class="h-full w-full object-cover" width="600" height="400" loading="lazy">
+                                        </div>
+                                    @endif
+                                    <div class="flex flex-1 flex-col p-5">
+                                        <span class="text-xs font-medium text-muted-foreground">{{ $product['kind'] === 'producto' ? 'Producto + instalación' : 'Material e instalación incluidos' }}</span>
+                                        <h3 class="mt-2 text-base font-medium text-primary">{{ $product['name'] }}</h3>
+                                        @if ($product['description'])
+                                            <p class="mt-2 text-sm leading-6 text-muted-foreground">{{ $product['description'] }}</p>
+                                        @endif
+                                        <div class="mt-auto pt-5">
+                                            <a href="{{ $product['quote_href'] }}" class="inline-flex h-10 items-center justify-center rounded-md bg-primary px-5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90">Cotizar</a>
+                                        </div>
+                                    </div>
+                                </article>
+                            @endforeach
+                        </div>
+                    </div>
+                </section>
+            @endif
+
             <section class="border-y border-border/60 bg-background py-20 sm:py-28">
                 <div class="mx-auto grid max-w-7xl gap-5 px-4 sm:px-6 lg:grid-cols-3 lg:px-8">
                     @foreach ([[$page['servicesTitle'] ?? 'Qué hacemos', $page['services']], [$page['problemsTitle'] ?? 'Problemas que resolvemos', $page['problems']], [$page['materialsTitle'] ?? 'Materiales y detalles', $page['materials']]] as [$title, $items])

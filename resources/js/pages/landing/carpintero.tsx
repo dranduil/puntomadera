@@ -1067,6 +1067,18 @@ export default function CarpinteroLanding({ landing, business }: Props) {
                                         Servicios
                                     </a>
                                     <a
+                                        href="/casa-nueva-guayaquil"
+                                        className="text-muted-foreground hover:text-foreground"
+                                    >
+                                        Casa nueva
+                                    </a>
+                                    <a
+                                        href="/empresas"
+                                        className="text-muted-foreground hover:text-foreground"
+                                    >
+                                        Empresas y Airbnb
+                                    </a>
+                                    <a
                                         href="/trabajos"
                                         className="text-muted-foreground hover:text-foreground"
                                     >
