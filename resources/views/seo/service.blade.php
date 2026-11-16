@@ -49,18 +49,12 @@
                         {{ $page['intent'] }}
                     </p>
                     <div class="mt-8 flex flex-col gap-3 sm:flex-row">
-                        <a href="{{ $whatsappHref }}" target="_blank" rel="noreferrer" class="inline-flex h-11 items-center justify-center rounded-md bg-primary px-6 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90">
+                        <a href="{{ $quoteHref }}" class="inline-flex h-11 items-center justify-center rounded-md bg-primary px-6 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90">
                             {{ $page['primaryCta'] }}
                         </a>
-                        @if (!empty($page['quoteOnly']))
-                            <a href="{{ $whatsappHref }}" target="_blank" rel="noreferrer" class="inline-flex h-11 items-center justify-center rounded-md border border-input px-6 text-sm font-medium text-primary transition-colors hover:bg-muted">
-                                Enviar fotos y medidas
-                            </a>
-                        @else
-                            <a href="/contacto" class="inline-flex h-11 items-center justify-center rounded-md border border-input px-6 text-sm font-medium text-primary transition-colors hover:bg-muted">
-                                Enviar detalles
-                            </a>
-                        @endif
+                        <a href="{{ $whatsappHref }}" target="_blank" rel="noreferrer" class="inline-flex h-11 items-center justify-center rounded-md border border-input px-6 text-sm font-medium text-primary transition-colors hover:bg-muted">
+                            {{ !empty($page['quoteOnly']) ? 'Enviar fotos por WhatsApp' : 'Escribir por WhatsApp' }}
+                        </a>
                     </div>
                 </div>
 
@@ -170,11 +164,11 @@
                             {{ $page['ctaDescription'] ?? 'Envía fotos, medidas aproximadas, ubicación y una descripción corta. Con eso podemos orientar mejor el alcance del trabajo, materiales y tiempos.' }}
                         </p>
                         <div class="mt-7 flex flex-col gap-3 sm:flex-row">
-                            <a href="{{ $whatsappHref }}" target="_blank" rel="noreferrer" class="inline-flex h-11 items-center justify-center rounded-md bg-primary px-6 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90">{{ $page['finalCta'] ?? 'WhatsApp' }}</a>
+                            <a href="{{ $quoteHref }}" class="inline-flex h-11 items-center justify-center rounded-md bg-primary px-6 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90">{{ $page['finalCta'] ?? 'Pedir cotización' }}</a>
                             @if (!empty($page['quoteOnly']))
                                 <a href="{{ $whatsappHref }}" target="_blank" rel="noreferrer" class="inline-flex h-11 items-center justify-center rounded-md border border-input px-6 text-sm font-medium text-primary transition-colors hover:bg-muted">Enviar fotos y medidas</a>
                             @else
-                                <a href="/trabajos" class="inline-flex h-11 items-center justify-center rounded-md border border-input px-6 text-sm font-medium text-primary transition-colors hover:bg-muted">Ver trabajos</a>
+                                <a href="{{ $whatsappHref }}" target="_blank" rel="noreferrer" class="inline-flex h-11 items-center justify-center rounded-md border border-input px-6 text-sm font-medium text-primary transition-colors hover:bg-muted">Escribir por WhatsApp</a>
                             @endif
                         </div>
                     </div>

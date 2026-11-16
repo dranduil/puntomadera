@@ -58,11 +58,15 @@
 
         @if (is_array($seo) && ! $hasSsrHead)
             <meta inertia="description" name="description" content="{{ $seo['description'] }}">
-            <meta inertia="robots" name="robots" content="index,follow,max-image-preview:large">
+            <meta inertia="robots" name="robots" content="{{ $seo['robots'] ?? 'index,follow,max-image-preview:large' }}">
+            @if (!empty($seo['canonical']))
             <link inertia="canonical" rel="canonical" href="{{ $seo['canonical'] }}">
+            @endif
             <meta inertia="og:title" property="og:title" content="{{ $seo['title'] }}">
             <meta inertia="og:description" property="og:description" content="{{ $seo['description'] }}">
+            @if (!empty($seo['canonical']))
             <meta inertia="og:url" property="og:url" content="{{ $seo['canonical'] }}">
+            @endif
             <meta inertia="og:type" property="og:type" content="website">
             <meta inertia="og:locale" property="og:locale" content="es_EC">
             <meta inertia="og:site_name" property="og:site_name" content="{{ $appName }}">

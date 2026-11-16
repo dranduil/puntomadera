@@ -5,6 +5,7 @@ import {
     FolderGit2,
     Handshake,
     Images,
+    Inbox,
     LayoutGrid,
     Mail,
     MapPin,
@@ -33,6 +34,7 @@ import { index as adminCatalog } from '@/routes/admin/catalog';
 import { index as adminContacts } from '@/routes/admin/contacts';
 import { edit as adminHome } from '@/routes/admin/home';
 import { index as adminPartners } from '@/routes/admin/partners';
+import { index as adminQuoteRequests } from '@/routes/admin/quote-requests';
 import { edit as adminQuoteSettings } from '@/routes/admin/quote-settings';
 import { index as adminReviews } from '@/routes/admin/reviews';
 import { index as adminServices } from '@/routes/admin/services';
@@ -64,6 +66,11 @@ export function AppSidebar() {
         },
         ...(user?.is_admin
             ? [
+                  {
+                      title: 'Solicitudes',
+                      href: adminQuoteRequests(),
+                      icon: Inbox,
+                  },
                   {
                       title: 'Admin - Home',
                       href: adminHome(),

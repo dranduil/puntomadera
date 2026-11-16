@@ -32,6 +32,7 @@ class LocalSeoPageController extends Controller
             ?: '593998897813'
         ));
         $whatsappHref = "https://wa.me/{$whatsappNumber}?text=".rawurlencode($page['message']);
+        $quoteHref = '/cotizar'.(empty($page['quoteService']) ? '' : '?servicio='.$page['quoteService']);
 
         $schemas = [
             ['@context' => 'https://schema.org'] + BusinessSchema::node($siteUrl, $landingData),
@@ -88,6 +89,7 @@ class LocalSeoPageController extends Controller
             'canonicalUrl' => $canonicalUrl,
             'areasServed' => $areasServed,
             'whatsappHref' => $whatsappHref,
+            'quoteHref' => $quoteHref,
             'schemas' => $schemas,
         ]);
     }
@@ -98,7 +100,7 @@ class LocalSeoPageController extends Controller
 
         // path => last modification. Only pages backed by real timestamps get a
         // <lastmod>; guessed dates would teach Google to ignore the field.
-        $urls = collect(['/', '/servicios', '/trabajos', '/resenas', '/contacto'])
+        $urls = collect(['/', '/cotizar', '/servicios', '/trabajos', '/resenas', '/contacto'])
             ->merge(collect(array_keys($this->pages()))->map(fn (string $slug) => "/{$slug}"))
             ->mapWithKeys(fn (string $path) => [$path => null]);
 
@@ -140,6 +142,7 @@ class LocalSeoPageController extends Controller
         return [
             'instalacion-puertas-guayaquil' => [
                 'slug' => 'instalacion-puertas-guayaquil',
+                'quoteService' => 'instalacion-reparacion-puertas-madera-guayaquil',
                 'title' => 'Instalación de puertas en Guayaquil | Alineadas y listas para usar',
                 'metaDescription' => 'Instalamos puertas en Guayaquil con medición, nivelación, marcos, bisagras y cerraduras. Entrega limpia, cierre correcto y cotización por WhatsApp.',
                 'serviceName' => 'Instalación de puertas en Guayaquil',
@@ -192,6 +195,7 @@ class LocalSeoPageController extends Controller
             ],
             'reparacion-puertas-guayaquil' => [
                 'slug' => 'reparacion-puertas-guayaquil',
+                'quoteService' => 'instalacion-reparacion-puertas-madera-guayaquil',
                 'title' => 'Reparación de puertas en Guayaquil | Ajuste, bisagras y marcos',
                 'metaDescription' => 'Reparación de puertas en Guayaquil: puertas caídas, bisagras flojas, cerraduras, marcos, roces, humedad y ajustes de madera. Cotiza por WhatsApp.',
                 'serviceName' => 'Reparación de puertas en Guayaquil',
@@ -244,6 +248,7 @@ class LocalSeoPageController extends Controller
             ],
             'carpinteria-a-medida-guayaquil' => [
                 'slug' => 'carpinteria-a-medida-guayaquil',
+                'quoteService' => 'muebles-a-medida-guayaquil',
                 'title' => 'Diseño de muebles a medida en Guayaquil | Carpintería personalizada',
                 'metaDescription' => 'Diseño y fabricación de muebles a medida en Guayaquil: closets, repisas, paneles, puertas y soluciones para interiores y exteriores. Cotiza por WhatsApp.',
                 'serviceName' => 'Carpintería a medida en Guayaquil',
@@ -297,6 +302,7 @@ class LocalSeoPageController extends Controller
             ],
             'puertas-madera-chapas-guayaquil' => [
                 'slug' => 'puertas-madera-chapas-guayaquil',
+                'quoteService' => 'instalacion-reparacion-puertas-madera-guayaquil',
                 'title' => 'Puertas de madera, chapas y accesorios en Guayaquil | Punto Madera',
                 'metaDescription' => 'Cotiza puertas de madera, acabados laqueados, chapas, manijas, bisagras y accesorios en Guayaquil. Modelos, compatibilidad y disponibilidad se confirman por WhatsApp.',
                 'serviceName' => 'Puertas, chapas y accesorios en Guayaquil',
@@ -311,8 +317,8 @@ class LocalSeoPageController extends Controller
                 'heroCaptionTitle' => 'Cotización directa por WhatsApp',
                 'heroCaption' => 'Modelo, acabado, compatibilidad y disponibilidad se confirman antes de avanzar.',
                 'quoteOnly' => true,
-                'primaryCta' => 'Cotizar por WhatsApp',
-                'finalCta' => 'Enviar solicitud por WhatsApp',
+                'primaryCta' => 'Cotizar puertas y chapas',
+                'finalCta' => 'Pedir cotización',
                 'message' => 'Hola, quiero cotizar una puerta, acabado laqueado o chapa/accesorio. Enviaré fotos, medidas, cantidad y sector por este medio.',
                 'galleryTitle' => 'Puertas y detalles para completar el espacio',
                 'galleryNote' => 'Imágenes ilustrativas generadas para presentar opciones; los modelos, tonos, compatibilidad y disponibilidad se confirman en cada cotización.',

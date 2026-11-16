@@ -301,17 +301,19 @@ export default function CarpinteroLanding({ landing, business }: Props) {
 
                                 <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
                                     <Button asChild size="lg">
+                                        <Link href="/cotizar">
+                                            Cotizar ahora
+                                            <ChevronRight data-icon="inline-end" />
+                                        </Link>
+                                    </Button>
+                                    <Button asChild size="lg" variant="outline">
                                         <a
                                             href={whatsappHref}
                                             target="_blank"
                                             rel="noreferrer"
                                         >
-                                            Cotizar ahora
-                                            <ChevronRight data-icon="inline-end" />
+                                            Escribir por WhatsApp
                                         </a>
-                                    </Button>
-                                    <Button asChild size="lg" variant="outline">
-                                        <a href="#trabajos">Ver trabajos</a>
                                     </Button>
                                 </div>
 

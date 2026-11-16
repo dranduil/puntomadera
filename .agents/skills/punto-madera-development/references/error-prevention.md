@@ -10,6 +10,20 @@ No concrete implementation error has been identified in the source chat that cre
 
 <!-- The record_error.py script appends dated entries below this line. -->
 
+### 2026-11-16 12:41 UTC — local-verification
+- Symptom: php artisan test failed locally while vendor/bin/pest worked
+- Cause: Herd.app is missing; artisan test spawns child PHP processes that load the broken Herd php.ini dump-loader prepend
+- Prevention: Run tests with a php wrapper using -n and call php vendor/bin/pest --compact directly
+- Verification: Full suite ran with the wrapper: 102 passed, 2 skipped
+
+
+### 2026-11-16 12:41 UTC — validation
+- Symptom: The quote request test expecting 'Elige al menos un servicio' failed: a request with empty services and items arrays was saved
+- Cause: Laravel Request::filled() returns true for an empty array, so the after() check never fired
+- Prevention: To require at least one choice across array inputs, count((array) $this->input('field', [])) instead of using filled()
+- Verification: StoreQuoteRequestRequest now counts services and items; tests/Feature/QuoteRequestTest.php passes
+
+
 ### 2026-10-06 08:10 UTC — tooling
 - Symptom: The local browser smoke check failed when I called a non-existent Playwright locator method scrollIntoViewIfNeeded
 - Cause: The CUA browser API exposes documented tab scrolling and locator actions but not Playwright's scrollIntoViewIfNeeded method

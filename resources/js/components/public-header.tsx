@@ -152,12 +152,17 @@ export function PublicHeader({ landing, whatsappHref }: Props) {
                                         ))}
                                     </div>
                                     <Button asChild className="mt-4">
+                                        <Link href="/cotizar">
+                                            Pedir cotización
+                                        </Link>
+                                    </Button>
+                                    <Button asChild variant="outline">
                                         <a
                                             href={defaultWhatsappHref}
                                             target="_blank"
                                             rel="noreferrer"
                                         >
-                                            Cotizar por WhatsApp
+                                            Escribir por WhatsApp
                                             <ArrowUpRight data-icon="inline-end" />
                                         </a>
                                     </Button>
@@ -167,14 +172,7 @@ export function PublicHeader({ landing, whatsappHref }: Props) {
                     </div>
 
                     <Button asChild className="hidden sm:inline-flex">
-                        <a
-                            href={defaultWhatsappHref}
-                            target="_blank"
-                            rel="noreferrer"
-                        >
-                            Cotizar por WhatsApp
-                            <ArrowUpRight data-icon="inline-end" />
-                        </a>
+                        <Link href="/cotizar">Pedir cotización</Link>
                     </Button>
                 </div>
             </div>

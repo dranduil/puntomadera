@@ -1,5 +1,6 @@
-import { Head } from '@inertiajs/react';
+import { Head, Link } from '@inertiajs/react';
 import {
+    ArrowRight,
     ArrowUpRight,
     CheckCircle2,
     MapPin,
@@ -393,6 +394,14 @@ export default function ServiceShow({ landing, service, seo }: Props) {
                                 </CardContent>
                                 <CardFooter className="flex-col items-stretch gap-4">
                                     <Button asChild size="lg">
+                                        <Link
+                                            href={`/cotizar?servicio=${service.slug}`}
+                                        >
+                                            Pedir cotización paso a paso
+                                            <ArrowRight data-icon="inline-end" />
+                                        </Link>
+                                    </Button>
+                                    <Button asChild size="lg" variant="outline">
                                         <a
                                             href={whatsappHref}
                                             target="_blank"

@@ -51,12 +51,13 @@
                                 <a href="{{ $item['href'] }}" class="block rounded-md px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-primary">{{ $item['label'] }}</a>
                             @endforeach
                         </div>
-                        <a href="{{ $whatsappHref }}" target="_blank" rel="noreferrer" class="inline-flex h-11 items-center justify-center gap-2 rounded-md bg-primary px-5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90">Cotizar por WhatsApp <span aria-hidden="true">↗</span></a>
+                        <a href="/cotizar" class="inline-flex h-11 items-center justify-center gap-2 rounded-md bg-primary px-5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90">Pedir cotización</a>
+                        <a href="{{ $whatsappHref }}" target="_blank" rel="noreferrer" class="mt-2 inline-flex h-11 items-center justify-center gap-2 rounded-md border border-input px-5 text-sm font-medium text-primary transition-colors hover:bg-muted">Escribir por WhatsApp <span aria-hidden="true">↗</span></a>
                     </nav>
                 </div>
             </details>
 
-            <a href="{{ $whatsappHref }}" target="_blank" rel="noreferrer" class="hidden h-11 items-center justify-center gap-2 rounded-md bg-primary px-5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 sm:inline-flex">Cotizar por WhatsApp <span aria-hidden="true">↗</span></a>
+            <a href="/cotizar" class="hidden h-11 items-center justify-center gap-2 rounded-md bg-primary px-5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 sm:inline-flex">Pedir cotización</a>
         </div>
     </div>
 </header>

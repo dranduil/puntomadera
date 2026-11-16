@@ -2,9 +2,18 @@
 
 namespace App\Support;
 
+/**
+ * Small math challenge kept in the session. Each public form uses its own key
+ * so a review and a quote request open in two tabs don't overwrite each other.
+ */
 final class SimpleCaptcha
 {
-    private const SESSION_KEY = 'review_captcha';
+    public function __construct(private string $sessionKey = 'review_captcha') {}
+
+    public static function for(string $sessionKey): self
+    {
+        return new self($sessionKey);
+    }
 
     public function issue(): array
     {
@@ -15,7 +24,7 @@ final class SimpleCaptcha
         $answer = $subtract ? $first - $second : $first + $second;
         $expiresAt = now()->addMinutes(10)->timestamp;
 
-        session()->put(self::SESSION_KEY, [
+        session()->put($this->sessionKey, [
             'question' => "¿Cuánto es {$first} {$operator} {$second}?",
             'answer' => hash('sha256', (string) $answer),
             'expires_at' => $expiresAt,
@@ -28,7 +37,7 @@ final class SimpleCaptcha
 
     public function challenge(): array
     {
-        $challenge = session(self::SESSION_KEY);
+        $challenge = session($this->sessionKey);
 
         if (! is_array($challenge)
             || ! isset($challenge['question'], $challenge['answer'], $challenge['expires_at'])
@@ -43,7 +52,7 @@ final class SimpleCaptcha
 
     public function passes(mixed $answer): bool
     {
-        $challenge = session(self::SESSION_KEY);
+        $challenge = session($this->sessionKey);
 
         if (! is_array($challenge)
             || ! isset($challenge['answer'], $challenge['expires_at'])
@@ -67,6 +76,6 @@ final class SimpleCaptcha
 
     public function clear(): void
     {
-        session()->forget(self::SESSION_KEY);
+        session()->forget($this->sessionKey);
     }
 }

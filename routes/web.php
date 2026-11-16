@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\CatalogAdminController;
 use App\Http\Controllers\Admin\ContactMessageAdminController;
 use App\Http\Controllers\Admin\HomeLandingAdminController;
 use App\Http\Controllers\Admin\PartnerAdminController;
+use App\Http\Controllers\Admin\QuoteRequestAdminController;
 use App\Http\Controllers\Admin\QuoteSettingsAdminController;
 use App\Http\Controllers\Admin\ReviewAdminController;
 use App\Http\Controllers\Admin\ServiceAdminController;
@@ -14,6 +15,7 @@ use App\Http\Controllers\ContactMessageController;
 use App\Http\Controllers\ContactPageController;
 use App\Http\Controllers\HomeLandingController;
 use App\Http\Controllers\LocalSeoPageController;
+use App\Http\Controllers\QuoteRequestController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\ReviewPhotoController;
 use App\Http\Controllers\ServiceBookingController;
@@ -57,6 +59,11 @@ Route::get('/resenas/{review}/foto/{photo}', [ReviewPhotoController::class, 'sho
 Route::get('/servicios', [ServiceController::class, 'index'])->name('services.index');
 Route::get('/servicios/{service:slug}', [ServiceController::class, 'show'])->name('services.show');
 
+Route::get('/cotizar', [QuoteRequestController::class, 'create'])->name('quote-requests.create');
+Route::post('/cotizar', [QuoteRequestController::class, 'store'])
+    ->middleware('throttle:5,10')
+    ->name('quote-requests.store');
+Route::get('/cotizar/enviado/{reference}', [QuoteRequestController::class, 'sent'])->name('quote-requests.sent');
 Route::get('/cotizacion-qr', [QuoteSettingsAdminController::class, 'qr'])->name('quote-settings.qr');
 
 Route::post('/bookings', [ServiceBookingController::class, 'store'])->name('bookings.store');
@@ -82,6 +89,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('services', [ServiceAdminController::class, 'store'])->name('admin.services.store');
         Route::patch('services/{service}', [ServiceAdminController::class, 'update'])->name('admin.services.update');
         Route::delete('services/{service}', [ServiceAdminController::class, 'destroy'])->name('admin.services.destroy');
+
+        Route::get('solicitudes', [QuoteRequestAdminController::class, 'index'])->name('admin.quote-requests.index');
+        Route::patch('solicitudes/{quoteRequest}', [QuoteRequestAdminController::class, 'update'])->name('admin.quote-requests.update');
+        Route::get('solicitudes/{quoteRequest}/foto/{index}', [QuoteRequestAdminController::class, 'photo'])
+            ->whereNumber('index')
+            ->name('admin.quote-requests.photo');
 
         Route::get('catalogo', [CatalogAdminController::class, 'index'])->name('admin.catalog.index');
         Route::post('catalogo', [CatalogAdminController::class, 'store'])->name('admin.catalog.store');

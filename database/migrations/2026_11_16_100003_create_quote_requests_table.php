@@ -21,6 +21,7 @@ return new class extends Migration
             $table->foreignId('service_zone_id')->nullable()->constrained('service_zones', indexName: 'quote_requests_zone_fk')->nullOnDelete();
             $table->string('sector')->nullable();
             $table->text('message')->nullable();
+            $table->json('services')->nullable();
             $table->json('items')->nullable();
             $table->json('accepted_suggestions')->nullable();
             $table->json('photos')->nullable();
