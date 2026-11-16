@@ -23,6 +23,7 @@ import { Separator } from '@/components/ui/separator';
 import { formatServiceAreas, resolveServiceAreas } from '@/lib/service-areas';
 import { getPublicAppName, sanitizePublicTitle } from '@/lib/site';
 import { cn } from '@/lib/utils';
+import { buildWhatsAppHref, resolveWhatsAppNumber } from '@/lib/whatsapp';
 
 const images = {
     hero: 'images/works/puerta-caoba-regenerada.png',
@@ -133,14 +134,9 @@ export default function CarpinteroLanding({ landing, business }: Props) {
     const heroImageUrl = `${siteUrl.replace(/\/$/, '')}/${images.hero.replace(/^\//, '')}`;
     const areasServed = resolveServiceAreas(landing.areas_served);
 
-    const envWhatsapp =
-        import.meta.env.VITE_WHATSAPP_NUMBER?.trim() ?? '593998897813';
-    const rawWhatsapp = envWhatsapp || landing.whatsapp_number?.trim();
-    const whatsappNumber = (rawWhatsapp ? rawWhatsapp : '593998897813').replace(
-        /[^0-9]/g,
-        '',
+    const whatsappHref = buildWhatsAppHref(
+        resolveWhatsAppNumber(landing.whatsapp_number),
     );
-    const whatsappHref = `https://wa.me/${whatsappNumber}`;
 
     const seoTitle = sanitizePublicTitle(landing.seo_title ?? defaultSeo.title);
     const seoDescription = landing.seo_description ?? defaultSeo.description;

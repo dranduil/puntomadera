@@ -61,5 +61,29 @@
                 window.fbq('track', 'PageView');
             }
         });
+
+        // One listener covers every WhatsApp button, on Inertia and Blade pages alike.
+        document.addEventListener('click', function (event) {
+            const link = event.target instanceof Element
+                ? event.target.closest('a[href*="wa.me/"]')
+                : null;
+
+            if (!link) {
+                return;
+            }
+
+            const linkText = (link.textContent || '').trim().replace(/\s+/g, ' ').slice(0, 100);
+
+            if (typeof window.gtag === 'function') {
+                window.gtag('event', 'whatsapp_click', {
+                    page_path: window.location.pathname,
+                    link_text: linkText,
+                });
+            }
+
+            if (typeof window.fbq === 'function') {
+                window.fbq('track', 'Contact');
+            }
+        }, true);
     </script>
 @endif

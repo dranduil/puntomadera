@@ -367,3 +367,27 @@ test('tracking scripts are omitted when ids are not configured', function () {
         ->not->toContain('googletagmanager.com/gtag/js')
         ->not->toContain('connect.facebook.net/en_US/fbevents.js');
 });
+
+test('whatsapp clicks are tracked as a conversion when tracking is configured', function () {
+    config([
+        'services.google_analytics.measurement_id' => 'G-TEST123',
+        'services.meta_pixel.id' => '123456789',
+    ]);
+
+    expect($this->get(route('home'))->getContent())
+        ->toContain("'whatsapp_click'")
+        ->toContain("window.fbq('track', 'Contact')");
+});
+
+test('campaign tags and the landing page are remembered for lead attribution', function () {
+    $this->get('/servicios?utm_source=facebook&utm_medium=cpc&utm_campaign=closets')
+        ->assertSuccessful();
+    $this->get('/contacto')->assertSuccessful();
+
+    expect(session('attribution'))->toMatchArray([
+        'utm_source' => 'facebook',
+        'utm_medium' => 'cpc',
+        'utm_campaign' => 'closets',
+        'landing_path' => '/servicios',
+    ]);
+});

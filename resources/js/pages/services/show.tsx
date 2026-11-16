@@ -22,6 +22,7 @@ import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { Textarea } from '@/components/ui/textarea';
 import { formatServiceAreas, resolveServiceAreas } from '@/lib/service-areas';
+import { buildWhatsAppHref, resolveWhatsAppNumber } from '@/lib/whatsapp';
 
 type Landing = {
     whatsapp_number: string | null;
@@ -51,11 +52,6 @@ type Props = {
     seo?: Seo;
 };
 
-function buildWhatsAppHref(number: string, message: string) {
-    const sanitized = number.replace(/[^0-9]/g, '');
-    return `https://wa.me/${sanitized}?text=${encodeURIComponent(message)}`;
-}
-
 export default function ServiceShow({ landing, service, seo }: Props) {
     const [name, setName] = useState('');
     const [phone, setPhone] = useState('');
@@ -63,10 +59,7 @@ export default function ServiceShow({ landing, service, seo }: Props) {
     const [details, setDetails] = useState('');
     const areasServed = resolveServiceAreas(landing.areas_served);
 
-    const envWhatsapp =
-        import.meta.env.VITE_WHATSAPP_NUMBER?.trim() ?? '593998897813';
-    const rawWhatsapp = envWhatsapp || landing.whatsapp_number?.trim();
-    const whatsappNumber = rawWhatsapp || '593998897813';
+    const whatsappNumber = resolveWhatsAppNumber(landing.whatsapp_number);
     const siteUrl = import.meta.env.VITE_APP_URL || 'https://punto-madera.com';
     const siteOrigin = siteUrl.replace(/\/$/, '');
     const canonicalUrl = `${siteOrigin}/servicios/${service.slug}`;

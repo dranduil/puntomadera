@@ -19,6 +19,11 @@ import {
 } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { formatServiceAreas, resolveServiceAreas } from '@/lib/service-areas';
+import {
+    buildWhatsAppHref,
+    formatWhatsAppNumber,
+    resolveWhatsAppNumber,
+} from '@/lib/whatsapp';
 
 type Landing = {
     whatsapp_number: string | null;
@@ -29,11 +34,6 @@ type Props = {
     landing: Landing;
 };
 
-function buildWhatsAppHref(number: string, message: string) {
-    const sanitized = number.replace(/[^0-9]/g, '');
-    return `https://wa.me/${sanitized}?text=${encodeURIComponent(message)}`;
-}
-
 const contactPoints = [
     'Foto del espacio o del mueble',
     'Medidas aproximadas, si las tienes',
@@ -42,14 +42,8 @@ const contactPoints = [
 
 export default function ContactPage({ landing }: Props) {
     const areasServed = resolveServiceAreas(landing.areas_served);
-    const envWhatsapp =
-        import.meta.env.VITE_WHATSAPP_NUMBER?.trim() ?? '593998897813';
-    const rawWhatsapp = envWhatsapp || landing.whatsapp_number?.trim();
-    const whatsappNumber = (rawWhatsapp || '593998897813').replace(/\D/g, '');
-    const displayWhatsapp =
-        whatsappNumber.length === 12
-            ? `+${whatsappNumber.replace(/(\d{3})(\d{3})(\d{3})(\d{3})/, '$1 $2 $3 $4')}`
-            : `+${whatsappNumber}`;
+    const whatsappNumber = resolveWhatsAppNumber(landing.whatsapp_number);
+    const displayWhatsapp = formatWhatsAppNumber(whatsappNumber);
     const whatsappHref = buildWhatsAppHref(
         whatsappNumber,
         'Hola, quiero cotizar un proyecto de carpintería en Guayaquil.',

@@ -9,6 +9,7 @@ import {
     SheetTitle,
     SheetTrigger,
 } from '@/components/ui/sheet';
+import { buildWhatsAppHref, resolveWhatsAppNumber } from '@/lib/whatsapp';
 
 type Landing = {
     whatsapp_number: string | null;
@@ -19,11 +20,6 @@ type Props = {
     isHome?: boolean;
     whatsappHref?: string;
 };
-
-function buildWhatsAppHref(number: string, message: string) {
-    const sanitized = number.replace(/[^0-9]/g, '');
-    return `https://wa.me/${sanitized}?text=${encodeURIComponent(message)}`;
-}
 
 const navItems = [
     { label: 'Inicio', href: '/' },
@@ -45,10 +41,7 @@ const moreItems = [
 
 export function PublicHeader({ landing, whatsappHref }: Props) {
     const appName = import.meta.env.VITE_APP_NAME || 'punto madera';
-    const envWhatsapp =
-        import.meta.env.VITE_WHATSAPP_NUMBER?.trim() ?? '593998897813';
-    const rawWhatsapp = envWhatsapp || landing?.whatsapp_number?.trim();
-    const whatsappNumber = rawWhatsapp || '593998897813';
+    const whatsappNumber = resolveWhatsAppNumber(landing?.whatsapp_number);
     const defaultWhatsappHref =
         whatsappHref ??
         buildWhatsAppHref(
