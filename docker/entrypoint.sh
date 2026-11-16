@@ -27,4 +27,18 @@ if [ "${RUN_MIGRATIONS:-true}" = "true" ]; then
     php artisan migrate --force --no-interaction
 fi
 
+# Serve pre-rendered HTML to crawlers: keep the Inertia SSR server running next to Apache.
+# If it is down, Inertia falls back to client-side rendering, so restart it instead of failing the container.
+if [ "${1:-}" = "apache2-foreground" ] \
+    && [ "${INERTIA_SSR_ENABLED:-true}" = "true" ] \
+    && { [ -f bootstrap/ssr/ssr.js ] || [ -f bootstrap/ssr/ssr.mjs ]; }; then
+    (
+        while true; do
+            runuser -u www-data -- php artisan inertia:start-ssr || true
+            echo "Inertia SSR server exited; restarting in 2s" >&2
+            sleep 2
+        done
+    ) &
+fi
+
 exec "$@"

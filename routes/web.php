@@ -22,6 +22,12 @@ Route::get('/', [HomeLandingController::class, 'show'])->name('home');
 Route::get('/sitemap.xml', [LocalSeoPageController::class, 'sitemap'])->name('sitemap');
 
 Route::redirect('/carpintero-guayaquil', '/');
+
+// The storefront was removed but Google still crawls its URLs (shelves, panels, desks):
+// send them to the custom furniture page instead of a 404.
+Route::permanentRedirect('/tienda', '/carpinteria-a-medida-guayaquil');
+Route::permanentRedirect('/tienda/{product}', '/carpinteria-a-medida-guayaquil')
+    ->where('product', '.*');
 Route::get('/instalacion-puertas-guayaquil', [LocalSeoPageController::class, 'show'])
     ->defaults('slug', 'instalacion-puertas-guayaquil')
     ->name('seo.doors.installation');

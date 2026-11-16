@@ -1,7 +1,10 @@
 <?php
 
+use App\Http\Controllers\ServiceController;
 use App\Models\HomeLanding;
 use App\Models\Service;
+use Inertia\Ssr\Gateway;
+use Inertia\Ssr\Response as SsrResponse;
 use Inertia\Testing\AssertableInertia as Assert;
 
 test('public document titles never use the Laravel framework fallback', function () {
@@ -148,7 +151,7 @@ test('auth pages are excluded from search indexing', function () {
     $response->assertSuccessful();
 
     expect($response->getContent())
-        ->toContain('<meta inertia="robots" name="robots" content="noindex,follow">');
+        ->toContain('<meta name="robots" content="noindex,follow">');
 });
 
 test('www public requests redirect to the canonical host', function () {
@@ -174,9 +177,71 @@ test('service detail pages expose searchable metadata', function () {
     $response->assertSuccessful();
 
     expect($response->getContent())
-        ->toContain('<title inertia>Muebles a medida en Guayaquil | Punto Madera Guayaquil</title>')
+        ->toContain('<title inertia>Muebles a medida en Guayaquil | Punto Madera</title>')
         ->toContain('https://punto-madera.com/servicios/muebles-a-medida-guayaquil')
-        ->toContain('Diseño y fabricación de muebles a medida en Guayaquil.');
+        ->toContain('Diseño y fabricación de muebles a medida en Guayaquil. Cotiza por WhatsApp.');
+});
+
+test('service titles name the city and the brand once', function (string $name, string $title) {
+    $service = new Service(['name' => $name]);
+
+    expect(ServiceController::snippetTitle($service))->toBe($title);
+})->with([
+    ['Muebles a medida en Guayaquil', 'Muebles a medida en Guayaquil | Punto Madera'],
+    ['Reparación de muebles de madera', 'Reparación de muebles de madera en Guayaquil | Punto Madera'],
+]);
+
+test('ssr head replaces the blade fallback tags instead of duplicating them', function () {
+    app()->instance(Gateway::class, new class implements Gateway
+    {
+        public function dispatch(array $page): ?SsrResponse
+        {
+            return new SsrResponse(
+                '<title inertia>SSR title</title><meta inertia="description" name="description" content="SSR description">',
+                '<div id="app" data-page="{}"><h1>Carpintero en Guayaquil</h1></div>',
+            );
+        }
+    });
+
+    $content = $this->get(route('home'))->assertSuccessful()->getContent();
+
+    expect($content)
+        ->toContain('<title inertia>SSR title</title>')
+        ->toContain('<h1>Carpintero en Guayaquil</h1>')
+        ->not->toContain('<title inertia>Carpintero en Guayaquil')
+        ->and(substr_count($content, 'name="description"'))->toBe(1);
+});
+
+test('landing pages share one business entity with a phone number', function () {
+    config([
+        'app.url' => 'https://punto-madera.com',
+        'services.whatsapp.number' => '593998897813',
+        'services.business.same_as' => ['https://www.instagram.com/puntomadera'],
+        'services.business.opening_hours' => 'Mo-Sa 08:00-18:00',
+    ]);
+
+    $content = $this->get(route('seo.doors.repair'))->assertSuccessful()->getContent();
+
+    expect($content)
+        ->toContain('"@id":"https://punto-madera.com/#business"')
+        ->toContain('"name":"Punto Madera"')
+        ->toContain('"telephone":"+593998897813"')
+        ->toContain('"sameAs":["https://www.instagram.com/puntomadera"]')
+        ->toContain('"openingHours":"Mo-Sa 08:00-18:00"');
+
+    $this->get(route('home'))->assertInertia(fn (Assert $page) => $page
+        ->where('business.@id', 'https://punto-madera.com/#business')
+        ->where('business.name', 'Punto Madera')
+        ->where('business.telephone', '+593998897813'),
+    );
+});
+
+test('business phone prefers the admin contact phone', function () {
+    HomeLanding::query()->create(['contact_phone' => '+593 4 123 4567']);
+
+    $this->get(route('home'))->assertInertia(fn (Assert $page) => $page
+        ->where('business.telephone', '+593 4 123 4567'),
+    );
 });
 
 test('robots explicitly allows OpenAI search crawling', function () {
@@ -218,17 +283,42 @@ test('sitemap lists public pages and published services', function () {
         ->not->toContain('/tienda');
 });
 
-test('public storefront routes are removed', function () {
-    $this->get('/tienda')->assertNotFound();
-    $this->get('/tienda/repisa-flotante-madera')->assertNotFound();
+test('sitemap dates only pages backed by real timestamps', function () {
+    config(['app.url' => 'https://example.test']);
+
+    $service = Service::query()->create([
+        'name' => 'Published service',
+        'slug' => 'published-service',
+        'is_published' => true,
+    ]);
+    $service->forceFill(['updated_at' => '2026-10-05 12:00:00'])->saveQuietly();
+
+    expect($this->get(route('sitemap'))->getContent())
+        ->toContain('<loc>https://example.test/servicios/published-service</loc><lastmod>2026-10-05</lastmod>')
+        ->toContain('<loc>https://example.test/servicios</loc><lastmod>2026-10-05</lastmod>')
+        ->toContain('<loc>https://example.test/contacto</loc></url>');
+});
+
+test('removed storefront urls permanently redirect to custom furniture', function () {
+    foreach (['/tienda', '/tienda/repisa-flotante-madera', '/tienda/panel-decorativo-listonado'] as $url) {
+        $this->get($url)
+            ->assertStatus(301)
+            ->assertRedirect('/carpinteria-a-medida-guayaquil');
+    }
 });
 
 test('contact page is available for WhatsApp quotations', function () {
-    $this->get(route('contact.show'))
+    config(['app.url' => 'https://punto-madera.com']);
+
+    $response = $this->get(route('contact.show'))
         ->assertSuccessful()
         ->assertInertia(fn (Assert $page) => $page
             ->component('contact/index'),
         );
+
+    expect($response->getContent())
+        ->toContain('<title inertia>Cotizar carpintería en Guayaquil | Punto Madera</title>')
+        ->toContain('<link inertia="canonical" rel="canonical" href="https://punto-madera.com/contacto">');
 });
 
 test('tracking scripts are rendered only when their ids are configured', function () {

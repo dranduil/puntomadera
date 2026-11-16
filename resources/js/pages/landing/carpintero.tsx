@@ -52,6 +52,8 @@ type Landing = {
 
 type Props = {
     landing: Landing;
+    /** Shared HomeAndConstructionBusiness node built by App\Support\BusinessSchema. */
+    business: Record<string, unknown>;
 };
 
 const services = [
@@ -124,7 +126,7 @@ const faqs = [
     },
 ];
 
-export default function CarpinteroLanding({ landing }: Props) {
+export default function CarpinteroLanding({ landing, business }: Props) {
     const appName = getPublicAppName(import.meta.env.VITE_APP_NAME);
     const siteUrl = import.meta.env.VITE_APP_URL || 'https://punto-madera.com';
     const canonicalUrl = `${siteUrl.replace(/\/$/, '')}/`;
@@ -150,28 +152,8 @@ export default function CarpinteroLanding({ landing }: Props) {
         'Diseñamos, fabricamos e instalamos carpintería para tu hogar o negocio. Cotización rápida por WhatsApp y trabajo prolijo.';
     const currentYear = new Date().getFullYear();
     const businessSchema = {
-        '@type': 'HomeAndConstructionBusiness',
-        '@id': `${canonicalUrl}#business`,
-        name: `${appName} - Carpinteria en Guayaquil`,
+        ...business,
         description: seoDescription,
-        areaServed: [
-            { '@type': 'Country', name: 'Ecuador' },
-            { '@type': 'City', name: 'Guayaquil' },
-            ...areasServed.map((name) => ({ '@type': 'Place', name })),
-        ],
-        address: {
-            '@type': 'PostalAddress',
-            addressLocality: 'Guayaquil',
-            addressRegion: 'Guayas',
-            addressCountry: 'Ecuador',
-        },
-        geo: {
-            '@type': 'GeoCoordinates',
-            latitude: -2.170998,
-            longitude: -79.922356,
-        },
-        url: canonicalUrl,
-        sameAs: [whatsappHref],
         serviceType: [
             'Carpintería a domicilio',
             'Muebles a medida',

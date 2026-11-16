@@ -40,9 +40,15 @@ type Service = {
     image_path: string | null;
 };
 
+type Seo = {
+    title: string;
+    description: string;
+};
+
 type Props = {
     landing: Landing;
     service: Service;
+    seo?: Seo;
 };
 
 function buildWhatsAppHref(number: string, message: string) {
@@ -50,7 +56,7 @@ function buildWhatsAppHref(number: string, message: string) {
     return `https://wa.me/${sanitized}?text=${encodeURIComponent(message)}`;
 }
 
-export default function ServiceShow({ landing, service }: Props) {
+export default function ServiceShow({ landing, service, seo }: Props) {
     const [name, setName] = useState('');
     const [phone, setPhone] = useState('');
     const [location, setLocation] = useState('');
@@ -64,8 +70,11 @@ export default function ServiceShow({ landing, service }: Props) {
     const siteUrl = import.meta.env.VITE_APP_URL || 'https://punto-madera.com';
     const siteOrigin = siteUrl.replace(/\/$/, '');
     const canonicalUrl = `${siteOrigin}/servicios/${service.slug}`;
-    const seoTitle = `${service.name} | Punto Madera Guayaquil`;
+    // Title and description come from ServiceController so the SSR head,
+    // the Blade fallback and the client all print the same snippet.
+    const seoTitle = seo?.title ?? `${service.name} | Punto Madera`;
     const seoDescription =
+        seo?.description ||
         service.summary?.trim() ||
         service.description?.trim() ||
         `Servicio de ${service.name} en Guayaquil.`;
@@ -89,8 +98,9 @@ export default function ServiceShow({ landing, service }: Props) {
         areaServed: areasServed.map((name) => ({ '@type': 'Place', name })),
         provider: {
             '@type': 'HomeAndConstructionBusiness',
+            '@id': `${siteOrigin}/#business`,
             name: 'Punto Madera',
-            url: siteOrigin,
+            url: `${siteOrigin}/`,
         },
         url: canonicalUrl,
     };

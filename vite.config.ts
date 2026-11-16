@@ -24,4 +24,8 @@ export default defineConfig({
     esbuild: {
         jsx: 'automatic',
     },
+    ssr: {
+        // Bundle dependencies into bootstrap/ssr so the runtime image only needs the node binary.
+        noExternal: true,
+    },
 });

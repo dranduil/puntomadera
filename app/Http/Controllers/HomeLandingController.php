@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\HomeLanding;
+use App\Support\BusinessSchema;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -30,6 +31,7 @@ class HomeLandingController extends Controller
 
         return Inertia::render('landing/carpintero', [
             'landing' => $landingData,
+            'business' => BusinessSchema::node($siteUrl, $landingData),
             'seo' => [
                 'title' => $seoTitle,
                 'description' => $seoDescription,

@@ -36,7 +36,7 @@ class ServiceController extends Controller
         $landing = HomeLanding::query()->first();
         $siteUrl = rtrim((string) config('app.url', 'http://localhost'), '/') ?: 'http://localhost';
         $canonicalUrl = "{$siteUrl}/servicios/{$service->slug}";
-        $description = Str::squish((string) ($service->summary ?: $service->description ?: "Servicio de {$service->name} en Guayaquil."));
+        $description = self::snippetDescription($service);
         $imageUrl = $service->image_path
             ? (preg_match('/^https?:\/\//i', $service->image_path)
                 ? $service->image_path
@@ -46,11 +46,11 @@ class ServiceController extends Controller
         return Inertia::render('services/show', [
             'service' => $service,
             'seo' => [
-                'title' => "{$service->name} | Punto Madera Guayaquil",
-                'description' => Str::limit($description, 160),
+                'title' => self::snippetTitle($service),
+                'description' => $description,
                 'canonical' => $canonicalUrl,
                 'image' => $imageUrl,
-                'imageAlt' => "{$service->name} en Guayaquil",
+                'imageAlt' => Str::before(self::snippetTitle($service), ' | '),
             ],
             'landing' => $landing?->toArray() ?? [
                 'whatsapp_number' => null,
@@ -58,5 +58,35 @@ class ServiceController extends Controller
                 'contact_phone' => null,
             ],
         ]);
+    }
+
+    /**
+     * "Muebles a medida en Guayaquil | Punto Madera": the city once, the brand once.
+     */
+    public static function snippetTitle(Service $service): string
+    {
+        $name = Str::squish($service->name);
+        $place = Str::contains($name, 'Guayaquil', ignoreCase: true) ? '' : ' en Guayaquil';
+
+        return "{$name}{$place} | Punto Madera";
+    }
+
+    /**
+     * Summary as the search snippet, closed with the WhatsApp call to action
+     * the landing pages use when there is room for it within ~160 characters.
+     */
+    public static function snippetDescription(Service $service): string
+    {
+        $description = Str::squish((string) (
+            $service->summary ?: $service->description ?: "Servicio de {$service->name} en Guayaquil."
+        ));
+        $cta = ' Cotiza por WhatsApp.';
+
+        if (! Str::contains($description, 'WhatsApp', ignoreCase: true)
+            && mb_strlen($description.$cta) <= 160) {
+            return $description.$cta;
+        }
+
+        return Str::limit($description, 160);
     }
 }

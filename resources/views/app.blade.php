@@ -35,12 +35,28 @@
             $appName = $appName === '' || str_contains(strtolower($appName), 'laravel')
                 ? 'Punto Madera'
                 : $appName;
-        @endphp
-        @php($seo = $page['props']['seo'] ?? null)
-        @php($isAuthPage = str_starts_with((string) ($page['component'] ?? ''), 'auth/'))
-        <title inertia>{{ is_array($seo) ? ($seo['title'] ?? $appName) : $appName }}</title>
+            $seo = $page['props']['seo'] ?? null;
+            $isAuthPage = str_starts_with((string) ($page['component'] ?? ''), 'auth/');
 
-        @if (is_array($seo))
+            // Dispatch SSR once, up front. The Inertia head/body directives reuse these variables,
+            // and the fallback tags below are only printed when SSR did not render the page's <Head>.
+            if (! isset($__inertiaSsrDispatched)) {
+                $__inertiaSsrDispatched = true;
+                $__inertiaSsrResponse = app(\Inertia\Ssr\Gateway::class)->dispatch($page);
+            }
+            $hasSsrHead = filled($__inertiaSsrResponse?->head);
+        @endphp
+
+        @if ($isAuthPage)
+            {{-- Not managed by Inertia's head manager, so client navigation can never strip it. --}}
+            <meta name="robots" content="noindex,follow">
+        @endif
+
+        @unless ($hasSsrHead)
+        <title inertia>{{ is_array($seo) ? ($seo['title'] ?? $appName) : $appName }}</title>
+        @endunless
+
+        @if (is_array($seo) && ! $hasSsrHead)
             <meta inertia="description" name="description" content="{{ $seo['description'] }}">
             <meta inertia="robots" name="robots" content="index,follow,max-image-preview:large">
             <link inertia="canonical" rel="canonical" href="{{ $seo['canonical'] }}">
@@ -64,8 +80,6 @@
             @if (!empty($seo['jsonLd']))
                 <script inertia="schema" type="application/ld+json">{!! json_encode($seo['jsonLd'], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) !!}</script>
             @endif
-        @elseif ($isAuthPage)
-            <meta inertia="robots" name="robots" content="noindex,follow">
         @endif
 
         <link rel="icon" href="/favicon.svg" type="image/svg+xml">

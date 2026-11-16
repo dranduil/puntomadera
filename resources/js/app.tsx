@@ -4,18 +4,12 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import '../css/app.css';
 import { initializeTheme } from '@/hooks/use-appearance';
-import { getPublicAppName, sanitizePublicTitle } from '@/lib/site';
+import { formatDocumentTitle, getPublicAppName } from '@/lib/site';
 
 const appName = getPublicAppName(import.meta.env.VITE_APP_NAME);
 
 createInertiaApp({
-    title: (title) => {
-        const safeTitle = title ? sanitizePublicTitle(title) : appName;
-
-        return safeTitle.toLowerCase() === appName.toLowerCase()
-            ? appName
-            : `${safeTitle} - ${appName}`;
-    },
+    title: (title) => formatDocumentTitle(title, appName),
     resolve: (name) =>
         resolvePageComponent(
             `./pages/${name}.tsx`,

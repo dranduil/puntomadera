@@ -52,7 +52,7 @@ COPY --from=vendor-dev /app/vendor ./vendor
 
 RUN touch database/database.sqlite
 
-RUN npm run build
+RUN npm run build:ssr
 
 FROM php:8.4-apache-bookworm AS runtime
 
@@ -71,11 +71,14 @@ RUN apt-get update \
         /etc/apache2/sites-available/*.conf \
     && rm -rf /var/lib/apt/lists/*
 
+COPY --from=node:22-bookworm-slim /usr/local/bin/node /usr/local/bin/node
+
 WORKDIR /var/www/html
 
 COPY . .
 COPY --from=vendor /app/vendor ./vendor
 COPY --from=frontend /app/public/build ./public/build
+COPY --from=frontend /app/bootstrap/ssr ./bootstrap/ssr
 COPY docker/entrypoint.sh /usr/local/bin/laravel-entrypoint
 
 RUN mkdir -p \

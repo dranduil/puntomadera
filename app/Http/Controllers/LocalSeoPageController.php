@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\HomeLanding;
 use App\Models\Service;
+use App\Models\Work;
+use App\Support\BusinessSchema;
 use Illuminate\Http\Response as HttpResponse;
+use Illuminate\Support\Carbon;
 use Illuminate\View\View;
 
 class LocalSeoPageController extends Controller
@@ -22,49 +25,16 @@ class LocalSeoPageController extends Controller
         ];
         $siteUrl = rtrim(config('app.url'), '/');
         $canonicalUrl = "{$siteUrl}/{$slug}";
-        $areasServed = collect($landingData['areas_served'] ?? [])
-            ->map(fn (string $area) => trim($area))
-            ->filter()
-            ->unique()
-            ->values()
-            ->all();
-
-        if ($areasServed === []) {
-            $areasServed = [
-                'Guayaquil (Norte y Sur)',
-                'Urdesa',
-                'Vía a la Costa',
-                'Samborondón',
-                'Daule',
-            ];
-        }
+        $areasServed = BusinessSchema::areasServed($landingData['areas_served'] ?? null);
         $whatsappNumber = preg_replace('/[^0-9]/', '', (string) (
             config('services.whatsapp.number')
-            ?: env('VITE_WHATSAPP_NUMBER', '593998897813')
             ?: $landingData['whatsapp_number']
             ?: '593998897813'
         ));
         $whatsappHref = "https://wa.me/{$whatsappNumber}?text=".rawurlencode($page['message']);
 
         $schemas = [
-            [
-                '@context' => 'https://schema.org',
-                '@type' => 'HomeAndConstructionBusiness',
-                '@id' => "{$siteUrl}/#business",
-                'name' => str_replace('-', ' ', config('app.name', 'punto madera')),
-                'url' => $siteUrl,
-                'telephone' => $landingData['contact_phone'] ?? $landingData['whatsapp_number'] ?? null,
-                'address' => [
-                    '@type' => 'PostalAddress',
-                    'addressLocality' => 'Guayaquil',
-                    'addressRegion' => 'Guayas',
-                    'addressCountry' => 'EC',
-                ],
-                'areaServed' => collect($areasServed)->map(fn (string $name) => [
-                    '@type' => 'Place',
-                    'name' => $name,
-                ])->values(),
-            ],
+            ['@context' => 'https://schema.org'] + BusinessSchema::node($siteUrl, $landingData),
             [
                 '@context' => 'https://schema.org',
                 '@type' => 'Service',
@@ -125,20 +95,32 @@ class LocalSeoPageController extends Controller
     public function sitemap(): HttpResponse
     {
         $baseUrl = rtrim(config('app.url'), '/');
+
+        // path => last modification. Only pages backed by real timestamps get a
+        // <lastmod>; guessed dates would teach Google to ignore the field.
         $urls = collect(['/', '/servicios', '/trabajos', '/resenas', '/contacto'])
             ->merge(collect(array_keys($this->pages()))->map(fn (string $slug) => "/{$slug}"))
-            ->merge(Service::query()
-                ->where('is_published', true)
-                ->pluck('slug')
-                ->map(fn (string $slug) => "/servicios/{$slug}"))
-            ->unique()
-            ->values();
+            ->mapWithKeys(fn (string $path) => [$path => null]);
+
+        $services = Service::query()
+            ->where('is_published', true)
+            ->get(['slug', 'updated_at']);
+
+        foreach ($services as $service) {
+            $urls["/servicios/{$service->slug}"] = $service->updated_at;
+        }
+
+        $urls['/servicios'] = $services->max('updated_at');
+        $urls['/trabajos'] = Work::query()->where('is_published', true)->max('updated_at');
 
         $items = $urls
-            ->map(function (string $path) use ($baseUrl): string {
+            ->map(function (mixed $lastModified, string $path) use ($baseUrl): string {
                 $url = $baseUrl.($path === '/' ? '' : '/'.ltrim($path, '/'));
+                $lastmod = $lastModified
+                    ? '<lastmod>'.Carbon::parse($lastModified)->toDateString().'</lastmod>'
+                    : '';
 
-                return '    <url><loc>'.e($url).'</loc></url>';
+                return '    <url><loc>'.e($url).'</loc>'.$lastmod.'</url>';
             })
             ->implode("\n");
 

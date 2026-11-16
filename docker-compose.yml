@@ -17,6 +17,12 @@ services:
             LOG_LEVEL: "${LOG_LEVEL:-info}"
             GOOGLE_ANALYTICS_ID: "${GOOGLE_ANALYTICS_ID:-}"
             META_PIXEL_ID: "${META_PIXEL_ID:-}"
+            VITE_WHATSAPP_NUMBER: "${VITE_WHATSAPP_NUMBER:-593998897813}"
+            INERTIA_SSR_ENABLED: "${INERTIA_SSR_ENABLED:-true}"
+            BUSINESS_PHONE: "${BUSINESS_PHONE:-}"
+            BUSINESS_STREET_ADDRESS: "${BUSINESS_STREET_ADDRESS:-}"
+            BUSINESS_OPENING_HOURS: "${BUSINESS_OPENING_HOURS:-}"
+            BUSINESS_SAME_AS: "${BUSINESS_SAME_AS:-}"
             DB_CONNECTION: sqlite
             DB_DATABASE: /var/www/html/storage/database.sqlite
             SESSION_DRIVER: file

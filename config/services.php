@@ -43,4 +43,22 @@ return [
         'id' => env('META_PIXEL_ID'),
     ],
 
+    'whatsapp' => [
+        'number' => env('WHATSAPP_NUMBER', env('VITE_WHATSAPP_NUMBER', '593998897813')),
+    ],
+
+    // Business details for LocalBusiness structured data. Keep them identical
+    // to the Google Business Profile so Google links the site to that listing.
+    'business' => [
+        'phone' => env('BUSINESS_PHONE'),
+        'street_address' => env('BUSINESS_STREET_ADDRESS'),
+        // schema.org format, e.g. "Mo-Fr 08:00-18:00, Sa 08:00-13:00"
+        'opening_hours' => env('BUSINESS_OPENING_HOURS'),
+        // Comma-separated profile URLs: Google Business Profile, Instagram, Facebook...
+        'same_as' => array_values(array_filter(array_map(
+            'trim',
+            explode(',', (string) env('BUSINESS_SAME_AS', '')),
+        ))),
+    ],
+
 ];
