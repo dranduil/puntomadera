@@ -3,9 +3,13 @@ import {
     BookOpen,
     Briefcase,
     FolderGit2,
+    Handshake,
     Images,
     LayoutGrid,
     Mail,
+    MapPin,
+    Package,
+    Settings2,
     Shield,
     Star,
     Wrench,
@@ -25,11 +29,15 @@ import {
 } from '@/components/ui/sidebar';
 import { dashboard } from '@/routes';
 import { index as adminBookings } from '@/routes/admin/bookings';
+import { index as adminCatalog } from '@/routes/admin/catalog';
 import { index as adminContacts } from '@/routes/admin/contacts';
 import { edit as adminHome } from '@/routes/admin/home';
+import { index as adminPartners } from '@/routes/admin/partners';
+import { edit as adminQuoteSettings } from '@/routes/admin/quote-settings';
 import { index as adminReviews } from '@/routes/admin/reviews';
 import { index as adminServices } from '@/routes/admin/services';
 import { index as adminWorks } from '@/routes/admin/works';
+import { index as adminZones } from '@/routes/admin/zones';
 import type { NavItem } from '@/types';
 
 const footerNavItems: NavItem[] = [
@@ -85,6 +93,26 @@ export function AppSidebar() {
                       title: 'Admin - Works',
                       href: adminWorks(),
                       icon: Images,
+                  },
+                  {
+                      title: 'Catálogo de precios',
+                      href: adminCatalog(),
+                      icon: Package,
+                  },
+                  {
+                      title: 'Zonas y movilización',
+                      href: adminZones(),
+                      icon: MapPin,
+                  },
+                  {
+                      title: 'Aliados y comisiones',
+                      href: adminPartners(),
+                      icon: Handshake,
+                  },
+                  {
+                      title: 'Ajustes de cotización',
+                      href: adminQuoteSettings(),
+                      icon: Settings2,
                   },
               ]
             : []),

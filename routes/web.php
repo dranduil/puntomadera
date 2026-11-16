@@ -1,10 +1,14 @@
 <?php
 
+use App\Http\Controllers\Admin\CatalogAdminController;
 use App\Http\Controllers\Admin\ContactMessageAdminController;
 use App\Http\Controllers\Admin\HomeLandingAdminController;
+use App\Http\Controllers\Admin\PartnerAdminController;
+use App\Http\Controllers\Admin\QuoteSettingsAdminController;
 use App\Http\Controllers\Admin\ReviewAdminController;
 use App\Http\Controllers\Admin\ServiceAdminController;
 use App\Http\Controllers\Admin\ServiceBookingAdminController;
+use App\Http\Controllers\Admin\ServiceZoneAdminController;
 use App\Http\Controllers\Admin\WorkAdminController;
 use App\Http\Controllers\ContactMessageController;
 use App\Http\Controllers\ContactPageController;
@@ -53,6 +57,8 @@ Route::get('/resenas/{review}/foto/{photo}', [ReviewPhotoController::class, 'sho
 Route::get('/servicios', [ServiceController::class, 'index'])->name('services.index');
 Route::get('/servicios/{service:slug}', [ServiceController::class, 'show'])->name('services.show');
 
+Route::get('/cotizacion-qr', [QuoteSettingsAdminController::class, 'qr'])->name('quote-settings.qr');
+
 Route::post('/bookings', [ServiceBookingController::class, 'store'])->name('bookings.store');
 Route::post('/contact', [ContactMessageController::class, 'store'])->name('contact.store');
 
@@ -76,6 +82,24 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('services', [ServiceAdminController::class, 'store'])->name('admin.services.store');
         Route::patch('services/{service}', [ServiceAdminController::class, 'update'])->name('admin.services.update');
         Route::delete('services/{service}', [ServiceAdminController::class, 'destroy'])->name('admin.services.destroy');
+
+        Route::get('catalogo', [CatalogAdminController::class, 'index'])->name('admin.catalog.index');
+        Route::post('catalogo', [CatalogAdminController::class, 'store'])->name('admin.catalog.store');
+        Route::post('catalogo/ajustar-precios', [CatalogAdminController::class, 'adjustPrices'])->name('admin.catalog.adjust');
+        Route::patch('catalogo/{item}', [CatalogAdminController::class, 'update'])->name('admin.catalog.update');
+        Route::post('catalogo/{item}/sugerencias', [CatalogAdminController::class, 'storeSuggestion'])->name('admin.catalog.suggestions.store');
+        Route::delete('catalogo/{item}/sugerencias/{suggested}', [CatalogAdminController::class, 'destroySuggestion'])->name('admin.catalog.suggestions.destroy');
+
+        Route::get('zonas', [ServiceZoneAdminController::class, 'index'])->name('admin.zones.index');
+        Route::post('zonas', [ServiceZoneAdminController::class, 'store'])->name('admin.zones.store');
+        Route::patch('zonas/{zone}', [ServiceZoneAdminController::class, 'update'])->name('admin.zones.update');
+
+        Route::get('aliados', [PartnerAdminController::class, 'index'])->name('admin.partners.index');
+        Route::post('aliados', [PartnerAdminController::class, 'store'])->name('admin.partners.store');
+        Route::patch('aliados/{partner}', [PartnerAdminController::class, 'update'])->name('admin.partners.update');
+
+        Route::get('ajustes-cotizacion', [QuoteSettingsAdminController::class, 'edit'])->name('admin.quote-settings.edit');
+        Route::post('ajustes-cotizacion', [QuoteSettingsAdminController::class, 'update'])->name('admin.quote-settings.update');
 
         Route::get('works', [WorkAdminController::class, 'index'])->name('admin.works.index');
         Route::post('works', [WorkAdminController::class, 'store'])->name('admin.works.store');
