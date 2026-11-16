@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Str;
 
 /**
  * One line of the internal price list. Prices never leave the admin: public
@@ -119,6 +120,19 @@ class CatalogItem extends Model
                 return $change;
             })
             ->all();
+    }
+
+    public static function uniqueSlug(string $name, ?int $ignoreId = null): string
+    {
+        $base = Str::slug($name) ?: 'item';
+        $slug = $base;
+        $i = 1;
+
+        while (self::query()->where('slug', $slug)->when($ignoreId, fn ($q) => $q->whereKeyNot($ignoreId))->exists()) {
+            $slug = "{$base}-".$i++;
+        }
+
+        return $slug;
     }
 
     public function isPercentage(): bool

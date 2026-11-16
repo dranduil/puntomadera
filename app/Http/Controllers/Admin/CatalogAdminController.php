@@ -50,7 +50,7 @@ class CatalogAdminController extends Controller
 
         CatalogItem::query()->create([
             ...$data,
-            'slug' => SaveCatalogItemRequest::uniqueSlug($data['name']),
+            'slug' => CatalogItem::uniqueSlug($data['name']),
             'sort_order' => (int) CatalogItem::query()->max('sort_order') + 10,
         ]);
 

@@ -1,6 +1,7 @@
 import { Link, usePage } from '@inertiajs/react';
 import {
     BookOpen,
+    Bot,
     Briefcase,
     FileText,
     FolderGit2,
@@ -30,6 +31,7 @@ import {
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import { dashboard } from '@/routes';
+import { index as adminAiHistory } from '@/routes/admin/ai-history';
 import { index as adminBookings } from '@/routes/admin/bookings';
 import { index as adminCatalog } from '@/routes/admin/catalog';
 import { index as adminContacts } from '@/routes/admin/contacts';
@@ -127,6 +129,11 @@ export function AppSidebar() {
                       title: 'Ajustes de cotización',
                       href: adminQuoteSettings(),
                       icon: Settings2,
+                  },
+                  {
+                      title: 'Historial IA',
+                      href: adminAiHistory(),
+                      icon: Bot,
                   },
               ]
             : []),

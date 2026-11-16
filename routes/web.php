@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\CatalogAdminController;
 use App\Http\Controllers\Admin\ContactMessageAdminController;
 use App\Http\Controllers\Admin\HomeLandingAdminController;
+use App\Http\Controllers\Admin\McpChangeLogAdminController;
 use App\Http\Controllers\Admin\PartnerAdminController;
 use App\Http\Controllers\Admin\QuoteAdminController;
 use App\Http\Controllers\Admin\QuoteRequestAdminController;
@@ -117,6 +118,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('cotizaciones/{quote}/enviada', [QuoteAdminController::class, 'markSent'])->name('admin.quotes.sent');
         Route::post('cotizaciones/{quote}/duplicar', [QuoteAdminController::class, 'duplicate'])->name('admin.quotes.duplicate');
         Route::post('cotizaciones/{quote}/pagada', [QuoteAdminController::class, 'markPaid'])->name('admin.quotes.paid');
+
+        Route::get('historial-ia', [McpChangeLogAdminController::class, 'index'])->name('admin.ai-history.index');
 
         Route::get('catalogo', [CatalogAdminController::class, 'index'])->name('admin.catalog.index');
         Route::post('catalogo', [CatalogAdminController::class, 'store'])->name('admin.catalog.store');

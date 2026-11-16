@@ -47,6 +47,12 @@ return [
         'number' => env('WHATSAPP_NUMBER', env('VITE_WHATSAPP_NUMBER', '593998897813')),
     ],
 
+    // Bearer token for the /mcp endpoint used by the owner's AI agent.
+    // Leave empty to keep the endpoint switched off (it answers 404).
+    'mcp' => [
+        'token' => env('MCP_TOKEN'),
+    ],
+
     // Business details for LocalBusiness structured data. Keep them identical
     // to the Google Business Profile so Google links the site to that listing.
     'business' => [

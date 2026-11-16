@@ -5,7 +5,6 @@ namespace App\Http\Requests\Admin;
 use App\Models\CatalogItem;
 use App\Support\Money;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
 class SaveCatalogItemRequest extends FormRequest
@@ -67,18 +66,5 @@ class SaveCatalogItemRequest extends FormRequest
             'price_max_cents' => $toStorage($data['price_max'] ?? null),
             'cost_cents' => $toStorage($data['cost'] ?? null),
         ];
-    }
-
-    public static function uniqueSlug(string $name, ?int $ignoreId = null): string
-    {
-        $base = Str::slug($name) ?: 'item';
-        $slug = $base;
-        $i = 1;
-
-        while (CatalogItem::query()->where('slug', $slug)->when($ignoreId, fn ($q) => $q->whereKeyNot($ignoreId))->exists()) {
-            $slug = "{$base}-".$i++;
-        }
-
-        return $slug;
     }
 }
