@@ -2,6 +2,7 @@ import { Link, usePage } from '@inertiajs/react';
 import {
     BookOpen,
     Briefcase,
+    FileText,
     FolderGit2,
     Handshake,
     Images,
@@ -36,6 +37,7 @@ import { edit as adminHome } from '@/routes/admin/home';
 import { index as adminPartners } from '@/routes/admin/partners';
 import { index as adminQuoteRequests } from '@/routes/admin/quote-requests';
 import { edit as adminQuoteSettings } from '@/routes/admin/quote-settings';
+import { index as adminQuotes } from '@/routes/admin/quotes';
 import { index as adminReviews } from '@/routes/admin/reviews';
 import { index as adminServices } from '@/routes/admin/services';
 import { index as adminWorks } from '@/routes/admin/works';
@@ -70,6 +72,11 @@ export function AppSidebar() {
                       title: 'Solicitudes',
                       href: adminQuoteRequests(),
                       icon: Inbox,
+                  },
+                  {
+                      title: 'Cotizaciones',
+                      href: adminQuotes(),
+                      icon: FileText,
                   },
                   {
                       title: 'Admin - Home',

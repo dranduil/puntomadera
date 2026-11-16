@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\CatalogAdminController;
 use App\Http\Controllers\Admin\ContactMessageAdminController;
 use App\Http\Controllers\Admin\HomeLandingAdminController;
 use App\Http\Controllers\Admin\PartnerAdminController;
+use App\Http\Controllers\Admin\QuoteAdminController;
 use App\Http\Controllers\Admin\QuoteRequestAdminController;
 use App\Http\Controllers\Admin\QuoteSettingsAdminController;
 use App\Http\Controllers\Admin\ReviewAdminController;
@@ -15,6 +16,7 @@ use App\Http\Controllers\ContactMessageController;
 use App\Http\Controllers\ContactPageController;
 use App\Http\Controllers\HomeLandingController;
 use App\Http\Controllers\LocalSeoPageController;
+use App\Http\Controllers\QuotePublicController;
 use App\Http\Controllers\QuoteRequestController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\ReviewPhotoController;
@@ -64,6 +66,17 @@ Route::post('/cotizar', [QuoteRequestController::class, 'store'])
     ->middleware('throttle:5,10')
     ->name('quote-requests.store');
 Route::get('/cotizar/enviado/{reference}', [QuoteRequestController::class, 'sent'])->name('quote-requests.sent');
+Route::get('/cotizacion/{token}', [QuotePublicController::class, 'show'])
+    ->where('token', '[A-Za-z0-9]{40,64}')
+    ->name('quotes.public.show');
+Route::post('/cotizacion/{token}/aceptar', [QuotePublicController::class, 'accept'])
+    ->where('token', '[A-Za-z0-9]{40,64}')
+    ->middleware('throttle:10,1')
+    ->name('quotes.public.accept');
+Route::post('/cotizacion/{token}/pago', [QuotePublicController::class, 'reportPayment'])
+    ->where('token', '[A-Za-z0-9]{40,64}')
+    ->middleware('throttle:10,1')
+    ->name('quotes.public.payment');
 Route::get('/cotizacion-qr', [QuoteSettingsAdminController::class, 'qr'])->name('quote-settings.qr');
 
 Route::post('/bookings', [ServiceBookingController::class, 'store'])->name('bookings.store');
@@ -95,6 +108,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('solicitudes/{quoteRequest}/foto/{index}', [QuoteRequestAdminController::class, 'photo'])
             ->whereNumber('index')
             ->name('admin.quote-requests.photo');
+
+        Route::get('cotizaciones', [QuoteAdminController::class, 'index'])->name('admin.quotes.index');
+        Route::get('cotizaciones/crear', [QuoteAdminController::class, 'create'])->name('admin.quotes.create');
+        Route::post('cotizaciones', [QuoteAdminController::class, 'store'])->name('admin.quotes.store');
+        Route::get('cotizaciones/{quote}/editar', [QuoteAdminController::class, 'edit'])->name('admin.quotes.edit');
+        Route::put('cotizaciones/{quote}', [QuoteAdminController::class, 'update'])->name('admin.quotes.update');
+        Route::post('cotizaciones/{quote}/enviada', [QuoteAdminController::class, 'markSent'])->name('admin.quotes.sent');
+        Route::post('cotizaciones/{quote}/duplicar', [QuoteAdminController::class, 'duplicate'])->name('admin.quotes.duplicate');
+        Route::post('cotizaciones/{quote}/pagada', [QuoteAdminController::class, 'markPaid'])->name('admin.quotes.paid');
 
         Route::get('catalogo', [CatalogAdminController::class, 'index'])->name('admin.catalog.index');
         Route::post('catalogo', [CatalogAdminController::class, 'store'])->name('admin.catalog.store');

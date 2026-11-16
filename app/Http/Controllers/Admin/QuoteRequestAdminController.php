@@ -38,7 +38,7 @@ class QuoteRequestAdminController extends Controller
                 'phone' => $quoteRequest->phone,
                 'email' => $quoteRequest->email,
                 'whatsapp_href' => QuoteSettings::whatsappHref(
-                    self::ecuadorPhone($quoteRequest->phone),
+                    QuoteSettings::ecuadorPhone($quoteRequest->phone),
                     "Hola {$quoteRequest->name}, te escribo de Punto Madera por tu solicitud {$quoteRequest->reference}.",
                 ),
                 'summary' => $quoteRequest->summaryLines(),
@@ -87,13 +87,5 @@ class QuoteRequestAdminController extends Controller
         abort_unless(is_string($path) && Storage::disk('local')->exists($path), 404);
 
         return response()->file(Storage::disk('local')->path($path), ['Cache-Control' => 'private, max-age=3600']);
-    }
-
-    /** Local numbers like 0991234567 become 593991234567 for wa.me links. */
-    public static function ecuadorPhone(string $phone): string
-    {
-        $digits = preg_replace('/\D/', '', $phone);
-
-        return str_starts_with($digits, '0') ? '593'.substr($digits, 1) : $digits;
     }
 }

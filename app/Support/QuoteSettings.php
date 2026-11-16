@@ -42,8 +42,17 @@ final class QuoteSettings
         return preg_replace('/\D/', '', (string) (config('services.whatsapp.number') ?: $landing?->whatsapp_number ?: '593998897813'));
     }
 
+    /** An empty number opens WhatsApp's contact picker with the message ready. */
     public static function whatsappHref(string $number, string $message): string
     {
         return 'https://wa.me/'.preg_replace('/\D/', '', $number).'?text='.rawurlencode($message);
+    }
+
+    /** Local numbers like 0991234567 become 593991234567 for wa.me links. */
+    public static function ecuadorPhone(?string $phone): string
+    {
+        $digits = preg_replace('/\D/', '', (string) $phone);
+
+        return str_starts_with($digits, '0') ? '593'.substr($digits, 1) : $digits;
     }
 }

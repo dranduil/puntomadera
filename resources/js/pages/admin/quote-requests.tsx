@@ -1,5 +1,5 @@
 import { Form, Head, Link } from '@inertiajs/react';
-import { MessageCircle } from 'lucide-react';
+import { FilePlus2, MessageCircle } from 'lucide-react';
 import { AdminField } from '@/components/admin-field';
 import { FlashStatus } from '@/components/flash-status';
 import Heading from '@/components/heading';
@@ -9,6 +9,10 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
 import AppLayout from '@/layouts/app-layout';
 import { index, update } from '@/routes/admin/quote-requests';
+import {
+    create as createQuote,
+    edit as editQuote,
+} from '@/routes/admin/quotes';
 import type { BreadcrumbItem } from '@/types';
 
 type QuoteRequestRow = {
@@ -189,18 +193,29 @@ export default function QuoteRequestsAdmin({
                                     </div>
                                 )}
 
-                                {row.quotes.length > 0 && (
-                                    <div className="flex flex-wrap gap-2 text-sm">
-                                        {row.quotes.map((quote) => (
-                                            <Badge
-                                                key={quote.id}
-                                                variant="outline"
-                                            >
+                                <div className="flex flex-wrap items-center gap-2 text-sm">
+                                    <Button asChild size="sm">
+                                        <Link
+                                            href={createQuote({
+                                                query: { solicitud: row.id },
+                                            })}
+                                        >
+                                            <FilePlus2 />
+                                            Crear cotización
+                                        </Link>
+                                    </Button>
+                                    {row.quotes.map((quote) => (
+                                        <Badge
+                                            key={quote.id}
+                                            variant="outline"
+                                            asChild
+                                        >
+                                            <Link href={editQuote(quote.id)}>
                                                 {quote.number} · {quote.status}
-                                            </Badge>
-                                        ))}
-                                    </div>
-                                )}
+                                            </Link>
+                                        </Badge>
+                                    ))}
+                                </div>
                             </div>
 
                             <Form
