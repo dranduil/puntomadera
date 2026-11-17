@@ -1,7 +1,9 @@
 import { Head, Link } from '@inertiajs/react';
 import { ArrowUpRight, CheckCircle2, MapPin, Ruler } from 'lucide-react';
+import { QuoteCta } from '@/components/landing-sections';
 import { PublicFooter } from '@/components/public-footer';
 import { PublicHeader } from '@/components/public-header';
+import type { Seo } from '@/components/seo-head';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -33,6 +35,7 @@ type Service = {
 type Props = {
     landing: Landing;
     services: Service[];
+    seo: Seo;
 };
 
 const trustPoints = [
@@ -49,13 +52,11 @@ function resolveImagePath(path: string | null | undefined) {
     return /^https?:\/\//i.test(path) ? path : `/${path.replace(/^\/+/, '')}`;
 }
 
-export default function ServicesIndex({ landing, services }: Props) {
+export default function ServicesIndex({ landing, services, seo }: Props) {
     const siteUrl = import.meta.env.VITE_APP_URL || 'https://punto-madera.com';
     const canonicalUrl = `${siteUrl.replace(/\/$/, '')}/servicios`;
-    const seoTitle =
-        'Servicios de carpintería en Guayaquil | Muebles, closets y puertas';
-    const seoDescription =
-        'Muebles, closets, cocinas y puertas en Guayaquil, Urdesa, Vía a la Costa, Samborondón y Daule. Revisa servicios y cotiza por WhatsApp.';
+    const seoTitle = seo.title;
+    const seoDescription = seo.description;
     const featuredService = services[0];
     const featuredImageUrl = resolveImagePath(featuredService?.image_path);
     const areasServed = resolveServiceAreas(landing.areas_served);
@@ -128,9 +129,7 @@ export default function ServicesIndex({ landing, services }: Props) {
             </Head>
 
             <div className="min-h-screen bg-background text-foreground">
-                <PublicHeader
-                    landing={{ whatsapp_number: landing.whatsapp_number }}
-                />
+                <PublicHeader />
 
                 <main>
                     <section className="border-b border-border/60 bg-card">
@@ -155,8 +154,8 @@ export default function ServicesIndex({ landing, services }: Props) {
 
                                 <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                                     <Button asChild size="lg">
-                                        <Link href="/contacto">
-                                            Cuéntanos tu proyecto
+                                        <Link href="/cotizar">
+                                            Pedir cotización
                                             <ArrowUpRight data-icon="inline-end" />
                                         </Link>
                                     </Button>
@@ -347,8 +346,8 @@ export default function ServicesIndex({ landing, services }: Props) {
                                     </CardHeader>
                                     <CardFooter className="flex-wrap gap-3">
                                         <Button asChild>
-                                            <Link href="/contacto">
-                                                Solicitar cotización
+                                            <Link href="/cotizar">
+                                                Pedir cotización
                                             </Link>
                                         </Button>
                                         <Button asChild variant="outline">
@@ -387,6 +386,11 @@ export default function ServicesIndex({ landing, services }: Props) {
                             </div>
                         </div>
                     </section>
+
+                    <QuoteCta
+                        title="¿No sabes qué servicio elegir?"
+                        text="Cuéntanos qué necesitas en el formulario y te enviamos la cotización por WhatsApp."
+                    />
                 </main>
                 <PublicFooter />
             </div>

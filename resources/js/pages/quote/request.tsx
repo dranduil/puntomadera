@@ -545,7 +545,7 @@ export default function QuoteRequestPage({
             <SeoHead seo={seo} />
 
             <div className="min-h-screen bg-background text-foreground">
-                <PublicHeader landing={{ whatsapp_number }} />
+                <PublicHeader />
 
                 <main className="mx-auto max-w-3xl px-4 pt-8 pb-36 sm:px-6 sm:pt-12 sm:pb-16">
                     <div className="text-sm font-medium text-primary">

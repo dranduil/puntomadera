@@ -6,13 +6,16 @@ export type BreadcrumbItem = {
     href: NonNullable<InertiaLinkProps['href']>;
 };
 
+export type SiteLink = { label: string; href: string };
+
 export type FooterGroup = {
     title: string;
-    links: { label: string; href: string }[];
+    links: SiteLink[];
 };
 
 /** Shared `site` prop from App\Support\SiteLinks::shared(). */
 export type SiteInfo = {
+    header: SiteLink[];
     footer: FooterGroup[];
     whatsappNumber: string;
     contactPhone: string | null;

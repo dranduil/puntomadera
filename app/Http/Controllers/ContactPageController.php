@@ -22,8 +22,8 @@ class ContactPageController extends Controller
             ],
             // Printed by the Blade layout when SSR is unavailable; mirrors the page's own <Head>.
             'seo' => [
-                'title' => 'Cotizar carpintería en Guayaquil | Punto Madera',
-                'description' => 'Cotiza muebles, closets, puertas y reparaciones en Guayaquil, Urdesa, Vía a la Costa, Samborondón y Daule. Escríbenos por WhatsApp.',
+                'title' => 'Contacto y WhatsApp en Guayaquil | Punto Madera',
+                'description' => 'Escríbenos por WhatsApp o llámanos. Atendemos Guayaquil, Urdesa, Vía a la Costa, Samborondón y Daule. Para un precio, pide tu cotización en línea.',
                 'canonical' => "{$siteUrl}/contacto",
             ],
         ]);

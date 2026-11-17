@@ -72,10 +72,11 @@ test('the guides are in the sitemap and linked from related pages', function () 
         ->toContain('href="/muebles-resistentes-humedad-guayaquil"');
 });
 
-test('every public Inertia page renders the shared footer', function (string $path) {
+test('every public Inertia page renders the shared header and footer', function (string $path) {
     $page = $this->get($path)->assertOk()->viewData('page');
 
-    expect($page['props']['site']['footer'])->toBe(SiteLinks::footer())
+    expect($page['props']['site']['header'])->toBe(SiteLinks::header())
+        ->and($page['props']['site']['footer'])->toBe(SiteLinks::footer())
         ->and(file_get_contents(resource_path("js/pages/{$page['component']}.tsx")))
         ->toContain('<PublicFooter />');
 })->with([
@@ -89,8 +90,18 @@ test('every public Inertia page renders the shared footer', function (string $pa
     'empresas' => '/empresas',
 ]);
 
-test('every footer link points to a page that exists', function () {
-    foreach (collect(SiteLinks::footer())->flatMap(fn (array $group) => $group['links']) as $link) {
+test('every header and footer link points to a page that exists', function () {
+    $links = collect(SiteLinks::footer())->flatMap(fn (array $group) => $group['links'])->merge(SiteLinks::header());
+
+    foreach ($links as $link) {
         $this->get($link['href'])->assertOk();
+    }
+});
+
+test('the Blade pages show the same header menu', function () {
+    $html = $this->get('/puertas-seguridad-guayaquil')->getContent();
+
+    foreach (SiteLinks::header() as $link) {
+        expect($html)->toContain('href="'.$link['href'].'" class="text-muted-foreground');
     }
 });

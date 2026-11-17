@@ -24,7 +24,7 @@ test('public works include Spanish alt text for every gallery image', function (
         ->assertInertia(fn (Assert $page) => $page
             ->component('works/index')
             ->where('seo.canonical', route('works.index'))
-            ->where('seo.title', 'Trabajos de carpintería en Guayaquil | Proyectos reales | Punto Madera')
+            ->where('seo.title', 'Trabajos de carpintería en Guayaquil | Punto Madera')
             ->where('works.data.0.image_alts', [
                 'Puerta de madera oscura instalada en un interior',
                 'Puerta de madera color caoba con paneles decorativos',

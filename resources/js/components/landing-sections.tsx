@@ -1,7 +1,8 @@
-import { Link } from '@inertiajs/react';
+import { Link, usePage } from '@inertiajs/react';
 import { ChevronDown, ChevronRight, MessageCircle } from 'lucide-react';
 import type { ReactNode } from 'react';
 import { Button } from '@/components/ui/button';
+import { buildWhatsAppHref } from '@/lib/whatsapp';
 
 export type Faq = { q: string; a: string };
 
@@ -69,22 +70,32 @@ export function FaqList({ faqs }: { faqs: Faq[] }) {
 }
 
 /** Closing band: the quote form first, WhatsApp as the second option. */
+/** The page's closing next step: the quote form first, WhatsApp second. */
 export function QuoteCta({
     title,
     text,
-    quoteHref,
+    quoteHref = '/cotizar',
     whatsappHref,
 }: {
     title: string;
     text: string;
-    quoteHref: string;
-    whatsappHref: string;
+    quoteHref?: string;
+    whatsappHref?: string;
 }) {
+    const { site } = usePage().props;
+    const chatHref =
+        whatsappHref ??
+        buildWhatsAppHref(
+            site.whatsappNumber,
+            'Hola, quiero cotizar con Punto Madera.',
+        );
+
     return (
         <section className="bg-primary text-primary-foreground">
             <div className="mx-auto flex max-w-6xl flex-col gap-6 px-4 py-14 sm:px-6 md:flex-row md:items-center md:justify-between lg:px-8">
                 <div className="max-w-xl">
-                    <h2 className="text-2xl font-semibold tracking-tight text-balance">
+                    {/* Headings are brown site-wide (app.css); this band is brown. */}
+                    <h2 className="text-2xl font-semibold tracking-tight text-balance text-primary-foreground">
                         {title}
                     </h2>
                     <p className="mt-2 text-primary-foreground/80">{text}</p>
@@ -103,7 +114,7 @@ export function QuoteCta({
                         className="border-primary-foreground/40 bg-transparent text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground"
                     >
                         <a
-                            href={whatsappHref}
+                            href={chatHref}
                             target="_blank"
                             rel="noopener noreferrer"
                         >

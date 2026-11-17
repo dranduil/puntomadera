@@ -7,7 +7,10 @@ export function getPublicAppName(configuredName?: string | null): string {
         return fallbackAppName;
     }
 
-    return normalizedName;
+    // APP_NAME is "punto-madera"; titles show the brand as "Punto Madera".
+    return normalizedName.replace(/(^|\s)\p{Ll}/gu, (letter) =>
+        letter.toUpperCase(),
+    );
 }
 
 export function sanitizePublicTitle(title?: string | null): string {
@@ -18,9 +21,9 @@ export function sanitizePublicTitle(title?: string | null): string {
 }
 
 /**
- * Document title shared by the browser and SSR entry points. Adds the brand
- * suffix only when the page title does not already name the brand, so SEO
- * titles like "… | Punto Madera" are not rendered as "… | Punto Madera - Punto Madera".
+ * Document title shared by the browser and SSR entry points. Public pages get
+ * "… | Punto Madera" from the server; any other title gets the same suffix,
+ * so every tab and search result reads the same way.
  */
 export function formatDocumentTitle(
     title: string | null | undefined,
@@ -30,5 +33,5 @@ export function formatDocumentTitle(
 
     return safeTitle.toLowerCase().includes(appName.toLowerCase())
         ? safeTitle
-        : `${safeTitle} - ${appName}`;
+        : `${safeTitle} | ${appName}`;
 }

@@ -16,7 +16,7 @@ test('public document titles never use the Laravel framework fallback', function
     $response->assertSuccessful();
 
     expect($response->getContent())
-        ->toContain('<title inertia>Carpintero en Guayaquil | Muebles, closets y puertas a medida</title>')
+        ->toContain('<title inertia>Carpintero en Guayaquil: closets, cocinas y puertas | Punto Madera</title>')
         ->not->toContain('<title inertia>Laravel</title>');
 });
 
@@ -28,7 +28,7 @@ test('homepage exposes crawler metadata for the canonical host', function () {
     $response->assertSuccessful();
 
     expect($response->getContent())
-        ->toContain('<title inertia>Carpintero en Guayaquil | Muebles, closets y puertas a medida</title>')
+        ->toContain('<title inertia>Carpintero en Guayaquil: closets, cocinas y puertas | Punto Madera</title>')
         ->toContain('<meta inertia="description" name="description"')
         ->toContain('Carpintero en Guayaquil para muebles a medida, closets, cocinas y puertas.')
         ->toContain('<link inertia="canonical" rel="canonical" href="https://punto-madera.com/">')
@@ -44,7 +44,7 @@ test('works page exposes descriptive metadata and cleans page one canonical', fu
     $response->assertSuccessful();
 
     expect($response->getContent())
-        ->toContain('<title inertia>Trabajos de carpintería en Guayaquil | Proyectos reales | Punto Madera</title>')
+        ->toContain('<title inertia>Trabajos de carpintería en Guayaquil | Punto Madera</title>')
         ->toContain('<meta inertia="description" name="description"')
         ->toContain('<link inertia="canonical" rel="canonical" href="https://punto-madera.com/trabajos">')
         ->not->toContain('href="https://punto-madera.com/trabajos?page=1"');
@@ -58,8 +58,8 @@ test('services index exposes a stronger local conversion snippet', function () {
     $response->assertSuccessful();
 
     expect($response->getContent())
-        ->toContain('<title inertia>Servicios de carpintería en Guayaquil | Muebles, closets y puertas</title>')
-        ->toContain('Revisa el proceso y cotiza por WhatsApp.')
+        ->toContain('<title inertia>Servicios de carpintería en Guayaquil | Punto Madera</title>')
+        ->toContain('pide la cotización en línea o por WhatsApp.')
         ->toContain('<link inertia="canonical" rel="canonical" href="https://punto-madera.com/servicios">');
 });
 
@@ -89,7 +89,7 @@ test('door installation page exposes outcome and WhatsApp metadata', function ()
     $response->assertSuccessful();
 
     expect($response->getContent())
-        ->toContain('<title>Instalación de puertas en Guayaquil | Alineadas y listas para usar</title>')
+        ->toContain('<title>Instalación de puertas en Guayaquil | Punto Madera</title>')
         ->toContain('Entrega limpia, cierre correcto y cotización por WhatsApp.')
         ->toContain('Guayaquil (Norte y Sur)')
         ->toContain('Samborondón')
@@ -105,7 +105,7 @@ test('door product page presents quote-only offers and illustrative images', fun
     $response->assertSuccessful();
 
     expect($response->getContent())
-        ->toContain('<title>Puertas de madera, chapas y accesorios en Guayaquil | Punto Madera</title>')
+        ->toContain('<title>Puertas de madera y chapas en Guayaquil | Punto Madera</title>')
         ->toContain('<link rel="canonical" href="https://punto-madera.com/puertas-madera-chapas-guayaquil">')
         ->toContain('te enviamos la cotización por WhatsApp antes de avanzar')
         ->toContain('href="https://wa.me/')
@@ -122,7 +122,7 @@ test('custom carpentry page targets furniture design intent', function () {
     $response->assertSuccessful();
 
     expect($response->getContent())
-        ->toContain('<title>Diseño de muebles a medida en Guayaquil | Carpintería personalizada</title>')
+        ->toContain('<title>Diseño de muebles a medida en Guayaquil | Punto Madera</title>')
         ->toContain('Diseño y fabricación de muebles a medida en Guayaquil')
         ->toContain('<link rel="canonical" href="https://punto-madera.com/carpinteria-a-medida-guayaquil">');
 });
@@ -253,13 +253,18 @@ test('business phone prefers the admin contact phone', function () {
     );
 });
 
-test('robots explicitly allows OpenAI search crawling', function () {
+test('robots lets every crawler read public pages and keeps private ones out', function () {
     $robots = file_get_contents(public_path('robots.txt'));
 
-    expect($robots)
-        ->toContain('User-agent: OAI-SearchBot')
-        ->toContain('Allow: /')
-        ->toContain('Disallow: /_boost/')
+    // One group for every bot: a bot-specific group would replace these rules
+    // for that bot instead of adding to them.
+    expect(substr_count($robots, 'User-agent:'))->toBe(1)
+        ->and($robots)
+        ->toContain("User-agent: *\nAllow: /")
+        ->toContain('Disallow: /admin')
+        ->toContain('Disallow: /cotizacion/')
+        ->toContain('Disallow: /cotizar/enviado/')
+        ->not->toContain('Disallow: /cotizar\n')
         ->toContain('Sitemap: https://punto-madera.com/sitemap.xml');
 });
 
@@ -326,7 +331,7 @@ test('contact page is available for WhatsApp quotations', function () {
         );
 
     expect($response->getContent())
-        ->toContain('<title inertia>Cotizar carpintería en Guayaquil | Punto Madera</title>')
+        ->toContain('<title inertia>Contacto y WhatsApp en Guayaquil | Punto Madera</title>')
         ->toContain('<link inertia="canonical" rel="canonical" href="https://punto-madera.com/contacto">');
 });
 

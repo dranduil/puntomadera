@@ -1,12 +1,5 @@
 import { Head, Link } from '@inertiajs/react';
-import {
-    ArrowRight,
-    ArrowUpRight,
-    CheckCircle2,
-    MapPin,
-    MessageCircle,
-} from 'lucide-react';
-import { useMemo, useState } from 'react';
+import { ArrowRight, CheckCircle2, MapPin, MessageCircle } from 'lucide-react';
 import { PublicFooter } from '@/components/public-footer';
 import { PublicHeader } from '@/components/public-header';
 import { Badge } from '@/components/ui/badge';
@@ -19,10 +12,7 @@ import {
     CardHeader,
     CardTitle,
 } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
-import { Textarea } from '@/components/ui/textarea';
 import { formatServiceAreas, resolveServiceAreas } from '@/lib/service-areas';
 import { buildWhatsAppHref, resolveWhatsAppNumber } from '@/lib/whatsapp';
 
@@ -55,10 +45,6 @@ type Props = {
 };
 
 export default function ServiceShow({ landing, service, seo }: Props) {
-    const [name, setName] = useState('');
-    const [phone, setPhone] = useState('');
-    const [location, setLocation] = useState('');
-    const [details, setDetails] = useState('');
     const areasServed = resolveServiceAreas(landing.areas_served);
 
     const whatsappNumber = resolveWhatsAppNumber(landing.whatsapp_number);
@@ -100,22 +86,9 @@ export default function ServiceShow({ landing, service, seo }: Props) {
         url: canonicalUrl,
     };
 
-    const composedMessage = useMemo(() => {
-        const header =
-            service.default_message?.trim() ||
-            `Hola, estoy interesado en el servicio: ${service.name}.`;
-
-        return [
-            header,
-            '',
-            name ? `Nombre: ${name}` : null,
-            phone ? `Teléfono: ${phone}` : null,
-            location ? `Ubicación: ${location}` : null,
-            details ? `Detalles: ${details}` : null,
-        ]
-            .filter(Boolean)
-            .join('\n');
-    }, [details, location, name, phone, service.default_message, service.name]);
+    const composedMessage =
+        service.default_message?.trim() ||
+        `Hola, estoy interesado en el servicio: ${service.name}.`;
 
     const whatsappHref = buildWhatsAppHref(whatsappNumber, composedMessage);
 
@@ -211,10 +184,7 @@ export default function ServiceShow({ landing, service, seo }: Props) {
             </Head>
 
             <div className="min-h-screen bg-background text-foreground">
-                <PublicHeader
-                    landing={{ whatsapp_number: landing.whatsapp_number }}
-                    whatsappHref={whatsappHref}
-                />
+                <PublicHeader whatsappHref={whatsappHref} />
 
                 <main>
                     <section className="border-b border-border/60 bg-card">
@@ -235,14 +205,15 @@ export default function ServiceShow({ landing, service, seo }: Props) {
                                         {service.summary}
                                     </p>
                                 )}
-                                <div className="mt-8 flex flex-wrap gap-2">
-                                    <Badge variant="secondary">A medida</Badge>
-                                    <Badge variant="secondary">
-                                        Comunicación directa
-                                    </Badge>
-                                    <Badge variant="secondary">
-                                        Instalación local
-                                    </Badge>
+                                <div className="mt-8">
+                                    <Button asChild size="lg">
+                                        <Link
+                                            href={`/cotizar?servicio=${service.slug}`}
+                                        >
+                                            Pedir cotización
+                                            <ArrowRight data-icon="inline-end" />
+                                        </Link>
+                                    </Button>
                                 </div>
                                 <div className="mt-6 max-w-xl rounded-xl border border-border/70 bg-background/70 p-4">
                                     <div className="text-xs font-medium tracking-[0.14em] text-muted-foreground uppercase">
@@ -328,77 +299,36 @@ export default function ServiceShow({ landing, service, seo }: Props) {
 
                             <Card className="h-fit rounded-2xl border-border/70 bg-card shadow-none lg:sticky lg:top-28">
                                 <CardHeader>
-                                    <Badge variant="outline" className="w-fit">
-                                        Cotización guiada
-                                    </Badge>
-                                    <CardTitle className="mt-3 text-2xl font-medium">
-                                        Cuéntanos qué necesitas
+                                    <CardTitle className="text-2xl font-medium">
+                                        Pide tu cotización
                                     </CardTitle>
                                     <CardDescription className="leading-6">
-                                        Completa lo esencial. El botón prepara
-                                        un mensaje listo para enviar por
-                                        WhatsApp.
+                                        Responde unas preguntas cortas y te
+                                        enviamos el precio por WhatsApp.
                                     </CardDescription>
                                 </CardHeader>
                                 <Separator />
-                                <CardContent className="grid gap-4 pt-6">
-                                    <div className="grid gap-2">
-                                        <Label htmlFor="name">Nombre</Label>
-                                        <Input
-                                            id="name"
-                                            value={name}
-                                            onChange={(event) =>
-                                                setName(event.target.value)
-                                            }
-                                            placeholder="Tu nombre"
-                                        />
-                                    </div>
-                                    <div className="grid gap-2">
-                                        <Label htmlFor="phone">
-                                            Teléfono / WhatsApp
-                                        </Label>
-                                        <Input
-                                            id="phone"
-                                            value={phone}
-                                            onChange={(event) =>
-                                                setPhone(event.target.value)
-                                            }
-                                            placeholder="+593 ..."
-                                        />
-                                    </div>
-                                    <div className="grid gap-2">
-                                        <Label htmlFor="location">
-                                            Ubicación
-                                        </Label>
-                                        <Input
-                                            id="location"
-                                            value={location}
-                                            onChange={(event) =>
-                                                setLocation(event.target.value)
-                                            }
-                                            placeholder="Guayaquil / Samborondón / Daule"
-                                        />
-                                    </div>
-                                    <div className="grid gap-2">
-                                        <Label htmlFor="details">
-                                            Detalles del proyecto
-                                        </Label>
-                                        <Textarea
-                                            id="details"
-                                            value={details}
-                                            onChange={(event) =>
-                                                setDetails(event.target.value)
-                                            }
-                                            placeholder="Medidas, material, fotos, referencias..."
-                                        />
-                                    </div>
+                                <CardContent className="grid gap-3 pt-6 text-sm text-muted-foreground">
+                                    {[
+                                        'Fotos del espacio, si tienes',
+                                        'Medidas aproximadas',
+                                        'Tu sector en Guayaquil',
+                                    ].map((item) => (
+                                        <div
+                                            key={item}
+                                            className="flex items-center gap-2"
+                                        >
+                                            <CheckCircle2 className="size-4 text-primary" />
+                                            {item}
+                                        </div>
+                                    ))}
                                 </CardContent>
-                                <CardFooter className="flex-col items-stretch gap-4">
+                                <CardFooter className="flex-col items-stretch gap-3">
                                     <Button asChild size="lg">
                                         <Link
                                             href={`/cotizar?servicio=${service.slug}`}
                                         >
-                                            Pedir cotización paso a paso
+                                            Pedir cotización
                                             <ArrowRight data-icon="inline-end" />
                                         </Link>
                                     </Button>
@@ -409,17 +339,9 @@ export default function ServiceShow({ landing, service, seo }: Props) {
                                             rel="noreferrer"
                                         >
                                             <MessageCircle data-icon="inline-start" />
-                                            Continuar por WhatsApp
-                                            <ArrowUpRight data-icon="inline-end" />
+                                            Escribir por WhatsApp
                                         </a>
                                     </Button>
-                                    <div className="rounded-lg border border-border/70 bg-background p-4 text-sm leading-6 whitespace-pre-wrap text-muted-foreground">
-                                        {composedMessage}
-                                    </div>
-                                    <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                                        <CheckCircle2 className="size-3.5 text-primary" />
-                                        Sin formularios largos ni compromiso.
-                                    </div>
                                 </CardFooter>
                             </Card>
                         </div>

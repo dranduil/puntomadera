@@ -37,7 +37,7 @@ test('the reviews page exposes only approved reviews and crawlable metadata', fu
             ->where('seo.canonical', 'https://punto-madera.com/resenas'));
 
     expect($response->getContent())
-        ->toContain('<title inertia>Opiniones de clientes | Punto Madera Guayaquil</title>')
+        ->toContain('<title inertia>Opiniones de clientes en Guayaquil | Punto Madera</title>')
         ->toContain('https://punto-madera.com/resenas')
         ->toContain('application/ld+json')
         ->toContain('Excelente trabajo de carpintería')

@@ -7,14 +7,15 @@ import {
     ShieldCheck,
     Timer,
 } from 'lucide-react';
+import { QuoteCta } from '@/components/landing-sections';
 import { PublicFooter } from '@/components/public-footer';
 import { PublicHeader } from '@/components/public-header';
+import type { Seo } from '@/components/seo-head';
 import { Button } from '@/components/ui/button';
 import {
     Card,
     CardContent,
     CardDescription,
-    CardFooter,
     CardHeader,
     CardTitle,
 } from '@/components/ui/card';
@@ -34,12 +35,6 @@ const images = {
     doors: 'images/works/punto-madera/punto-madera-01.jpg',
 };
 
-const defaultSeo = {
-    title: 'Carpintero en Guayaquil | Muebles, closets y puertas a medida',
-    description:
-        'Carpintero en Guayaquil, Urdesa, Vía a la Costa, Samborondón y Daule. Muebles a medida, closets, cocinas, puertas y reparaciones por WhatsApp.',
-};
-
 type Landing = {
     hero_title: string | null;
     hero_subtitle: string | null;
@@ -54,6 +49,7 @@ type Props = {
     landing: Landing;
     /** Shared HomeAndConstructionBusiness node built by App\Support\BusinessSchema. */
     business: Record<string, unknown>;
+    seo: Seo;
 };
 
 const services = [
@@ -126,7 +122,7 @@ const faqs = [
     },
 ];
 
-export default function CarpinteroLanding({ landing, business }: Props) {
+export default function CarpinteroLanding({ landing, business, seo }: Props) {
     const appName = getPublicAppName(import.meta.env.VITE_APP_NAME);
     const siteUrl = import.meta.env.VITE_APP_URL || 'https://punto-madera.com';
     const canonicalUrl = `${siteUrl.replace(/\/$/, '')}/`;
@@ -137,14 +133,15 @@ export default function CarpinteroLanding({ landing, business }: Props) {
         resolveWhatsAppNumber(landing.whatsapp_number),
     );
 
-    const seoTitle = sanitizePublicTitle(landing.seo_title ?? defaultSeo.title);
-    const seoDescription = landing.seo_description ?? defaultSeo.description;
+    // The server resolves the admin's SEO text and its defaults.
+    const seoTitle = sanitizePublicTitle(seo.title);
+    const seoDescription = seo.description;
     const heroTitle =
         landing.hero_title ??
         'Carpintero en Guayaquil para muebles a medida, closets y puertas';
     const heroSubtitle =
         landing.hero_subtitle ??
-        'Diseñamos, fabricamos e instalamos carpintería para tu hogar o negocio. Cotización rápida por WhatsApp y trabajo prolijo.';
+        'Diseñamos, fabricamos e instalamos carpintería para tu hogar o negocio. Pide tu cotización en línea o escríbenos por WhatsApp.';
     const businessSchema = {
         ...business,
         description: seoDescription,
@@ -275,11 +272,7 @@ export default function CarpinteroLanding({ landing, business }: Props) {
             </Head>
 
             <div className="min-h-screen bg-background text-foreground">
-                <PublicHeader
-                    landing={{ whatsapp_number: landing.whatsapp_number }}
-                    isHome
-                    whatsappHref={whatsappHref}
-                />
+                <PublicHeader whatsappHref={whatsappHref} />
 
                 <main>
                     <section className="border-b border-border/60 bg-card">
@@ -300,7 +293,7 @@ export default function CarpinteroLanding({ landing, business }: Props) {
                                 <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
                                     <Button asChild size="lg">
                                         <Link href="/cotizar">
-                                            Cotizar ahora
+                                            Pedir cotización
                                             <ChevronRight data-icon="inline-end" />
                                         </Link>
                                     </Button>
@@ -459,21 +452,6 @@ export default function CarpinteroLanding({ landing, business }: Props) {
                                     <p className="mt-2 text-sm text-muted-foreground">
                                         {`${formatServiceAreas(areasServed)}. Visitas coordinadas según disponibilidad del sector.`}
                                     </p>
-                                    <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-                                        <Button asChild>
-                                            <a
-                                                href={whatsappHref}
-                                                target="_blank"
-                                                rel="noreferrer"
-                                            >
-                                                Agendar visita
-                                                <ChevronRight data-icon="inline-end" />
-                                            </a>
-                                        </Button>
-                                        <Button asChild variant="outline">
-                                            <a href="#contacto">Dejar datos</a>
-                                        </Button>
-                                    </div>
                                 </div>
 
                                 <div className="grid gap-3">
@@ -635,76 +613,6 @@ export default function CarpinteroLanding({ landing, business }: Props) {
                         </div>
                     </section>
 
-                    <section id="booking" className="bg-card py-20 sm:py-28">
-                        <div className="mx-auto max-w-6xl px-4">
-                            <div className="grid gap-10 lg:grid-cols-2 lg:items-start">
-                                <div>
-                                    <h2 className="text-3xl font-medium tracking-tight sm:text-4xl">
-                                        Agendar
-                                    </h2>
-                                    <p className="mt-3 max-w-xl text-muted-foreground">
-                                        Escríbenos directamente por WhatsApp
-                                        para contarnos qué necesitas. Te
-                                        orientamos sobre materiales, medidas y
-                                        tiempos antes de confirmar una visita.
-                                    </p>
-
-                                    <div className="mt-6 grid gap-3 text-sm text-muted-foreground">
-                                        {[
-                                            'Muebles, closets, cocinas, puertas y reparaciones',
-                                            'Respuesta directa y cotización clara',
-                                            `Cobertura: ${formatServiceAreas(areasServed)}`,
-                                        ].map((line) => (
-                                            <div
-                                                key={line}
-                                                className="flex items-start gap-3"
-                                            >
-                                                <Check className="mt-0.5 size-4 text-primary" />
-                                                <span>{line}</span>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-
-                                <Card className="border-border/70 bg-background shadow-none">
-                                    <CardHeader>
-                                        <CardTitle>
-                                            Conversemos por WhatsApp
-                                        </CardTitle>
-                                        <CardDescription className="leading-6">
-                                            Cuéntanos qué proyecto tienes y
-                                            coordinamos el siguiente paso sin
-                                            formularios largos.
-                                        </CardDescription>
-                                    </CardHeader>
-                                    <CardContent className="flex items-start gap-3 text-sm text-muted-foreground">
-                                        <MessageCircle className="mt-0.5 size-5 shrink-0 text-primary" />
-                                        <p>
-                                            Puedes enviar fotos, medidas o una
-                                            idea inicial directamente en el
-                                            chat.
-                                        </p>
-                                    </CardContent>
-                                    <CardFooter className="flex-col items-stretch gap-3">
-                                        <Button asChild size="lg">
-                                            <a
-                                                href={whatsappHref}
-                                                target="_blank"
-                                                rel="noreferrer"
-                                            >
-                                                Escribir por WhatsApp
-                                                <MessageCircle data-icon="inline-end" />
-                                            </a>
-                                        </Button>
-                                        <p className="text-center text-xs text-muted-foreground">
-                                            Respuesta directa desde Guayaquil.
-                                        </p>
-                                    </CardFooter>
-                                </Card>
-                            </div>
-                        </div>
-                    </section>
-
                     <section
                         id="proceso"
                         className="bg-background py-20 sm:py-28"
@@ -787,19 +695,12 @@ export default function CarpinteroLanding({ landing, business }: Props) {
                                 ))}
                             </div>
 
-                            <div className="mt-10 flex flex-col gap-3 sm:flex-row">
+                            <div className="mt-10">
                                 <Button asChild size="lg">
-                                    <a
-                                        href={whatsappHref}
-                                        target="_blank"
-                                        rel="noreferrer"
-                                    >
-                                        Empezar por WhatsApp
+                                    <Link href="/cotizar">
+                                        Pedir cotización
                                         <ChevronRight data-icon="inline-end" />
-                                    </a>
-                                </Button>
-                                <Button asChild size="lg" variant="outline">
-                                    <a href="#faq">Ver preguntas frecuentes</a>
+                                    </Link>
                                 </Button>
                             </div>
                         </div>
@@ -835,135 +736,11 @@ export default function CarpinteroLanding({ landing, business }: Props) {
                         </div>
                     </section>
 
-                    <section
-                        id="contacto"
-                        className="bg-background py-20 sm:py-28"
-                    >
-                        <div className="mx-auto max-w-6xl px-4">
-                            <div className="grid gap-10 lg:grid-cols-2 lg:items-center">
-                                <div>
-                                    <h2 className="text-3xl font-medium tracking-tight sm:text-4xl">
-                                        Contáctanos
-                                    </h2>
-                                    <p className="mt-3 text-muted-foreground">
-                                        {`Envíanos un mensaje o contáctanos por WhatsApp para carpintería en ${formatServiceAreas(areasServed)}.`}
-                                    </p>
-
-                                    <div className="mt-8 grid gap-4">
-                                        {[
-                                            'Carpintero Guayaquil · respuesta rápida',
-                                            'Muebles a medida, closets, puertas y reparaciones',
-                                            `Cobertura: ${formatServiceAreas(areasServed)}`,
-                                        ].map((line) => (
-                                            <div
-                                                key={line}
-                                                className="flex items-start gap-3"
-                                            >
-                                                <Check className="mt-0.5 size-4 text-primary" />
-                                                <div className="text-sm text-muted-foreground">
-                                                    {line}
-                                                </div>
-                                            </div>
-                                        ))}
-                                    </div>
-
-                                    <div className="mt-8 grid gap-2 text-sm text-muted-foreground">
-                                        {landing.contact_phone && (
-                                            <div>
-                                                Teléfono:{' '}
-                                                {landing.contact_phone}
-                                            </div>
-                                        )}
-                                    </div>
-
-                                    <div className="mt-10 flex flex-col gap-3 sm:flex-row">
-                                        <Button asChild size="lg">
-                                            <a
-                                                href={whatsappHref}
-                                                target="_blank"
-                                                rel="noreferrer"
-                                            >
-                                                WhatsApp
-                                                <ChevronRight data-icon="inline-end" />
-                                            </a>
-                                        </Button>
-                                        <Button
-                                            asChild
-                                            size="lg"
-                                            variant="outline"
-                                        >
-                                            <a href="#booking">Agendar</a>
-                                        </Button>
-                                    </div>
-                                </div>
-
-                                <Card className="overflow-hidden border-border/70 bg-card p-0 shadow-none">
-                                    <div className="relative">
-                                        <img
-                                            src={images.kitchen}
-                                            alt="Cocina con anaqueles de madera fabricados a medida en Guayaquil"
-                                            className="h-48 w-full object-cover"
-                                            width="1200"
-                                            height="800"
-                                            loading="lazy"
-                                            decoding="async"
-                                        />
-                                        <div className="p-6 sm:p-8">
-                                            <div className="text-sm font-semibold">
-                                                Elige tu canal de contacto
-                                            </div>
-                                            <Separator className="my-5" />
-
-                                            <div className="grid gap-3">
-                                                <Button
-                                                    asChild
-                                                    className="w-full"
-                                                >
-                                                    <a
-                                                        href={whatsappHref}
-                                                        target="_blank"
-                                                        rel="noreferrer"
-                                                    >
-                                                        WhatsApp
-                                                        <ChevronRight data-icon="inline-end" />
-                                                    </a>
-                                                </Button>
-                                                <Button
-                                                    asChild
-                                                    variant="outline"
-                                                    className="w-full"
-                                                >
-                                                    <a href="/contacto">
-                                                        Página de contacto
-                                                        <ChevronRight data-icon="inline-end" />
-                                                    </a>
-                                                </Button>
-                                            </div>
-
-                                            <Separator className="my-6" />
-
-                                            <div className="grid gap-3 text-sm text-muted-foreground">
-                                                {[
-                                                    'Foto del área (cocina / closet / puerta)',
-                                                    'Medidas aproximadas',
-                                                    'Material preferido (melamina / madera)',
-                                                    'Ubicación en Guayaquil',
-                                                ].map((item) => (
-                                                    <div
-                                                        key={item}
-                                                        className="flex items-start gap-3"
-                                                    >
-                                                        <Check className="mt-0.5 size-4 text-primary" />
-                                                        <span>{item}</span>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </Card>
-                            </div>
-                        </div>
-                    </section>
+                    <QuoteCta
+                        title="Cuéntanos qué necesitas"
+                        text="Responde unas preguntas cortas, agrega fotos si tienes y te enviamos la cotización por WhatsApp."
+                        whatsappHref={whatsappHref}
+                    />
                 </main>
 
                 <Button

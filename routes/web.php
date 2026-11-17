@@ -17,6 +17,7 @@ use App\Http\Controllers\ContactMessageController;
 use App\Http\Controllers\ContactPageController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HomeLandingController;
+use App\Http\Controllers\LlmsTxtController;
 use App\Http\Controllers\LocalSeoPageController;
 use App\Http\Controllers\MoneyPageController;
 use App\Http\Controllers\QuotePublicController;
@@ -31,6 +32,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeLandingController::class, 'show'])->name('home');
 Route::get('/sitemap.xml', [LocalSeoPageController::class, 'sitemap'])->name('sitemap');
+Route::get('/llms.txt', [LlmsTxtController::class, 'index'])->name('llms');
+Route::get('/llms-full.txt', [LlmsTxtController::class, 'full'])->name('llms.full');
+Route::permanentRedirect('/llm.txt', '/llms.txt');
 
 Route::redirect('/carpintero-guayaquil', '/');
 

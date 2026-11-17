@@ -1,5 +1,6 @@
 import { Head, Link } from '@inertiajs/react';
 import { ArrowUpRight, MapPin } from 'lucide-react';
+import { QuoteCta } from '@/components/landing-sections';
 import { PublicFooter } from '@/components/public-footer';
 import { PublicHeader } from '@/components/public-header';
 import { Badge } from '@/components/ui/badge';
@@ -13,10 +14,6 @@ import {
     CardTitle,
 } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-
-type Landing = {
-    whatsapp_number: string | null;
-};
 
 type Work = {
     id: number;
@@ -45,7 +42,6 @@ type Seo = {
 };
 
 type Props = {
-    landing: Landing;
     seo: Seo;
     works: Paginator<Work>;
 };
@@ -88,7 +84,7 @@ function WorkImage({
     );
 }
 
-export default function WorksIndex({ landing, seo, works }: Props) {
+export default function WorksIndex({ seo, works }: Props) {
     const siteUrl = new URL(seo.canonical).origin;
     const featuredWork = works.data[0];
     const remainingWorks = works.data.slice(1);
@@ -161,9 +157,7 @@ export default function WorksIndex({ landing, seo, works }: Props) {
             </Head>
 
             <div className="min-h-screen bg-background text-foreground">
-                <PublicHeader
-                    landing={{ whatsapp_number: landing.whatsapp_number }}
-                />
+                <PublicHeader />
 
                 <main>
                     <section className="border-b border-border/60 bg-card">
@@ -332,8 +326,8 @@ export default function WorksIndex({ landing, seo, works }: Props) {
                                                     variant="link"
                                                     className="px-0"
                                                 >
-                                                    <Link href="/contacto">
-                                                        Crear algo parecido
+                                                    <Link href="/cotizar">
+                                                        Quiero algo parecido
                                                         <ArrowUpRight data-icon="inline-end" />
                                                     </Link>
                                                 </Button>
@@ -383,6 +377,11 @@ export default function WorksIndex({ landing, seo, works }: Props) {
                             )}
                         </div>
                     </section>
+
+                    <QuoteCta
+                        title="¿Quieres algo parecido en tu casa?"
+                        text="Cuéntanos qué necesitas y te enviamos la cotización por WhatsApp."
+                    />
                 </main>
                 <PublicFooter />
             </div>

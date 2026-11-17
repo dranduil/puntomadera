@@ -18,7 +18,7 @@ class ReviewController extends Controller
     {
         $siteUrl = rtrim((string) config('app.url', 'http://localhost'), '/') ?: 'http://localhost';
         $canonicalUrl = "{$siteUrl}/resenas";
-        $seoTitle = 'Opiniones de clientes | Punto Madera Guayaquil';
+        $seoTitle = 'Opiniones de clientes en Guayaquil | Punto Madera';
         $seoDescription = 'Lee opiniones de clientes de Punto Madera en Guayaquil y comparte tu experiencia con muebles, puertas, closets y carpintería a medida.';
         $reviews = CustomerReview::query()
             ->approved()
@@ -51,9 +51,6 @@ class ReviewController extends Controller
         ])->all();
 
         return Inertia::render('reviews/index', [
-            'landing' => [
-                'whatsapp_number' => null,
-            ],
             'reviews' => $reviews->map->asPublicData()->values()->all(),
             'captcha' => app(SimpleCaptcha::class)->challenge(),
             'reviewStatus' => $request->session()->get('review_status'),

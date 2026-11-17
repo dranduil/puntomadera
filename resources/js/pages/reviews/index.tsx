@@ -1,6 +1,7 @@
 import { Form, Head } from '@inertiajs/react';
 import { Camera, CheckCircle2, Star } from 'lucide-react';
 import InputError from '@/components/input-error';
+import { QuoteCta } from '@/components/landing-sections';
 import { PublicFooter } from '@/components/public-footer';
 import { PublicHeader } from '@/components/public-header';
 import { Badge } from '@/components/ui/badge';
@@ -11,10 +12,6 @@ import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { Textarea } from '@/components/ui/textarea';
 import { store } from '@/routes/reviews';
-
-type Landing = {
-    whatsapp_number: string | null;
-};
 
 type Review = {
     id: number;
@@ -34,7 +31,6 @@ type Seo = {
 };
 
 type Props = {
-    landing: Landing;
     reviews: Review[];
     captcha: {
         question: string;
@@ -62,7 +58,6 @@ function RatingStars({ rating }: { rating: number }) {
 }
 
 export default function ReviewsPage({
-    landing,
     reviews,
     captcha,
     reviewStatus,
@@ -139,9 +134,7 @@ export default function ReviewsPage({
             </Head>
 
             <div className="min-h-screen bg-background text-foreground">
-                <PublicHeader
-                    landing={{ whatsapp_number: landing.whatsapp_number }}
-                />
+                <PublicHeader />
 
                 <main>
                     <section className="border-b border-border/60 bg-card">
@@ -476,6 +469,11 @@ export default function ReviewsPage({
                             </div>
                         </div>
                     </section>
+
+                    <QuoteCta
+                        title="¿Listo para tu proyecto?"
+                        text="Cuéntanos qué necesitas y te enviamos la cotización por WhatsApp."
+                    />
                 </main>
                 <PublicFooter />
             </div>

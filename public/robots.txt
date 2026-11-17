@@ -1,9 +1,9 @@
 User-agent: *
 Allow: /
-Disallow: /_boost/
-
-# Keep public pages available to answer-engine crawlers.
-User-agent: OAI-SearchBot
-Allow: /
+Disallow: /admin
+Disallow: /dashboard
+Disallow: /settings
+Disallow: /cotizacion/
+Disallow: /cotizar/enviado/
 
 Sitemap: https://punto-madera.com/sitemap.xml

@@ -57,7 +57,7 @@ class QuoteRequestController extends Controller
             'captcha' => SimpleCaptcha::for(StoreQuoteRequestRequest::CAPTCHA_KEY)->challenge(),
             'whatsapp_number' => QuoteSettings::whatsappNumber(),
             'seo' => [
-                'title' => 'Pide tu cotización de carpintería en Guayaquil | Punto Madera',
+                'title' => 'Cotizar carpintería en Guayaquil | Punto Madera',
                 'description' => 'Cuéntanos qué necesitas: puertas, closets, cocinas, muebles o reparaciones en Guayaquil. Responde unas preguntas y recibe tu cotización por WhatsApp.',
                 'canonical' => "{$siteUrl}/cotizar",
             ],

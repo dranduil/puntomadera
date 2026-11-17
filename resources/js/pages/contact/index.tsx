@@ -1,4 +1,4 @@
-import { Head } from '@inertiajs/react';
+import { Head, Link, usePage } from '@inertiajs/react';
 import {
     ArrowUpRight,
     CheckCircle2,
@@ -8,6 +8,7 @@ import {
 } from 'lucide-react';
 import { PublicFooter } from '@/components/public-footer';
 import { PublicHeader } from '@/components/public-header';
+import type { Seo } from '@/components/seo-head';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -33,6 +34,7 @@ type Landing = {
 
 type Props = {
     landing: Landing;
+    seo: Seo;
 };
 
 const contactPoints = [
@@ -41,7 +43,8 @@ const contactPoints = [
     'Ubicación y tipo de material preferido',
 ];
 
-export default function ContactPage({ landing }: Props) {
+export default function ContactPage({ landing, seo }: Props) {
+    const { site } = usePage().props;
     const areasServed = resolveServiceAreas(landing.areas_served);
     const whatsappNumber = resolveWhatsAppNumber(landing.whatsapp_number);
     const displayWhatsapp = formatWhatsAppNumber(whatsappNumber);
@@ -51,9 +54,8 @@ export default function ContactPage({ landing }: Props) {
     );
     const siteUrl = import.meta.env.VITE_APP_URL || 'https://punto-madera.com';
     const canonicalUrl = `${siteUrl.replace(/\/$/, '')}/contacto`;
-    const seoTitle = 'Cotizar carpintería en Guayaquil | Punto Madera';
-    const seoDescription =
-        'Cotiza muebles, closets, puertas y reparaciones en Guayaquil, Urdesa, Vía a la Costa, Samborondón y Daule. Escríbenos por WhatsApp.';
+    const seoTitle = seo.title;
+    const seoDescription = seo.description;
 
     return (
         <>
@@ -123,10 +125,7 @@ export default function ContactPage({ landing }: Props) {
             </Head>
 
             <div className="min-h-screen bg-background text-foreground">
-                <PublicHeader
-                    landing={{ whatsapp_number: landing.whatsapp_number }}
-                    whatsappHref={whatsappHref}
-                />
+                <PublicHeader whatsappHref={whatsappHref} />
 
                 <main>
                     <section className="border-b border-border/60 bg-card">
@@ -160,9 +159,11 @@ export default function ContactPage({ landing }: Props) {
                                             <ArrowUpRight data-icon="inline-end" />
                                         </a>
                                     </Button>
-                                    <span className="text-sm text-muted-foreground">
-                                        Respuesta directa desde Guayaquil
-                                    </span>
+                                    <Button asChild size="lg" variant="outline">
+                                        <Link href="/cotizar">
+                                            Pedir cotización
+                                        </Link>
+                                    </Button>
                                 </div>
                             </div>
 
@@ -194,18 +195,11 @@ export default function ContactPage({ landing }: Props) {
                         <div className="mx-auto grid max-w-7xl gap-8 px-4 sm:px-6 lg:grid-cols-[0.8fr_1.2fr] lg:px-8">
                             <Card className="h-fit rounded-2xl border-border/70 bg-card shadow-none">
                                 <CardHeader>
-                                    <Badge
-                                        variant="secondary"
-                                        className="w-fit"
-                                    >
-                                        Contacto directo
-                                    </Badge>
-                                    <CardTitle className="mt-3 text-2xl font-medium">
-                                        Tu cotización empieza aquí
+                                    <CardTitle className="text-2xl font-medium">
+                                        Datos de contacto
                                     </CardTitle>
                                     <CardDescription className="leading-6">
-                                        Mándanos lo que tengas. Si faltan
-                                        medidas, lo resolvemos juntos.
+                                        Respuesta directa desde Guayaquil.
                                     </CardDescription>
                                 </CardHeader>
                                 <Separator />
@@ -221,6 +215,22 @@ export default function ContactPage({ landing }: Props) {
                                             </div>
                                         </div>
                                     </div>
+                                    {site.contactPhone && (
+                                        <div className="flex items-start gap-3">
+                                            <Phone className="mt-0.5 size-4 text-primary" />
+                                            <div>
+                                                <div className="text-sm font-medium">
+                                                    Teléfono
+                                                </div>
+                                                <a
+                                                    href={`tel:${site.contactPhone.replace(/[^\d+]/g, '')}`}
+                                                    className="mt-1 block text-sm text-muted-foreground hover:text-primary"
+                                                >
+                                                    {site.contactPhone}
+                                                </a>
+                                            </div>
+                                        </div>
+                                    )}
                                     <div className="flex items-start gap-3">
                                         <MapPin className="mt-0.5 size-4 text-primary" />
                                         <div>

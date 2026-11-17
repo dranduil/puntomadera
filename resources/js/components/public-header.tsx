@@ -1,4 +1,4 @@
-import { Link } from '@inertiajs/react';
+import { Link, usePage } from '@inertiajs/react';
 import { ArrowUpRight, Menu } from 'lucide-react';
 import AppLogoIcon from '@/components/app-logo-icon';
 import { Button } from '@/components/ui/button';
@@ -9,46 +9,24 @@ import {
     SheetTitle,
     SheetTrigger,
 } from '@/components/ui/sheet';
-import { buildWhatsAppHref, resolveWhatsAppNumber } from '@/lib/whatsapp';
-
-type Landing = {
-    whatsapp_number: string | null;
-};
+import { buildWhatsAppHref } from '@/lib/whatsapp';
 
 type Props = {
-    landing?: Landing;
-    isHome?: boolean;
     whatsappHref?: string;
 };
 
-const navItems = [
-    { label: 'Inicio', href: '/' },
-    { label: 'Servicios', href: '/servicios' },
-    { label: 'Trabajos', href: '/trabajos' },
-    { label: 'Opiniones', href: '/resenas' },
-    { label: 'Contacto', href: '/contacto' },
-];
-
-const moreItems = [
-    { label: 'Casa nueva', href: '/casa-nueva-guayaquil' },
-    { label: 'Empresas y Airbnb', href: '/empresas' },
-    { label: 'Instalación de puertas', href: '/instalacion-puertas-guayaquil' },
-    { label: 'Reparación de puertas', href: '/reparacion-puertas-guayaquil' },
-    { label: 'Carpintería a medida', href: '/carpinteria-a-medida-guayaquil' },
-    {
-        label: 'Puertas, chapas y accesorios',
-        href: '/puertas-madera-chapas-guayaquil',
-    },
-];
-
-export function PublicHeader({ landing, whatsappHref }: Props) {
+/**
+ * Same header as resources/views/components/public-header.blade.php. The menu
+ * comes from App\Support\SiteLinks through the shared `site` prop.
+ */
+export function PublicHeader({ whatsappHref }: Props) {
+    const { site } = usePage().props;
     const appName = import.meta.env.VITE_APP_NAME || 'punto madera';
-    const whatsappNumber = resolveWhatsAppNumber(landing?.whatsapp_number);
     const defaultWhatsappHref =
         whatsappHref ??
         buildWhatsAppHref(
-            whatsappNumber,
-            'Hola, quiero cotizar con punto-madera.',
+            site.whatsappNumber,
+            'Hola, quiero cotizar con Punto Madera.',
         );
 
     return (
@@ -77,7 +55,7 @@ export function PublicHeader({ landing, whatsappHref }: Props) {
                     aria-label="Navegación principal"
                     className="hidden items-center gap-7 text-sm font-medium lg:flex"
                 >
-                    {navItems.map((item) => (
+                    {site.header.map((item) => (
                         <Link
                             key={item.href}
                             href={item.href}
@@ -122,9 +100,9 @@ export function PublicHeader({ landing, whatsappHref }: Props) {
                                 </SheetHeader>
                                 <nav
                                     aria-label="Navegación móvil"
-                                    className="mt-8 grid gap-1"
+                                    className="mt-4 grid gap-1 px-4"
                                 >
-                                    {navItems.map((item) => (
+                                    {site.header.map((item) => (
                                         <Button
                                             key={item.href}
                                             asChild
@@ -136,23 +114,6 @@ export function PublicHeader({ landing, whatsappHref }: Props) {
                                             </Link>
                                         </Button>
                                     ))}
-                                    <div className="my-3 border-t border-border/60 pt-3">
-                                        <div className="px-4 pb-2 text-xs font-medium tracking-[0.16em] text-muted-foreground uppercase">
-                                            Más páginas
-                                        </div>
-                                        {moreItems.map((item) => (
-                                            <Button
-                                                key={item.href}
-                                                asChild
-                                                variant="ghost"
-                                                className="justify-start text-sm text-muted-foreground"
-                                            >
-                                                <a href={item.href}>
-                                                    {item.label}
-                                                </a>
-                                            </Button>
-                                        ))}
-                                    </div>
                                     <Button asChild className="mt-4">
                                         <Link href="/cotizar">
                                             Pedir cotización

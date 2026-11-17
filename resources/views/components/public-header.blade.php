@@ -1,20 +1,6 @@
 @php
     $appName = str_replace('-', ' ', config('app.name', 'punto madera'));
-    $navItems = [
-        ['label' => 'Inicio', 'href' => '/'],
-        ['label' => 'Servicios', 'href' => '/servicios'],
-        ['label' => 'Trabajos', 'href' => '/trabajos'],
-        ['label' => 'Opiniones', 'href' => '/resenas'],
-        ['label' => 'Contacto', 'href' => '/contacto'],
-    ];
-    $moreItems = [
-        ['label' => 'Casa nueva', 'href' => '/casa-nueva-guayaquil'],
-        ['label' => 'Empresas y Airbnb', 'href' => '/empresas'],
-        ['label' => 'Instalación de puertas', 'href' => '/instalacion-puertas-guayaquil'],
-        ['label' => 'Reparación de puertas', 'href' => '/reparacion-puertas-guayaquil'],
-        ['label' => 'Carpintería a medida', 'href' => '/carpinteria-a-medida-guayaquil'],
-        ['label' => 'Puertas, chapas y accesorios', 'href' => '/puertas-madera-chapas-guayaquil'],
-    ];
+    $navItems = \App\Support\SiteLinks::header();
 @endphp
 
 <header class="sticky top-0 z-50 border-b border-border/60 bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/85">
@@ -47,13 +33,7 @@
                         @foreach ($navItems as $item)
                             <a href="{{ $item['href'] }}" class="rounded-md px-3 py-2.5 text-muted-foreground transition-colors hover:bg-muted hover:text-primary">{{ $item['label'] }}</a>
                         @endforeach
-                        <div class="my-3 border-t border-border/60 pt-3">
-                            <div class="px-3 pb-2 text-xs font-medium tracking-[0.16em] text-muted-foreground uppercase">Más páginas</div>
-                            @foreach ($moreItems as $item)
-                                <a href="{{ $item['href'] }}" class="block rounded-md px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-primary">{{ $item['label'] }}</a>
-                            @endforeach
-                        </div>
-                        <a href="/cotizar" class="inline-flex h-11 items-center justify-center gap-2 rounded-md bg-primary px-5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90">Pedir cotización</a>
+                        <a href="/cotizar" class="mt-3 inline-flex h-11 items-center justify-center gap-2 rounded-md bg-primary px-5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90">Pedir cotización</a>
                         <a href="{{ $whatsappHref }}" target="_blank" rel="noreferrer" class="mt-2 inline-flex h-11 items-center justify-center gap-2 rounded-md border border-input px-5 text-sm font-medium text-primary transition-colors hover:bg-muted">Escribir por WhatsApp <span aria-hidden="true">↗</span></a>
                     </nav>
                 </div>

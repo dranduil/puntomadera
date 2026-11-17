@@ -15,10 +15,10 @@ class LocalSeoPageController extends Controller
 {
     public function show(string $slug): View
     {
-        abort_unless(array_key_exists($slug, $this->pages()), 404);
+        abort_unless(array_key_exists($slug, self::pages()), 404);
 
         $landing = HomeLanding::query()->first();
-        $page = $this->pages()[$slug];
+        $page = self::pages()[$slug];
         $landingData = $landing?->toArray() ?? [
             'whatsapp_number' => null,
             'contact_phone' => null,
@@ -104,7 +104,7 @@ class LocalSeoPageController extends Controller
         // path => last modification. Only pages backed by real timestamps get a
         // <lastmod>; guessed dates would teach Google to ignore the field.
         $urls = collect(['/', '/cotizar', '/casa-nueva-guayaquil', '/empresas', '/servicios', '/trabajos', '/resenas', '/contacto'])
-            ->merge(collect(array_keys($this->pages()))->map(fn (string $slug) => "/{$slug}"))
+            ->merge(collect(array_keys(self::pages()))->map(fn (string $slug) => "/{$slug}"))
             ->mapWithKeys(fn (string $path) => [$path => null]);
 
         $services = Service::query()
@@ -171,15 +171,18 @@ class LocalSeoPageController extends Controller
     }
 
     /**
+     * Every server-rendered service and guide page, keyed by slug. Also read by
+     * the sitemap and llms.txt. Guides carry `'guide' => true`.
+     *
      * @return array<string, array<string, mixed>>
      */
-    private function pages(): array
+    public static function pages(): array
     {
         return [
             'instalacion-puertas-guayaquil' => [
                 'slug' => 'instalacion-puertas-guayaquil',
                 'quoteService' => 'instalacion-reparacion-puertas-madera-guayaquil',
-                'title' => 'Instalación de puertas en Guayaquil | Alineadas y listas para usar',
+                'title' => 'Instalación de puertas en Guayaquil | Punto Madera',
                 'metaDescription' => 'Instalamos puertas en Guayaquil con medición, nivelación, marcos, bisagras y cerraduras. Entrega limpia, cierre correcto y cotización por WhatsApp.',
                 'serviceName' => 'Instalación de puertas en Guayaquil',
                 'h1' => 'Instalación de puertas para obra nueva en Guayaquil',
@@ -232,7 +235,7 @@ class LocalSeoPageController extends Controller
             'reparacion-puertas-guayaquil' => [
                 'slug' => 'reparacion-puertas-guayaquil',
                 'quoteService' => 'instalacion-reparacion-puertas-madera-guayaquil',
-                'title' => 'Reparación de puertas en Guayaquil | Ajuste, bisagras y marcos',
+                'title' => 'Reparación de puertas en Guayaquil | Punto Madera',
                 'metaDescription' => 'Reparación de puertas en Guayaquil: puertas caídas, bisagras flojas, cerraduras, marcos, roces, humedad y ajustes de madera. Cotiza por WhatsApp.',
                 'serviceName' => 'Reparación de puertas en Guayaquil',
                 'h1' => 'Reparación de puertas en Guayaquil con ajuste prolijo',
@@ -285,7 +288,7 @@ class LocalSeoPageController extends Controller
             'carpinteria-a-medida-guayaquil' => [
                 'slug' => 'carpinteria-a-medida-guayaquil',
                 'quoteService' => 'muebles-a-medida-guayaquil',
-                'title' => 'Diseño de muebles a medida en Guayaquil | Carpintería personalizada',
+                'title' => 'Diseño de muebles a medida en Guayaquil | Punto Madera',
                 'metaDescription' => 'Diseño y fabricación de muebles a medida en Guayaquil: closets, repisas, paneles, puertas y soluciones para interiores y exteriores. Cotiza por WhatsApp.',
                 'serviceName' => 'Carpintería a medida en Guayaquil',
                 'h1' => 'Diseño de muebles a medida para interiores y exteriores en Guayaquil',
@@ -340,8 +343,8 @@ class LocalSeoPageController extends Controller
                 'slug' => 'puertas-madera-chapas-guayaquil',
                 'quoteService' => 'instalacion-reparacion-puertas-madera-guayaquil',
                 'productsService' => 'instalacion-reparacion-puertas-madera-guayaquil',
-                'title' => 'Puertas de madera, chapas y accesorios en Guayaquil | Punto Madera',
-                'metaDescription' => 'Cotiza puertas de madera, acabados laqueados, chapas, manijas, bisagras y accesorios en Guayaquil. Modelos, compatibilidad y disponibilidad se confirman por WhatsApp.',
+                'title' => 'Puertas de madera y chapas en Guayaquil | Punto Madera',
+                'metaDescription' => 'Puertas de madera, acabados laqueados, chapas, manijas y bisagras en Guayaquil. Confirmamos modelo, medida y disponibilidad antes de instalar.',
                 'serviceName' => 'Puertas, chapas y accesorios en Guayaquil',
                 'h1' => 'Puertas, acabados laqueados y chapas en Guayaquil',
                 'eyebrow' => 'Puertas · Acabados · Herrajes',
@@ -431,12 +434,13 @@ class LocalSeoPageController extends Controller
             ],
             'muebles-resistentes-humedad-guayaquil' => [
                 'slug' => 'muebles-resistentes-humedad-guayaquil',
+                'guide' => true,
                 'quoteService' => 'closets-anaqueles-cocina-guayaquil',
                 'productSlugs' => ['material-closet-batiente', 'material-cocina-baja', 'material-mueble-bano'],
                 'productsEyebrow' => 'Muebles para zonas húmedas',
                 'productsTitle' => 'Cotiza tu mueble con material resistente a la humedad',
                 'productsIntro' => 'Las cocinas y los muebles de baño ya van en melamina RH. Para closets, puedes pedirla como mejora en el formulario.',
-                'title' => 'Muebles resistentes a la humedad en Guayaquil | Melamina RH | Punto Madera',
+                'title' => 'Muebles resistentes a la humedad en Guayaquil | Punto Madera',
                 'metaDescription' => 'Closets, cocinas y muebles de baño que no se hinchan con la humedad de Guayaquil: melamina RH, cantos sellados y ventilación. Cotiza sin compromiso.',
                 'serviceName' => 'Muebles resistentes a la humedad en Guayaquil',
                 'h1' => 'Muebles que aguantan la humedad de Guayaquil',
@@ -501,12 +505,13 @@ class LocalSeoPageController extends Controller
             ],
             'comejen-puertas-muebles-guayaquil' => [
                 'slug' => 'comejen-puertas-muebles-guayaquil',
+                'guide' => true,
                 'quoteService' => 'reparacion-muebles-madera-guayaquil',
                 'productSlugs' => ['rapido-cambio-piezas-comejen', 'producto-puerta-wpc', 'rapido-puerta-interior'],
                 'productsEyebrow' => 'Reparación y cambio',
                 'productsTitle' => 'Cambiamos lo que el comején dañó',
                 'productsIntro' => 'Primero revisamos el daño con fotos. El precio depende de cuántas piezas hay que cambiar.',
-                'title' => 'Comején en puertas y muebles en Guayaquil | Reparación y cambio | Punto Madera',
+                'title' => 'Daños por comején en puertas y muebles | Punto Madera',
                 'metaDescription' => '¿Polvillo o huecos en tu puerta, marco o closet? En Guayaquil cambiamos las piezas dañadas por comején y te recomendamos materiales que resisten mejor.',
                 'serviceName' => 'Reparación de daños por comején en Guayaquil',
                 'h1' => 'Puertas, marcos y muebles dañados por comején',
@@ -571,12 +576,13 @@ class LocalSeoPageController extends Controller
             ],
             'puertas-seguridad-guayaquil' => [
                 'slug' => 'puertas-seguridad-guayaquil',
+                'guide' => true,
                 'quoteService' => 'instalacion-reparacion-puertas-madera-guayaquil',
                 'productSlugs' => ['rapido-refuerzo-puerta', 'producto-cerradura-digital', 'producto-chapa-sobreponer', 'material-puerta-laurel'],
                 'productsEyebrow' => 'Para tu puerta principal',
                 'productsTitle' => 'Refuerza tu puerta o cambia la cerradura',
                 'productsIntro' => 'El precio depende del tipo de puerta, del marco y de la cerradura que elijas.',
-                'title' => 'Puertas y chapas de seguridad en Guayaquil | Refuerzo e instalación | Punto Madera',
+                'title' => 'Puertas de seguridad en Guayaquil | Punto Madera',
                 'metaDescription' => 'Refuerza tu puerta principal en Guayaquil: marco y bisagras firmes, cerrojo o cerradura digital y puertas macizas de madera. Cotiza por WhatsApp.',
                 'serviceName' => 'Puertas y chapas de seguridad en Guayaquil',
                 'h1' => 'Una puerta principal más segura para tu casa',

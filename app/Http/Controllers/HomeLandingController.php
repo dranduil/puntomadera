@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\HomeLanding;
 use App\Support\BusinessSchema;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -25,7 +26,11 @@ class HomeLandingController extends Controller
         ];
         $siteUrl = rtrim((string) config('app.url', 'http://localhost'), '/') ?: 'http://localhost';
         $seoTitle = trim((string) ($landingData['seo_title'] ?? ''))
-            ?: 'Carpintero en Guayaquil | Muebles, closets y puertas a medida';
+            ?: 'Carpintero en Guayaquil: closets, cocinas y puertas';
+        // Same brand suffix as every other page, also when the admin sets the title.
+        $seoTitle = Str::contains($seoTitle, BusinessSchema::NAME, ignoreCase: true)
+            ? $seoTitle
+            : $seoTitle.' | '.BusinessSchema::NAME;
         $seoDescription = trim((string) ($landingData['seo_description'] ?? ''))
             ?: 'Carpintero en Guayaquil para muebles a medida, closets, cocinas y puertas. Cotiza por WhatsApp instalación, reparación y acabados para tu hogar o negocio.';
 
