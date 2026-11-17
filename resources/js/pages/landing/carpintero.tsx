@@ -4,11 +4,10 @@ import {
     ChevronRight,
     MapPin,
     MessageCircle,
-    Phone,
     ShieldCheck,
     Timer,
 } from 'lucide-react';
-import AppLogoIcon from '@/components/app-logo-icon';
+import { PublicFooter } from '@/components/public-footer';
 import { PublicHeader } from '@/components/public-header';
 import { Button } from '@/components/ui/button';
 import {
@@ -146,7 +145,6 @@ export default function CarpinteroLanding({ landing, business }: Props) {
     const heroSubtitle =
         landing.hero_subtitle ??
         'Diseñamos, fabricamos e instalamos carpintería para tu hogar o negocio. Cotización rápida por WhatsApp y trabajo prolijo.';
-    const currentYear = new Date().getFullYear();
     const businessSchema = {
         ...business,
         description: seoDescription,
@@ -978,153 +976,7 @@ export default function CarpinteroLanding({ landing, business }: Props) {
                     </a>
                 </Button>
 
-                <footer className="border-t border-border/60 bg-card py-12">
-                    <div className="mx-auto max-w-6xl px-4">
-                        <div className="grid gap-10 md:grid-cols-12">
-                            <div className="md:col-span-5">
-                                <div className="flex items-center gap-3 text-primary">
-                                    <AppLogoIcon
-                                        className="size-11 shrink-0 text-primary"
-                                        aria-hidden="true"
-                                    />
-                                    <span>
-                                        <span className="block text-sm font-light tracking-[0.38em] lowercase">
-                                            {appName.replace('-', ' ')}
-                                        </span>
-                                        <span className="mt-1 block text-[0.58rem] tracking-[0.32em] text-muted-foreground uppercase">
-                                            Guayaquil, Ecuador
-                                        </span>
-                                    </span>
-                                </div>
-                                <p className="mt-4 max-w-md text-sm text-muted-foreground">
-                                    Muebles a medida, closets empotrados,
-                                    cocinas, puertas y reparaciones. Trabajo
-                                    limpio, tiempos realistas y cotización
-                                    clara.
-                                </p>
-
-                                <div className="mt-6 flex flex-wrap gap-2">
-                                    <Button asChild>
-                                        <a
-                                            href={whatsappHref}
-                                            target="_blank"
-                                            rel="noreferrer"
-                                        >
-                                            WhatsApp
-                                            <ChevronRight data-icon="inline-end" />
-                                        </a>
-                                    </Button>
-                                    <Button asChild variant="outline">
-                                        <a href="/contacto">
-                                            Contacto
-                                            <ChevronRight data-icon="inline-end" />
-                                        </a>
-                                    </Button>
-                                </div>
-                            </div>
-
-                            <div className="md:col-span-3">
-                                <div className="text-sm font-semibold">
-                                    Navegación
-                                </div>
-                                <div className="mt-4 grid gap-2 text-sm">
-                                    <a
-                                        href="#servicios"
-                                        className="text-muted-foreground hover:text-foreground"
-                                    >
-                                        Servicios
-                                    </a>
-                                    <a
-                                        href="#trabajos"
-                                        className="text-muted-foreground hover:text-foreground"
-                                    >
-                                        Trabajos
-                                    </a>
-                                    <a
-                                        href="#booking"
-                                        className="text-muted-foreground hover:text-foreground"
-                                    >
-                                        Agendar
-                                    </a>
-                                    <a
-                                        href="#faq"
-                                        className="text-muted-foreground hover:text-foreground"
-                                    >
-                                        FAQ
-                                    </a>
-                                </div>
-                            </div>
-
-                            <div className="md:col-span-2">
-                                <div className="text-sm font-semibold">
-                                    Páginas
-                                </div>
-                                <div className="mt-4 grid gap-2 text-sm">
-                                    <a
-                                        href="/servicios"
-                                        className="text-muted-foreground hover:text-foreground"
-                                    >
-                                        Servicios
-                                    </a>
-                                    <a
-                                        href="/casa-nueva-guayaquil"
-                                        className="text-muted-foreground hover:text-foreground"
-                                    >
-                                        Casa nueva
-                                    </a>
-                                    <a
-                                        href="/empresas"
-                                        className="text-muted-foreground hover:text-foreground"
-                                    >
-                                        Empresas y Airbnb
-                                    </a>
-                                    <a
-                                        href="/trabajos"
-                                        className="text-muted-foreground hover:text-foreground"
-                                    >
-                                        Trabajos
-                                    </a>
-                                    <a
-                                        href="/contacto"
-                                        className="text-muted-foreground hover:text-foreground"
-                                    >
-                                        Contacto
-                                    </a>
-                                </div>
-                            </div>
-
-                            <div className="md:col-span-2">
-                                <div className="text-sm font-semibold">
-                                    Contacto
-                                </div>
-                                <div className="mt-4 grid gap-3 text-sm text-muted-foreground">
-                                    {landing.contact_phone && (
-                                        <div className="flex items-center gap-2">
-                                            <Phone className="size-4" />
-                                            <span>{landing.contact_phone}</span>
-                                        </div>
-                                    )}
-                                    <div className="flex items-center gap-2">
-                                        <MapPin className="size-4" />
-                                        <span>Guayaquil, Ecuador</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <Separator className="mt-10" />
-                        <div className="flex flex-col gap-2 pt-6 text-xs text-muted-foreground md:flex-row md:items-center md:justify-between">
-                            <div>
-                                © {currentYear} {appName}. Todos los derechos
-                                reservados.
-                            </div>
-                            <div>
-                                Ecuador · Muebles a medida · Closets · Puertas ·
-                                Reparaciones
-                            </div>
-                        </div>
-                    </div>
-                </footer>
+                <PublicFooter />
             </div>
         </>
     );

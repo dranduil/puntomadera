@@ -3,6 +3,7 @@
 use App\Http\Controllers\ServiceController;
 use App\Models\HomeLanding;
 use App\Models\Service;
+use App\Support\SiteLinks;
 use Inertia\Ssr\Gateway;
 use Inertia\Ssr\Response as SsrResponse;
 use Inertia\Testing\AssertableInertia as Assert;
@@ -132,16 +133,24 @@ test('server rendered seo pages share the public shell and footer', function () 
         'seo.doors.repair',
         'seo.doors.products',
         'seo.custom.carpentry',
+        'seo.guides.humidity',
+        'seo.guides.termites',
+        'seo.guides.security',
     ] as $routeName) {
         $response = $this->get(route($routeName));
 
         $response->assertSuccessful();
 
-        expect($response->getContent())
+        $html = $response->getContent();
+
+        expect($html)
             ->toContain('Navegación principal')
-            ->toContain('Muebles a medida, closets empotrados, cocinas, puertas y reparaciones.')
-            ->toContain('href="/puertas-madera-chapas-guayaquil"')
-            ->toContain('Todos los derechos reservados.');
+            ->toContain('aria-label="Páginas del sitio"')
+            ->toContain('© '.now()->year);
+
+        foreach (collect(SiteLinks::footer())->flatMap(fn (array $group) => $group['links']) as $link) {
+            expect($html)->toContain('href="'.$link['href'].'"');
+        }
     }
 });
 

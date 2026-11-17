@@ -2,12 +2,12 @@ import { Link } from '@inertiajs/react';
 import { Building2, Check, ChevronRight, House, Store } from 'lucide-react';
 import {
     FaqList,
-    LandingFooter,
     QuoteCta,
     SectionHeading,
     Steps,
 } from '@/components/landing-sections';
 import type { Faq } from '@/components/landing-sections';
+import { PublicFooter } from '@/components/public-footer';
 import { PublicHeader } from '@/components/public-header';
 import { SeoHead } from '@/components/seo-head';
 import type { Seo } from '@/components/seo-head';
@@ -247,7 +247,7 @@ export default function Empresas({ faqs, whatsapp_number, seo }: Props) {
                     />
                 </main>
 
-                <LandingFooter />
+                <PublicFooter />
             </div>
         </>
     );

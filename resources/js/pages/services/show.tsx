@@ -7,6 +7,7 @@ import {
     MessageCircle,
 } from 'lucide-react';
 import { useMemo, useState } from 'react';
+import { PublicFooter } from '@/components/public-footer';
 import { PublicHeader } from '@/components/public-header';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -424,6 +425,7 @@ export default function ServiceShow({ landing, service, seo }: Props) {
                         </div>
                     </section>
                 </main>
+                <PublicFooter />
             </div>
         </>
     );

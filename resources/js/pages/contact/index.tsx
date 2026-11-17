@@ -6,6 +6,7 @@ import {
     MessageCircle,
     Phone,
 } from 'lucide-react';
+import { PublicFooter } from '@/components/public-footer';
 import { PublicHeader } from '@/components/public-header';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -294,6 +295,7 @@ export default function ContactPage({ landing }: Props) {
                         </div>
                     </section>
                 </main>
+                <PublicFooter />
             </div>
         </>
     );

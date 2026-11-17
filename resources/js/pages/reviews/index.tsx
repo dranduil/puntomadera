@@ -1,6 +1,7 @@
 import { Form, Head } from '@inertiajs/react';
 import { Camera, CheckCircle2, Star } from 'lucide-react';
 import InputError from '@/components/input-error';
+import { PublicFooter } from '@/components/public-footer';
 import { PublicHeader } from '@/components/public-header';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -476,6 +477,7 @@ export default function ReviewsPage({
                         </div>
                     </section>
                 </main>
+                <PublicFooter />
             </div>
         </>
     );

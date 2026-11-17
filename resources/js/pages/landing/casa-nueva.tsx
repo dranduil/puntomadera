@@ -2,12 +2,12 @@ import { Link } from '@inertiajs/react';
 import { Check, ChevronRight, MapPin, Ruler } from 'lucide-react';
 import {
     FaqList,
-    LandingFooter,
     QuoteCta,
     SectionHeading,
     Steps,
 } from '@/components/landing-sections';
 import type { Faq } from '@/components/landing-sections';
+import { PublicFooter } from '@/components/public-footer';
 import { PublicHeader } from '@/components/public-header';
 import { SeoHead } from '@/components/seo-head';
 import type { Seo } from '@/components/seo-head';
@@ -235,7 +235,7 @@ export default function CasaNueva({
                     />
                 </main>
 
-                <LandingFooter />
+                <PublicFooter />
             </div>
         </>
     );

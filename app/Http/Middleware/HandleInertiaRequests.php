@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Support\SiteLinks;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -45,6 +46,7 @@ class HandleInertiaRequests extends Middleware
                 'status' => fn () => $request->session()->get('status'),
             ],
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
+            'site' => fn () => SiteLinks::shared(),
         ];
     }
 }

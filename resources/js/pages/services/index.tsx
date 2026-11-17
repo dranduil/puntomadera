@@ -1,5 +1,6 @@
 import { Head, Link } from '@inertiajs/react';
 import { ArrowUpRight, CheckCircle2, MapPin, Ruler } from 'lucide-react';
+import { PublicFooter } from '@/components/public-footer';
 import { PublicHeader } from '@/components/public-header';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -387,6 +388,7 @@ export default function ServicesIndex({ landing, services }: Props) {
                         </div>
                     </section>
                 </main>
+                <PublicFooter />
             </div>
         </>
     );

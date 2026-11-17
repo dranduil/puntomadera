@@ -25,14 +25,49 @@ class CatalogSeeder extends Seeder
 
     private const DOMICILIO = 'carpintero-a-domicilio-guayaquil';
 
+    /** Items added on 17/11/2026 for the humidity, comején and security guides. */
+    public const GUIDE_ITEMS = [
+        'material-extra-melamina-rh',
+        'rapido-cambio-piezas-comejen',
+        'producto-puerta-wpc',
+        'rapido-refuerzo-puerta',
+    ];
+
     public function run(): void
     {
         $this->seedZones();
+        $this->seedItems();
+        $this->seedSuggestions();
+    }
 
+    /**
+     * Add items created after the first deploy to a live catalog, with only
+     * the suggestions that involve them, so links removed in the admin stay
+     * removed.
+     *
+     * @param  list<string>  $slugs
+     */
+    public function addItems(array $slugs): void
+    {
+        $this->seedItems($slugs);
+        $this->seedSuggestions($slugs);
+    }
+
+    /**
+     * @param  list<string>|null  $only
+     */
+    private function seedItems(?array $only = null): void
+    {
         $serviceIds = Service::query()->pluck('id', 'slug');
         $sort = 0;
 
         foreach ($this->items() as $item) {
+            $sort += 10;
+
+            if ($only !== null && ! in_array($item['slug'], $only, true)) {
+                continue;
+            }
+
             $serviceSlug = $item['service'] ?? null;
             unset($item['service']);
 
@@ -47,12 +82,10 @@ class CatalogSeeder extends Seeder
                     'is_active' => true,
                     ...$item,
                     'service_id' => $serviceSlug ? $serviceIds->get($serviceSlug) : null,
-                    'sort_order' => $sort += 10,
+                    'sort_order' => $sort,
                 ],
             );
         }
-
-        $this->seedSuggestions();
     }
 
     private function seedZones(): void
@@ -101,6 +134,9 @@ class CatalogSeeder extends Seeder
             ['slug' => 'producto-chapa-sobreponer', 'service' => self::PUERTAS, 'kind' => 'producto', 'name' => 'Cerradura de sobreponer o cerrojo', 'includes_material' => true, 'image_path' => $locks],
             ['slug' => 'producto-cerradura-digital', 'service' => self::PUERTAS, 'kind' => 'producto', 'name' => 'Cerradura digital', 'description' => 'Con clave, tarjeta o huella según el modelo.', 'includes_material' => true, 'image_path' => $locks],
             ['slug' => 'producto-bisagras-puerta', 'service' => self::PUERTAS, 'kind' => 'producto', 'name' => 'Juego de 3 bisagras para puerta', 'includes_material' => true, 'image_path' => $locks],
+            // Guía de seguridad y comején. La puerta WPC queda inactiva hasta confirmar proveedor.
+            ['slug' => 'rapido-refuerzo-puerta', 'service' => self::PUERTAS, 'name' => 'Refuerzo de marco y bisagras de puerta principal', 'description' => 'Tornillos largos hasta la pared y bisagras más firmes.', 'image_path' => $doorIcon],
+            ['slug' => 'producto-puerta-wpc', 'service' => self::PUERTAS, 'kind' => 'producto', 'name' => 'Puerta WPC resistente al comején y la humedad', 'description' => 'Material compuesto de fibra de madera y plástico.', 'includes_material' => true, 'is_active' => false, 'image_path' => 'images/doors-cotizacion/puerta-laqueada-referencia.jpg'],
             // Closets y cocinas
             ['slug' => 'material-closet-batiente', 'service' => self::CLOSETS, 'name' => 'Closet de melamina con puertas batientes', 'description' => 'Melamina 18 mm, de piso a 2,40 m.', 'unit' => 'metro_lineal', 'price_min_cents' => 22000, 'price_max_cents' => 28000, 'includes_material' => true, 'image_path' => 'images/service-icons/closets-empotrados.png'],
             ['slug' => 'material-closet-corredizo', 'service' => self::CLOSETS, 'name' => 'Closet con puertas corredizas o más cajones', 'unit' => 'metro_lineal', 'price_min_cents' => 26000, 'price_max_cents' => 33000, 'includes_material' => true, 'image_path' => 'images/service-icons/closets-empotrados.png'],
@@ -112,6 +148,7 @@ class CatalogSeeder extends Seeder
             ['slug' => 'producto-rieles-telescopicos', 'service' => self::CLOSETS, 'kind' => 'producto', 'name' => 'Rieles telescópicos para cajón', 'includes_material' => true],
             ['slug' => 'material-extra-cierre-suave', 'service' => self::CLOSETS, 'kind' => 'extra', 'name' => 'Bisagras de cierre suave', 'description' => 'Las puertas cierran despacio y sin golpe. Precio por puerta.', 'price_min_cents' => 800, 'price_max_cents' => 1200, 'includes_material' => true],
             ['slug' => 'material-extra-mdf-lacado', 'service' => self::CLOSETS, 'kind' => 'extra', 'name' => 'Acabado MDF lacado en vez de melamina', 'unit' => 'porcentaje', 'price_min_cents' => 40, 'price_max_cents' => 60, 'includes_material' => true],
+            ['slug' => 'material-extra-melamina-rh', 'service' => self::CLOSETS, 'kind' => 'extra', 'name' => 'Melamina RH resistente a la humedad', 'description' => 'Para closets junto al baño o en paredes húmedas.', 'unit' => 'porcentaje', 'includes_material' => true],
             ['slug' => 'aliado-meson-granito', 'service' => self::CLOSETS, 'kind' => 'aliado', 'name' => 'Mesón de granito instalado', 'description' => 'Lo coordinamos con un aliado de confianza.', 'unit' => 'metro_lineal', 'includes_material' => true],
             ['slug' => 'aliado-meson-cuarzo', 'service' => self::CLOSETS, 'kind' => 'aliado', 'name' => 'Mesón de cuarzo instalado', 'description' => 'Lo coordinamos con un aliado de confianza.', 'unit' => 'metro_lineal', 'includes_material' => true],
             // Muebles a medida
@@ -121,6 +158,7 @@ class CatalogSeeder extends Seeder
             ['slug' => 'aliado-mampara-vidrio', 'service' => null, 'kind' => 'aliado', 'name' => 'Mampara de vidrio para ducha', 'description' => 'La coordinamos con un aliado de confianza.', 'includes_material' => true],
             // Reparación de muebles
             ['slug' => 'rapido-reparacion-mueble', 'service' => self::REPARACION, 'name' => 'Reparación de mueble pequeño', 'description' => 'Silla, velador, cajón o similar.', 'price_min_cents' => 2000, 'price_max_cents' => 3500, 'image_path' => 'images/service-icons/reparacion-muebles.png'],
+            ['slug' => 'rapido-cambio-piezas-comejen', 'service' => self::REPARACION, 'name' => 'Cambio de piezas dañadas por comején', 'description' => 'Marcos, tapamarcos, repisas o tapas. Se cotiza al ver el daño.', 'unit' => 'servicio', 'includes_material' => true, 'image_path' => 'images/service-icons/reparacion-muebles.png'],
             // Cargos internos: solo se usan al armar la cotización
             ['slug' => 'cargo-minimo-visita', 'service' => self::DOMICILIO, 'name' => 'Cargo mínimo por visita (mano de obra)', 'unit' => 'servicio', 'price_min_cents' => 2500, 'is_public' => false],
             ['slug' => 'recargo-urgencia', 'service' => null, 'kind' => 'extra', 'name' => 'Recargo por urgencia (mismo día, domingo o feriado)', 'unit' => 'porcentaje', 'price_min_cents' => 30, 'is_public' => false],
@@ -129,24 +167,30 @@ class CatalogSeeder extends Seeder
         ];
     }
 
-    private function seedSuggestions(): void
+    /**
+     * @param  list<string>|null  $only  limit to links where either side is one of these slugs
+     */
+    private function seedSuggestions(?array $only = null): void
     {
         $suggestions = [
             'rapido-puerta-interior' => [['producto-chapa-pomo', 'Chapa nueva para tu puerta'], ['producto-bisagras-puerta', 'Bisagras nuevas para que no se caiga']],
-            'rapido-puerta-principal' => [['producto-cerradura-digital', 'Más seguridad con cerradura digital'], ['producto-chapa-sobreponer', 'Cerrojo de seguridad']],
+            'rapido-puerta-principal' => [['producto-cerradura-digital', 'Más seguridad con cerradura digital'], ['producto-chapa-sobreponer', 'Cerrojo de seguridad'], ['rapido-refuerzo-puerta', 'Refuerza el marco y las bisagras']],
             'material-puerta-mdf' => [['producto-chapa-pomo', 'La puerta no incluye chapa']],
-            'material-puerta-laurel' => [['producto-cerradura-digital', 'Más seguridad con cerradura digital'], ['producto-chapa-sobreponer', 'Cerrojo de seguridad']],
+            'material-puerta-laurel' => [['producto-cerradura-digital', 'Más seguridad con cerradura digital'], ['producto-chapa-sobreponer', 'Cerrojo de seguridad'], ['rapido-refuerzo-puerta', 'Refuerza el marco y las bisagras']],
+            'rapido-ajuste-puerta' => [['rapido-cambio-piezas-comejen', '¿El marco suena hueco o suelta polvillo? Puede ser comején']],
             'rapido-cerradura-digital' => [['producto-cerradura-digital', '¿No tienes la cerradura? Te la conseguimos']],
-            'rapido-cerradura-sobreponer' => [['producto-chapa-sobreponer', '¿No tienes la cerradura? Te la conseguimos']],
+            'rapido-cerradura-sobreponer' => [['producto-chapa-sobreponer', '¿No tienes la cerradura? Te la conseguimos'], ['rapido-refuerzo-puerta', 'Con un marco firme el cerrojo resiste más']],
             'rapido-cerradura-pomo' => [['producto-chapa-pomo', '¿No tienes la chapa? Te la conseguimos']],
             'rapido-bisagras-puerta' => [['producto-bisagras-puerta', 'Te llevamos las bisagras']],
-            'material-closet-batiente' => [['material-extra-cierre-suave', 'Puertas que cierran suave y sin golpe']],
-            'material-closet-corredizo' => [['material-extra-cierre-suave', 'Cajones y puertas que cierran suave']],
+            'material-closet-batiente' => [['material-extra-cierre-suave', 'Puertas que cierran suave y sin golpe'], ['material-extra-melamina-rh', '¿Closet junto al baño o en una pared húmeda?']],
+            'material-closet-corredizo' => [['material-extra-cierre-suave', 'Cajones y puertas que cierran suave'], ['material-extra-melamina-rh', '¿Closet junto al baño o en una pared húmeda?']],
             'material-cocina-baja' => [['aliado-meson-cuarzo', 'Mesón de cuarzo instalado'], ['aliado-meson-granito', 'Mesón de granito instalado'], ['material-extra-cierre-suave', 'Puertas que cierran suave y sin golpe']],
             'material-cocina-alta' => [['material-extra-cierre-suave', 'Puertas que cierran suave y sin golpe']],
             'rapido-ajuste-closet-cocina' => [['rapido-bisagras-mueble', 'Cambia las bisagras gastadas'], ['rapido-rieles-cajon', 'Cajones que corren bien otra vez']],
             'rapido-rieles-cajon' => [['producto-rieles-telescopicos', 'Te llevamos los rieles']],
             'material-mueble-bano' => [['aliado-mampara-vidrio', 'Mampara de vidrio para la ducha']],
+            'rapido-reparacion-mueble' => [['rapido-cambio-piezas-comejen', '¿Ves polvillo o huecos? Puede ser comején']],
+            'rapido-cambio-piezas-comejen' => [['producto-puerta-wpc', 'Una puerta que el comején no ataca']],
         ];
 
         $ids = CatalogItem::query()->pluck('id', 'slug');
@@ -159,6 +203,10 @@ class CatalogSeeder extends Seeder
             }
 
             foreach ($targets as $index => [$targetSlug, $reason]) {
+                if ($only !== null && ! in_array($slug, $only, true) && ! in_array($targetSlug, $only, true)) {
+                    continue;
+                }
+
                 $targetId = $ids->get($targetSlug);
 
                 if ($targetId && ! $item->suggestions()->whereKey($targetId)->exists()) {

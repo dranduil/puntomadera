@@ -1,7 +1,6 @@
 import { Link } from '@inertiajs/react';
 import { ChevronDown, ChevronRight, MessageCircle } from 'lucide-react';
 import type { ReactNode } from 'react';
-import AppLogoIcon from '@/components/app-logo-icon';
 import { Button } from '@/components/ui/button';
 
 export type Faq = { q: string; a: string };
@@ -115,51 +114,5 @@ export function QuoteCta({
                 </div>
             </div>
         </section>
-    );
-}
-
-const footerLinks = [
-    { label: 'Pedir cotización', href: '/cotizar' },
-    { label: 'Casa nueva', href: '/casa-nueva-guayaquil' },
-    { label: 'Empresas y Airbnb', href: '/empresas' },
-    { label: 'Servicios', href: '/servicios' },
-    { label: 'Trabajos', href: '/trabajos' },
-    { label: 'Contacto', href: '/contacto' },
-];
-
-export function LandingFooter() {
-    return (
-        <footer className="border-t border-border/60 bg-card py-10">
-            <div className="mx-auto flex max-w-6xl flex-col gap-6 px-4 sm:px-6 md:flex-row md:items-center md:justify-between lg:px-8">
-                <div className="flex items-center gap-3 text-primary">
-                    <AppLogoIcon
-                        className="size-10 shrink-0"
-                        aria-hidden="true"
-                    />
-                    <span>
-                        <span className="block text-sm font-light tracking-[0.38em] lowercase">
-                            punto madera
-                        </span>
-                        <span className="mt-1 block text-[0.58rem] tracking-[0.32em] text-muted-foreground uppercase">
-                            Guayaquil, Ecuador
-                        </span>
-                    </span>
-                </div>
-                <nav
-                    aria-label="Páginas"
-                    className="flex flex-wrap gap-x-5 gap-y-2 text-sm"
-                >
-                    {footerLinks.map((link) => (
-                        <Link
-                            key={link.href}
-                            href={link.href}
-                            className="text-muted-foreground transition-colors hover:text-foreground"
-                        >
-                            {link.label}
-                        </Link>
-                    ))}
-                </nav>
-            </div>
-        </footer>
     );
 }

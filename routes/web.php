@@ -51,6 +51,15 @@ Route::get('/carpinteria-a-medida-guayaquil', [LocalSeoPageController::class, 's
 Route::get('/puertas-madera-chapas-guayaquil', [LocalSeoPageController::class, 'show'])
     ->defaults('slug', 'puertas-madera-chapas-guayaquil')
     ->name('seo.doors.products');
+Route::get('/muebles-resistentes-humedad-guayaquil', [LocalSeoPageController::class, 'show'])
+    ->defaults('slug', 'muebles-resistentes-humedad-guayaquil')
+    ->name('seo.guides.humidity');
+Route::get('/comejen-puertas-muebles-guayaquil', [LocalSeoPageController::class, 'show'])
+    ->defaults('slug', 'comejen-puertas-muebles-guayaquil')
+    ->name('seo.guides.termites');
+Route::get('/puertas-seguridad-guayaquil', [LocalSeoPageController::class, 'show'])
+    ->defaults('slug', 'puertas-seguridad-guayaquil')
+    ->name('seo.guides.security');
 
 Route::get('/casa-nueva-guayaquil', [MoneyPageController::class, 'casaNueva'])->name('money.casa-nueva');
 Route::get('/empresas', [MoneyPageController::class, 'empresas'])->name('money.empresas');

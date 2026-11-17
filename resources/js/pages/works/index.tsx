@@ -1,5 +1,6 @@
 import { Head, Link } from '@inertiajs/react';
 import { ArrowUpRight, MapPin } from 'lucide-react';
+import { PublicFooter } from '@/components/public-footer';
 import { PublicHeader } from '@/components/public-header';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -383,6 +384,7 @@ export default function WorksIndex({ landing, seo, works }: Props) {
                         </div>
                     </section>
                 </main>
+                <PublicFooter />
             </div>
         </>
     );

@@ -20,6 +20,7 @@ class MoneyPageController extends Controller
         $faqs = [
             ['q' => '¿Cuánto tarda un paquete para casa nueva?', 'a' => 'Depende de cuántos closets y metros de cocina sean. Te damos el plazo exacto en la cotización, después de la visita de medidas.'],
             ['q' => '¿Qué material usan para la cocina?', 'a' => 'Melamina RH, resistente a la humedad, para muebles bajos y altos. Si prefieres MDF lacado también lo cotizamos.'],
+            ['q' => '¿Los closets se hinchan con la humedad de Guayaquil?', 'a' => 'Sellamos todos los cantos y separamos el mueble del piso. Si el closet va junto al baño o en una pared húmeda, pídelo en melamina RH, resistente a la humedad.'],
             ['q' => '¿Incluye el mesón?', 'a' => 'El mesón de granito o cuarzo lo coordinamos con un aliado de confianza y va en la misma cotización, para que tengas un solo responsable.'],
             ['q' => '¿Cómo se paga?', 'a' => 'Con un anticipo para comprar materiales y empezar, y el saldo a la entrega. Puedes pagar con Deuna o transferencia.'],
             ['q' => '¿Atienden mi urbanización?', 'a' => 'Sí, trabajamos en Guayaquil, La Aurora, Daule, Samborondón, Vía a la Costa y Durán. La movilización depende de la zona y se indica en la cotización.'],
