@@ -11,8 +11,9 @@ import {
     Minus,
     Plus,
     Sparkles,
+    X,
 } from 'lucide-react';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import type { FormEvent, ReactNode } from 'react';
 import InputError from '@/components/input-error';
 import { PublicHeader } from '@/components/public-header';
@@ -78,6 +79,8 @@ type Props = {
 
 type Line = { catalog_item_id: number; quantity: number };
 
+type Suggestion = { item: CatalogOption; reason: string | null };
+
 type FormFields = {
     type: QuoteType;
     package: string;
@@ -97,14 +100,17 @@ type FormFields = {
     website: string;
 };
 
-type StepKey = 'need' | 'details' | 'extras' | 'contact';
+type StepKey = 'need' | 'details' | 'contact';
 
-const STEP_TITLES: Record<StepKey, string> = {
-    need: '¿Qué necesitas?',
-    details: 'Cuéntanos los detalles',
-    extras: 'También te puede interesar',
-    contact: '¿Dónde es el trabajo y cómo te respondemos?',
-};
+const STEPS: { key: StepKey; label: string; title: string }[] = [
+    { key: 'need', label: 'Trabajo', title: '¿Qué necesitas?' },
+    { key: 'details', label: 'Detalles', title: 'Cuéntanos los detalles' },
+    {
+        key: 'contact',
+        label: 'Tus datos',
+        title: '¿Cómo te respondemos y dónde es?',
+    },
+];
 
 const TYPES: {
     value: QuoteType;
@@ -114,7 +120,7 @@ const TYPES: {
 }[] = [
     {
         value: 'cliente',
-        label: 'Para mi casa',
+        label: 'Mi casa',
         hint: 'Un trabajo, una reparación o un mueble.',
         icon: Home,
     },
@@ -132,14 +138,24 @@ const TYPES: {
     },
 ];
 
-const QUANTITY_UNITS: Record<
-    string,
-    { label: string; step: number; min: number }
-> = {
-    unidad: { label: 'unidades', step: 1, min: 1 },
-    metro_lineal: { label: 'metros lineales (aprox.)', step: 0.5, min: 0.5 },
-    m2: { label: 'm² (aprox.)', step: 0.5, min: 0.5 },
+type QuantityUnit = { one: string; many: string; step: number; min: number };
+
+const QUANTITY_UNITS: Record<string, QuantityUnit> = {
+    unidad: { one: 'unidad', many: 'unidades', step: 1, min: 1 },
+    metro_lineal: {
+        one: 'metro lineal',
+        many: 'metros lineales',
+        step: 0.5,
+        min: 0.5,
+    },
+    m2: { one: 'm²', many: 'm²', step: 0.5, min: 0.5 },
 };
+
+function unitLabel(unit: QuantityUnit, quantity: number): string {
+    return quantity === 1 ? unit.one : unit.many;
+}
+
+const MAX_PHOTOS = 5;
 
 function stepForError(field: string): StepKey {
     if (
@@ -150,15 +166,29 @@ function stepForError(field: string): StepKey {
         return 'need';
     }
 
-    if (
-        field.startsWith('items') ||
+    return field.startsWith('items') ||
+        field.startsWith('accepted_suggestions') ||
         field === 'message' ||
         field.startsWith('photos')
-    ) {
-        return 'details';
+        ? 'details'
+        : 'contact';
+}
+
+/** "Zona C · Norte" is the admin's pricing name; visitors only need "Norte". */
+function zoneLabel(name: string): string {
+    return name.replace(/^Zona\s+\S+\s*·\s*/u, '') || name;
+}
+
+function itemNote(item: CatalogOption): string | null {
+    if (item.kind === 'producto') {
+        return 'Producto + instalación';
     }
 
-    return field.startsWith('accepted_suggestions') ? 'extras' : 'contact';
+    if (item.kind === 'aliado') {
+        return 'Con aliado de confianza';
+    }
+
+    return item.includes_material ? 'Con material' : null;
 }
 
 function ChoiceCard({
@@ -184,12 +214,32 @@ function ChoiceCard({
             )}
         >
             {selected && (
-                <span className="absolute top-3 right-3 flex size-5 items-center justify-center rounded-full bg-primary text-primary-foreground">
+                <span className="absolute top-2 right-2 flex size-5 items-center justify-center rounded-full bg-primary text-primary-foreground">
                     <Check className="size-3.5" aria-hidden="true" />
                 </span>
             )}
             {children}
         </button>
+    );
+}
+
+function SelectMark({ selected }: { selected: boolean }) {
+    return (
+        <span
+            className={cn(
+                'flex size-7 shrink-0 items-center justify-center rounded-full border',
+                selected
+                    ? 'border-primary bg-primary text-primary-foreground'
+                    : 'border-input bg-background text-muted-foreground',
+            )}
+            aria-hidden="true"
+        >
+            {selected ? (
+                <Check className="size-4" />
+            ) : (
+                <Plus className="size-4" />
+            )}
+        </span>
     );
 }
 
@@ -199,14 +249,14 @@ function QuantityStepper({
     onChange,
 }: {
     line: Line;
-    unit: { label: string; step: number; min: number };
+    unit: QuantityUnit;
     onChange: (quantity: number) => void;
 }) {
     const clamp = (value: number) =>
         Math.min(500, Math.max(unit.min, Math.round(value * 2) / 2));
 
     return (
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="flex items-center gap-2">
             <Button
                 type="button"
                 variant="outline"
@@ -227,7 +277,7 @@ function QuantityStepper({
                     onChange(Number(event.target.value) || unit.min)
                 }
                 className="h-9 w-20 text-center"
-                aria-label={`Cantidad en ${unit.label}`}
+                aria-label={`Cantidad en ${unit.many}`}
             />
             <Button
                 type="button"
@@ -238,93 +288,167 @@ function QuantityStepper({
             >
                 <Plus aria-hidden="true" />
             </Button>
-            <span className="text-sm text-muted-foreground">{unit.label}</span>
+            <span className="text-sm text-muted-foreground">
+                {unitLabel(unit, line.quantity)}
+            </span>
         </div>
     );
 }
 
-function ItemCard({
+/** One catalog item: the whole row toggles it; quantity and add-ons open below. */
+function ItemRow({
     item,
-    line,
-    reason,
+    selected,
     onToggle,
-    onQuantity,
+    children,
 }: {
     item: CatalogOption;
-    line?: Line;
-    reason?: string | null;
+    selected: boolean;
     onToggle: () => void;
-    onQuantity?: (quantity: number) => void;
+    children?: ReactNode;
 }) {
-    const unit = QUANTITY_UNITS[item.unit];
-    const selected = Boolean(line);
+    const note = itemNote(item);
 
     return (
         <div
             className={cn(
-                'flex gap-3 rounded-lg border bg-card p-3',
-                selected && 'border-primary bg-primary/5',
+                'overflow-hidden rounded-lg border bg-card',
+                selected && 'border-primary ring-1 ring-primary',
             )}
         >
-            {item.image_url ? (
-                <img
-                    src={item.image_url}
-                    alt=""
-                    loading="lazy"
-                    className="size-16 shrink-0 rounded-md bg-muted object-cover"
-                />
-            ) : (
-                <div className="flex size-16 shrink-0 items-center justify-center rounded-md bg-muted text-muted-foreground">
-                    <Sparkles className="size-5" aria-hidden="true" />
-                </div>
-            )}
-            <div className="min-w-0 flex-1">
-                {reason && (
-                    <div className="mb-1 text-xs font-medium text-primary">
-                        {reason}
-                    </div>
+            <button
+                type="button"
+                aria-pressed={selected}
+                onClick={onToggle}
+                className={cn(
+                    'flex w-full items-center gap-3 p-3 text-left transition-colors hover:bg-muted/40 focus-visible:ring-[3px] focus-visible:ring-ring/30 focus-visible:outline-none focus-visible:ring-inset',
+                    selected && 'bg-primary/5',
                 )}
-                <div className="leading-snug font-medium">{item.name}</div>
-                {item.description && (
-                    <p className="mt-1 text-sm leading-5 text-muted-foreground">
-                        {item.description}
-                    </p>
+            >
+                {item.image_url ? (
+                    <img
+                        src={item.image_url}
+                        alt=""
+                        loading="lazy"
+                        className="size-14 shrink-0 rounded-md bg-muted object-cover"
+                    />
+                ) : (
+                    <span className="flex size-14 shrink-0 items-center justify-center rounded-md bg-muted text-muted-foreground">
+                        <Sparkles className="size-5" aria-hidden="true" />
+                    </span>
                 )}
-                <div className="mt-2 flex flex-wrap gap-1">
-                    {item.includes_material && (
-                        <Badge variant="secondary">Con material</Badge>
+                <span className="min-w-0 flex-1">
+                    <span className="block leading-snug font-medium">
+                        {item.name}
+                    </span>
+                    {item.description && (
+                        <span className="mt-0.5 line-clamp-2 block text-sm leading-5 text-muted-foreground">
+                            {item.description}
+                        </span>
                     )}
-                    {item.kind === 'producto' && (
-                        <Badge variant="outline">Producto + instalación</Badge>
+                    {note && (
+                        <span className="mt-1 block text-xs font-medium text-primary">
+                            {note}
+                        </span>
                     )}
-                    {item.kind === 'aliado' && (
-                        <Badge variant="outline">Con aliado de confianza</Badge>
-                    )}
-                </div>
-                <div className="mt-3 flex flex-wrap items-center gap-3">
-                    <Button
-                        type="button"
-                        size="sm"
-                        variant={selected ? 'default' : 'outline'}
-                        aria-pressed={selected}
-                        onClick={onToggle}
-                    >
-                        {selected ? (
-                            <Check aria-hidden="true" />
-                        ) : (
-                            <Plus aria-hidden="true" />
-                        )}
-                        {selected ? 'Agregado' : 'Agregar'}
-                    </Button>
-                    {line && unit && onQuantity && (
-                        <QuantityStepper
-                            line={line}
-                            unit={unit}
-                            onChange={onQuantity}
-                        />
-                    )}
-                </div>
+                </span>
+                <SelectMark selected={selected} />
+            </button>
+            {children}
+        </div>
+    );
+}
+
+function PhotoThumb({
+    file,
+    label,
+    onRemove,
+}: {
+    file: File;
+    label: string;
+    onRemove: () => void;
+}) {
+    const image = useRef<HTMLImageElement>(null);
+
+    // The preview URL lives as long as the thumbnail, so memory is released.
+    useEffect(() => {
+        const url = URL.createObjectURL(file);
+
+        if (image.current) {
+            image.current.src = url;
+        }
+
+        return () => URL.revokeObjectURL(url);
+    }, [file]);
+
+    return (
+        <div className="relative size-20 overflow-hidden rounded-md border bg-muted">
+            <img ref={image} alt={label} className="size-full object-cover" />
+            <button
+                type="button"
+                onClick={onRemove}
+                aria-label={`Quitar ${label.toLowerCase()}`}
+                className="absolute top-1 right-1 flex size-6 items-center justify-center rounded-full bg-background/90 text-foreground shadow-sm hover:bg-background"
+            >
+                <X className="size-3.5" aria-hidden="true" />
+            </button>
+        </div>
+    );
+}
+
+function PhotoPicker({
+    photos,
+    onChange,
+    error,
+}: {
+    photos: File[];
+    onChange: (photos: File[]) => void;
+    error?: string;
+}) {
+    return (
+        <div className="grid gap-2">
+            <div className="text-sm font-medium">
+                Fotos del espacio (opcional)
             </div>
+            <div className="flex flex-wrap gap-2">
+                {photos.map((photo, index) => (
+                    <PhotoThumb
+                        key={`${photo.name}-${photo.size}-${photo.lastModified}`}
+                        file={photo}
+                        label={`Foto ${index + 1}`}
+                        onRemove={() =>
+                            onChange(photos.filter((_, i) => i !== index))
+                        }
+                    />
+                ))}
+                {photos.length < MAX_PHOTOS && (
+                    <label className="flex size-20 cursor-pointer flex-col items-center justify-center gap-1 rounded-md border border-dashed border-input bg-card text-xs text-muted-foreground transition-colors focus-within:ring-[3px] focus-within:ring-ring/30 hover:border-primary hover:text-primary">
+                        <Camera className="size-5" aria-hidden="true" />
+                        Agregar
+                        <input
+                            type="file"
+                            accept="image/jpeg,image/png,image/webp"
+                            multiple
+                            className="sr-only"
+                            aria-label="Agregar fotos del espacio"
+                            onChange={(event) => {
+                                onChange(
+                                    [
+                                        ...photos,
+                                        ...Array.from(event.target.files ?? []),
+                                    ].slice(0, MAX_PHOTOS),
+                                );
+                                event.target.value = '';
+                            }}
+                        />
+                    </label>
+                )}
+            </div>
+            <p className="text-xs leading-5 text-muted-foreground">
+                Hasta {MAX_PHOTOS} fotos JPG, PNG o WEBP de máximo 5 MB. Con
+                fotos te cotizamos más rápido.
+            </p>
+            <InputError message={error} />
         </div>
     );
 }
@@ -362,8 +486,17 @@ export default function QuoteRequestPage({
             captcha_answer: '',
             website: '',
         });
-    const [step, setStep] = useState<StepKey>('need');
+    // A link from a service, product or package page already answers step 1.
+    const [step, setStep] = useState<StepKey>(
+        initialPackage ||
+            prefill.service_ids.length > 0 ||
+            prefill.item_ids.length > 0
+            ? 'details'
+            : 'need',
+    );
     const [stepError, setStepError] = useState<string | null>(null);
+    const progressRef = useRef<HTMLDivElement>(null);
+    const headingRef = useRef<HTMLHeadingElement>(null);
     const fieldErrors = errors as Record<string, string | undefined>;
 
     const itemsById = useMemo(
@@ -371,31 +504,50 @@ export default function QuoteRequestPage({
         [items],
     );
 
-    const suggestions = useMemo(() => {
+    // Add-ons shown under the item that suggests them, each one only once.
+    const suggestionsByItem = useMemo(() => {
         const chosen = new Set(data.items.map((line) => line.catalog_item_id));
-        const found = new Map<number, string | null>();
+        const shown = new Set<number>();
+        const byItem = new Map<number, Suggestion[]>();
 
-        data.items.forEach((line) =>
-            itemsById.get(line.catalog_item_id)?.suggestions.forEach((s) => {
-                if (!chosen.has(s.id) && !found.has(s.id)) {
-                    found.set(s.id, s.reason);
+        data.items.forEach((line) => {
+            const related = (
+                itemsById.get(line.catalog_item_id)?.suggestions ?? []
+            ).flatMap(({ id, reason }) => {
+                const item = itemsById.get(id);
+
+                if (!item || chosen.has(id) || shown.has(id)) {
+                    return [];
                 }
-            }),
-        );
 
-        return [...found].flatMap(([id, reason]) => {
-            const item = itemsById.get(id);
+                shown.add(id);
 
-            return item ? [{ item, reason }] : [];
+                return [{ item, reason }];
+            });
+
+            if (related.length > 0) {
+                byItem.set(line.catalog_item_id, related);
+            }
         });
+
+        return byItem;
     }, [data.items, itemsById]);
 
-    const steps: StepKey[] =
-        suggestions.length > 0
-            ? ['need', 'details', 'extras', 'contact']
-            : ['need', 'details', 'contact'];
-    const stepIndex = Math.max(0, steps.indexOf(step));
-    const isLastStep = stepIndex === steps.length - 1;
+    const suggestedIds = useMemo(
+        () =>
+            new Set(
+                [...suggestionsByItem.values()].flatMap((list) =>
+                    list.map(({ item }) => item.id),
+                ),
+            ),
+        [suggestionsByItem],
+    );
+
+    const stepIndex = Math.max(
+        0,
+        STEPS.findIndex((entry) => entry.key === step),
+    );
+    const isLastStep = stepIndex === STEPS.length - 1;
 
     const detailGroups = useMemo(() => {
         const wanted = new Set<number>(data.services);
@@ -406,11 +558,11 @@ export default function QuoteRequestPage({
                 wanted.add(serviceId);
             }
         });
-        const shown =
-            wanted.size > 0
-                ? services.filter((s) => wanted.has(s.id))
-                : services;
-        const groups = shown
+
+        // Only the chosen services: a company request without services just
+        // describes the job in the message.
+        const groups = services
+            .filter((service) => wanted.has(service.id))
             .map((service) => ({
                 key: `service-${service.id}`,
                 title: service.name,
@@ -419,7 +571,7 @@ export default function QuoteRequestPage({
             .filter((group) => group.items.length > 0);
         const others = items.filter((item) => item.service_id === null);
 
-        return others.length > 0
+        return groups.length > 0 && others.length > 0
             ? [
                   ...groups,
                   { key: 'others', title: 'Otros trabajos', items: others },
@@ -430,19 +582,31 @@ export default function QuoteRequestPage({
     const lineFor = (id: number) =>
         data.items.find((line) => line.catalog_item_id === id);
 
-    const toggleItem = (item: CatalogOption) =>
+    const isAcceptedSuggestion = (id: number) =>
+        suggestedIds.has(id) && data.accepted_suggestions.includes(id);
+
+    const toggleSuggestion = (id: number) =>
+        setData(
+            'accepted_suggestions',
+            data.accepted_suggestions.includes(id)
+                ? data.accepted_suggestions.filter((value) => value !== id)
+                : [...data.accepted_suggestions, id],
+        );
+
+    const toggleItem = (item: CatalogOption) => {
+        if (isAcceptedSuggestion(item.id)) {
+            toggleSuggestion(item.id);
+
+            return;
+        }
+
         setData(
             'items',
             lineFor(item.id)
                 ? data.items.filter((line) => line.catalog_item_id !== item.id)
-                : [
-                      ...data.items,
-                      {
-                          catalog_item_id: item.id,
-                          quantity: QUANTITY_UNITS[item.unit]?.min ?? 1,
-                      },
-                  ],
+                : [...data.items, { catalog_item_id: item.id, quantity: 1 }],
         );
+    };
 
     const setQuantity = (id: number, quantity: number) =>
         setData(
@@ -466,24 +630,42 @@ export default function QuoteRequestPage({
             package: pkg.key,
             items: pkg.item_ids.map((id) => ({
                 catalog_item_id: id,
-                quantity:
-                    QUANTITY_UNITS[itemsById.get(id)?.unit ?? '']?.min ?? 1,
+                quantity: 1,
             })),
         }));
-
-    const toggleSuggestion = (id: number) =>
-        setData(
-            'accepted_suggestions',
-            data.accepted_suggestions.includes(id)
-                ? data.accepted_suggestions.filter((value) => value !== id)
-                : [...data.accepted_suggestions, id],
-        );
 
     const goTo = (next: StepKey) => {
         setStep(next);
         setStepError(null);
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        // Back to the progress bar, not the page intro, and announce the step.
+        requestAnimationFrame(() => {
+            progressRef.current?.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start',
+            });
+            headingRef.current?.focus({ preventScroll: true });
+        });
     };
+
+    const summary = [
+        ...data.items.flatMap((line) => {
+            const item = itemsById.get(line.catalog_item_id);
+            const unit = item ? QUANTITY_UNITS[item.unit] : undefined;
+
+            if (!item) {
+                return [];
+            }
+
+            return [
+                unit
+                    ? `${item.name} · ${line.quantity.toLocaleString('es-EC')} ${unitLabel(unit, line.quantity)}`
+                    : item.name,
+            ];
+        }),
+        ...data.accepted_suggestions
+            .filter((id) => suggestedIds.has(id))
+            .flatMap((id) => itemsById.get(id)?.name ?? []),
+    ];
 
     const handleSubmit = (event: FormEvent) => {
         event.preventDefault();
@@ -507,18 +689,16 @@ export default function QuoteRequestPage({
         }
 
         if (!isLastStep) {
-            goTo(steps[stepIndex + 1]);
+            goTo(STEPS[stepIndex + 1].key);
 
             return;
         }
-
-        const suggested = new Set(suggestions.map(({ item }) => item.id));
 
         transform((fields) => ({
             ...fields,
             package: fields.type === 'casa_nueva' ? fields.package : '',
             accepted_suggestions: fields.accepted_suggestions.filter((id) =>
-                suggested.has(id),
+                suggestedIds.has(id),
             ),
         }));
 
@@ -528,8 +708,7 @@ export default function QuoteRequestPage({
                 const first = Object.keys(validationErrors)[0];
 
                 if (first) {
-                    const target = stepForError(first);
-                    goTo(steps.includes(target) ? target : 'contact');
+                    goTo(stepForError(first));
                 }
             },
         });
@@ -537,8 +716,12 @@ export default function QuoteRequestPage({
 
     const itemErrors = Object.entries(fieldErrors).filter(
         ([key, message]) =>
-            message && (key.startsWith('items') || key.startsWith('photos.')),
+            message &&
+            (key.startsWith('items') ||
+                key.startsWith('accepted_suggestions') ||
+                key.startsWith('photos.')),
     );
+    const selectedType = TYPES.find((type) => type.value === data.type);
 
     return (
         <>
@@ -548,77 +731,108 @@ export default function QuoteRequestPage({
                 <PublicHeader />
 
                 <main className="mx-auto max-w-3xl px-4 pt-8 pb-36 sm:px-6 sm:pt-12 sm:pb-16">
-                    <div className="text-sm font-medium text-primary">
-                        Cotización sin compromiso · Guayaquil
-                    </div>
-                    <h1 className="mt-2 text-3xl font-medium tracking-tight text-balance sm:text-4xl">
+                    <h1 className="text-3xl font-medium tracking-tight text-balance sm:text-4xl">
                         Pide tu cotización
                     </h1>
                     <p className="mt-3 max-w-2xl leading-7 text-muted-foreground">
-                        Responde unas preguntas cortas. Revisamos tu pedido y te
-                        enviamos la cotización por WhatsApp. Cada trabajo es
-                        distinto, por eso no publicamos precios fijos.
+                        Tres pasos cortos y sin compromiso. Cada trabajo es
+                        distinto: revisamos tu pedido y te enviamos el precio
+                        por WhatsApp.
                     </p>
+                    <a
+                        href={buildWhatsAppHref(
+                            whatsapp_number,
+                            'Hola, quiero cotizar un trabajo de carpintería.',
+                        )}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="mt-2 inline-flex items-center gap-1.5 text-sm text-muted-foreground underline-offset-4 hover:text-primary hover:underline"
+                    >
+                        <MessageCircle className="size-4" aria-hidden="true" />
+                        ¿Prefieres escribirnos? Abre WhatsApp
+                    </a>
 
-                    <div className="mt-8" aria-live="polite">
-                        <div className="flex items-center justify-between text-sm">
-                            <span className="font-medium">
-                                Paso {stepIndex + 1} de {steps.length}
-                            </span>
-                            <a
-                                href={buildWhatsAppHref(
-                                    whatsapp_number,
-                                    'Hola, quiero cotizar un trabajo de carpintería.',
-                                )}
-                                target="_blank"
-                                rel="noreferrer"
-                                className="inline-flex items-center gap-1 text-muted-foreground underline-offset-4 hover:text-primary hover:underline"
-                            >
-                                <MessageCircle
-                                    className="size-4"
-                                    aria-hidden="true"
-                                />
-                                Prefiero escribir por WhatsApp
-                            </a>
-                        </div>
-                        <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-muted">
-                            <div
-                                className="h-full rounded-full bg-primary transition-all"
-                                style={{
-                                    width: `${((stepIndex + 1) / steps.length) * 100}%`,
-                                }}
-                            />
-                        </div>
+                    <div ref={progressRef} className="mt-8 scroll-mt-28">
+                        <ol className="grid grid-cols-3 gap-2">
+                            {STEPS.map((entry, index) => (
+                                <li
+                                    key={entry.key}
+                                    aria-current={
+                                        index === stepIndex ? 'step' : undefined
+                                    }
+                                    className="grid gap-1.5"
+                                >
+                                    <span
+                                        className={cn(
+                                            'h-1.5 rounded-full transition-colors',
+                                            index <= stepIndex
+                                                ? 'bg-primary'
+                                                : 'bg-muted',
+                                        )}
+                                    />
+                                    <span
+                                        className={cn(
+                                            'flex items-center gap-1 text-xs',
+                                            index === stepIndex
+                                                ? 'font-semibold text-foreground'
+                                                : 'text-muted-foreground',
+                                        )}
+                                    >
+                                        {index < stepIndex && (
+                                            <Check
+                                                className="size-3.5 text-primary"
+                                                aria-hidden="true"
+                                            />
+                                        )}
+                                        {index + 1}. {entry.label}
+                                    </span>
+                                </li>
+                            ))}
+                        </ol>
                     </div>
 
                     <form onSubmit={handleSubmit} className="mt-8">
-                        <h2 className="text-xl font-semibold tracking-tight">
-                            {STEP_TITLES[step]}
+                        <h2
+                            ref={headingRef}
+                            tabIndex={-1}
+                            className="text-xl font-semibold tracking-tight focus:outline-none"
+                        >
+                            {STEPS[stepIndex].title}
                         </h2>
 
                         {step === 'need' && (
                             <div className="mt-5 grid gap-6">
-                                <div className="grid gap-3 sm:grid-cols-3">
-                                    {TYPES.map((type) => (
-                                        <ChoiceCard
-                                            key={type.value}
-                                            selected={data.type === type.value}
-                                            onClick={() =>
-                                                setData('type', type.value)
-                                            }
-                                        >
-                                            <type.icon
-                                                className="size-5 text-primary"
-                                                aria-hidden="true"
-                                            />
-                                            <div className="mt-2 font-medium">
-                                                {type.label}
-                                            </div>
-                                            <div className="mt-1 text-sm leading-5 text-muted-foreground">
-                                                {type.hint}
-                                            </div>
-                                        </ChoiceCard>
-                                    ))}
+                                <div className="grid gap-2">
+                                    <div className="text-sm font-medium">
+                                        ¿Para dónde es?
+                                    </div>
+                                    <div className="grid grid-cols-3 gap-2">
+                                        {TYPES.map((type) => (
+                                            <ChoiceCard
+                                                key={type.value}
+                                                selected={
+                                                    data.type === type.value
+                                                }
+                                                onClick={() =>
+                                                    setData('type', type.value)
+                                                }
+                                                className="flex flex-col items-center gap-1.5 px-2 py-3 text-center"
+                                            >
+                                                <type.icon
+                                                    className="size-5 text-primary"
+                                                    aria-hidden="true"
+                                                />
+                                                <span className="text-sm leading-tight font-medium">
+                                                    {type.label}
+                                                </span>
+                                            </ChoiceCard>
+                                        ))}
+                                    </div>
+                                    {selectedType && (
+                                        <p className="text-sm text-muted-foreground">
+                                            {selectedType.hint}
+                                        </p>
+                                    )}
                                 </div>
 
                                 {data.type === 'casa_nueva' && (
@@ -658,13 +872,15 @@ export default function QuoteRequestPage({
                                     </div>
                                 )}
 
-                                <div className="grid gap-3">
+                                <div className="grid gap-2">
                                     <div className="text-sm font-medium">
                                         {data.type === 'casa_nueva'
                                             ? '¿Algo más? (opcional)'
-                                            : 'Elige uno o varios servicios'}
+                                            : data.type === 'empresa'
+                                              ? '¿Qué trabajos? (opcional)'
+                                              : 'Elige uno o varios servicios'}
                                     </div>
-                                    <div className="grid gap-3 sm:grid-cols-2">
+                                    <div className="grid gap-2 sm:grid-cols-2">
                                         {services.map((service) => (
                                             <ChoiceCard
                                                 key={service.id}
@@ -674,7 +890,7 @@ export default function QuoteRequestPage({
                                                 onClick={() =>
                                                     toggleService(service.id)
                                                 }
-                                                className="flex items-center gap-3"
+                                                className="flex items-center gap-3 p-3"
                                             >
                                                 {SERVICE_ICONS[
                                                     service.slug
@@ -687,7 +903,7 @@ export default function QuoteRequestPage({
                                                         }
                                                         alt=""
                                                         loading="lazy"
-                                                        className="size-12 shrink-0 object-contain"
+                                                        className="size-10 shrink-0 object-contain"
                                                     />
                                                 )}
                                                 <span className="pr-6 leading-snug font-medium">
@@ -711,36 +927,128 @@ export default function QuoteRequestPage({
 
                         {step === 'details' && (
                             <div className="mt-5 grid gap-8">
-                                <p className="text-sm leading-6 text-muted-foreground">
-                                    Agrega los trabajos que necesitas y una
-                                    cantidad aproximada. Si no estás seguro,
-                                    cuéntalo en el mensaje y lo vemos juntos.
-                                </p>
+                                {detailGroups.length > 0 && (
+                                    <p className="text-sm leading-6 text-muted-foreground">
+                                        Toca lo que necesitas y pon una cantidad
+                                        aproximada. Si no estás seguro, sáltalo
+                                        y cuéntanos abajo.
+                                    </p>
+                                )}
 
                                 {detailGroups.map((group) => (
                                     <section
                                         key={group.key}
-                                        className="grid gap-3"
+                                        className="grid gap-2"
                                     >
                                         <h3 className="font-medium">
                                             {group.title}
                                         </h3>
-                                        {group.items.map((item) => (
-                                            <ItemCard
-                                                key={item.id}
-                                                item={item}
-                                                line={lineFor(item.id)}
-                                                onToggle={() =>
-                                                    toggleItem(item)
-                                                }
-                                                onQuantity={(quantity) =>
-                                                    setQuantity(
-                                                        item.id,
-                                                        quantity,
-                                                    )
-                                                }
-                                            />
-                                        ))}
+                                        {group.items.map((item) => {
+                                            const line = lineFor(item.id);
+                                            const unit =
+                                                QUANTITY_UNITS[item.unit];
+                                            const related =
+                                                suggestionsByItem.get(
+                                                    item.id,
+                                                ) ?? [];
+
+                                            return (
+                                                <ItemRow
+                                                    key={item.id}
+                                                    item={item}
+                                                    selected={
+                                                        Boolean(line) ||
+                                                        isAcceptedSuggestion(
+                                                            item.id,
+                                                        )
+                                                    }
+                                                    onToggle={() =>
+                                                        toggleItem(item)
+                                                    }
+                                                >
+                                                    {line && unit && (
+                                                        <div className="border-t px-3 py-3">
+                                                            <QuantityStepper
+                                                                line={line}
+                                                                unit={unit}
+                                                                onChange={(
+                                                                    quantity,
+                                                                ) =>
+                                                                    setQuantity(
+                                                                        item.id,
+                                                                        quantity,
+                                                                    )
+                                                                }
+                                                            />
+                                                        </div>
+                                                    )}
+                                                    {line &&
+                                                        related.length > 0 && (
+                                                            <div className="grid gap-2 border-t bg-muted/30 px-3 py-3">
+                                                                <div className="text-xs font-medium text-muted-foreground">
+                                                                    Muchos
+                                                                    clientes
+                                                                    también
+                                                                    agregan
+                                                                </div>
+                                                                {related.map(
+                                                                    ({
+                                                                        item: extra,
+                                                                        reason,
+                                                                    }) => {
+                                                                        const accepted =
+                                                                            data.accepted_suggestions.includes(
+                                                                                extra.id,
+                                                                            );
+
+                                                                        return (
+                                                                            <button
+                                                                                key={
+                                                                                    extra.id
+                                                                                }
+                                                                                type="button"
+                                                                                aria-pressed={
+                                                                                    accepted
+                                                                                }
+                                                                                onClick={() =>
+                                                                                    toggleSuggestion(
+                                                                                        extra.id,
+                                                                                    )
+                                                                                }
+                                                                                className={cn(
+                                                                                    'flex items-center gap-3 rounded-md border bg-background px-3 py-2 text-left transition-colors hover:border-primary/60 focus-visible:ring-[3px] focus-visible:ring-ring/30 focus-visible:outline-none',
+                                                                                    accepted &&
+                                                                                        'border-primary',
+                                                                                )}
+                                                                            >
+                                                                                <span className="min-w-0 flex-1">
+                                                                                    <span className="block text-sm font-medium">
+                                                                                        {
+                                                                                            extra.name
+                                                                                        }
+                                                                                    </span>
+                                                                                    {reason && (
+                                                                                        <span className="block text-xs text-muted-foreground">
+                                                                                            {
+                                                                                                reason
+                                                                                            }
+                                                                                        </span>
+                                                                                    )}
+                                                                                </span>
+                                                                                <SelectMark
+                                                                                    selected={
+                                                                                        accepted
+                                                                                    }
+                                                                                />
+                                                                            </button>
+                                                                        );
+                                                                    },
+                                                                )}
+                                                            </div>
+                                                        )}
+                                                </ItemRow>
+                                            );
+                                        })}
                                     </section>
                                 ))}
 
@@ -750,7 +1058,9 @@ export default function QuoteRequestPage({
 
                                 <div className="grid gap-2">
                                     <Label htmlFor="quote-message">
-                                        Medidas, colores o detalles (opcional)
+                                        {detailGroups.length > 0
+                                            ? 'Medidas, colores o detalles (opcional)'
+                                            : 'Cuéntanos qué necesitas'}
                                     </Label>
                                     <Textarea
                                         id="quote-message"
@@ -762,135 +1072,93 @@ export default function QuoteRequestPage({
                                             )
                                         }
                                         maxLength={2000}
-                                        placeholder="Ej.: closet de 2,5 m de ancho, color blanco, con cajones."
+                                        placeholder={
+                                            data.type === 'empresa'
+                                                ? 'Ej.: 6 suites en Samborondón, revisión de puertas y chapas cada mes.'
+                                                : 'Ej.: closet de 2,5 m de ancho, color blanco, con cajones.'
+                                        }
                                     />
                                     <InputError message={fieldErrors.message} />
                                 </div>
 
-                                <div className="grid gap-2">
-                                    <Label htmlFor="quote-photos">
-                                        Fotos del espacio (opcional)
-                                    </Label>
-                                    <Input
-                                        id="quote-photos"
-                                        type="file"
-                                        accept="image/jpeg,image/png,image/webp"
-                                        multiple
-                                        onChange={(event) =>
-                                            setData(
-                                                'photos',
-                                                Array.from(
-                                                    event.target.files ?? [],
-                                                ).slice(0, 5),
-                                            )
-                                        }
-                                    />
-                                    <p className="flex items-start gap-2 text-xs leading-5 text-muted-foreground">
-                                        <Camera
-                                            className="mt-0.5 size-4 shrink-0"
-                                            aria-hidden="true"
-                                        />
-                                        {data.photos.length > 0
-                                            ? `${data.photos.length} foto(s) lista(s) para enviar.`
-                                            : 'Hasta 5 fotos JPG, PNG o WEBP de máximo 5 MB. Nos ayudan a cotizar más rápido.'}
-                                    </p>
-                                    <InputError message={fieldErrors.photos} />
-                                </div>
-                            </div>
-                        )}
-
-                        {step === 'extras' && (
-                            <div className="mt-5 grid gap-3">
-                                <p className="text-sm leading-6 text-muted-foreground">
-                                    Otros clientes con un trabajo parecido
-                                    también pidieron esto. Márcalo si te
-                                    interesa y lo incluimos en la cotización.
-                                </p>
-                                {suggestions.map(({ item, reason }) => (
-                                    <ItemCard
-                                        key={item.id}
-                                        item={item}
-                                        reason={reason}
-                                        line={
-                                            data.accepted_suggestions.includes(
-                                                item.id,
-                                            )
-                                                ? {
-                                                      catalog_item_id: item.id,
-                                                      quantity: 1,
-                                                  }
-                                                : undefined
-                                        }
-                                        onToggle={() =>
-                                            toggleSuggestion(item.id)
-                                        }
-                                    />
-                                ))}
+                                <PhotoPicker
+                                    photos={data.photos}
+                                    onChange={(photos) =>
+                                        setData('photos', photos)
+                                    }
+                                    error={fieldErrors.photos}
+                                />
                             </div>
                         )}
 
                         {step === 'contact' && (
-                            <div className="mt-5 grid gap-6">
-                                <fieldset className="grid gap-3">
-                                    <legend className="mb-3 text-sm font-medium">
-                                        Zona del trabajo
-                                    </legend>
-                                    <div className="grid gap-3 sm:grid-cols-2">
-                                        {zones.map((zone) => (
-                                            <ChoiceCard
-                                                key={zone.id}
-                                                selected={
-                                                    data.service_zone_id ===
-                                                    String(zone.id)
-                                                }
-                                                onClick={() =>
-                                                    setData(
-                                                        'service_zone_id',
-                                                        String(zone.id),
-                                                    )
-                                                }
+                            <div className="mt-5 grid gap-8">
+                                {summary.length > 0 && (
+                                    <div className="rounded-lg border bg-card p-4">
+                                        <div className="flex items-center justify-between gap-3">
+                                            <div className="text-sm font-medium">
+                                                Tu pedido
+                                            </div>
+                                            <button
+                                                type="button"
+                                                onClick={() => goTo('details')}
+                                                className="text-sm text-muted-foreground underline underline-offset-4 hover:text-primary"
                                             >
-                                                <div className="pr-6 font-medium">
-                                                    {zone.name}
-                                                </div>
-                                                {zone.neighborhoods.length >
-                                                    0 && (
-                                                    <div className="mt-1 text-sm leading-5 text-muted-foreground">
-                                                        {zone.neighborhoods
-                                                            .slice(0, 5)
-                                                            .join(', ')}
-                                                        {zone.neighborhoods
-                                                            .length > 5 && '…'}
-                                                    </div>
-                                                )}
-                                            </ChoiceCard>
-                                        ))}
+                                                Cambiar
+                                            </button>
+                                        </div>
+                                        <ul className="mt-2 grid gap-1 text-sm leading-6 text-muted-foreground">
+                                            {summary.map((line) => (
+                                                <li key={line}>{line}</li>
+                                            ))}
+                                        </ul>
                                     </div>
-                                    <InputError
-                                        message={fieldErrors.service_zone_id}
-                                    />
-                                </fieldset>
+                                )}
 
                                 <div className="grid gap-4 sm:grid-cols-2">
-                                    <div className="grid gap-2 sm:col-span-2">
-                                        <Label htmlFor="quote-sector">
-                                            Barrio, ciudadela o urbanización
-                                            (opcional)
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="quote-name">
+                                            Tu nombre
                                         </Label>
                                         <Input
-                                            id="quote-sector"
-                                            value={data.sector}
+                                            id="quote-name"
+                                            value={data.name}
                                             onChange={(event) =>
                                                 setData(
-                                                    'sector',
+                                                    'name',
                                                     event.target.value,
                                                 )
                                             }
-                                            maxLength={120}
-                                            placeholder="Ej.: Ciudad Celeste, Sauces 8…"
+                                            required
+                                            maxLength={80}
+                                            autoComplete="name"
                                         />
                                         <InputError
-                                            message={fieldErrors.sector}
+                                            message={fieldErrors.name}
+                                        />
+                                    </div>
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="quote-phone">
+                                            Tu WhatsApp
+                                        </Label>
+                                        <Input
+                                            id="quote-phone"
+                                            type="tel"
+                                            inputMode="tel"
+                                            value={data.phone}
+                                            onChange={(event) =>
+                                                setData(
+                                                    'phone',
+                                                    event.target.value,
+                                                )
+                                            }
+                                            required
+                                            maxLength={20}
+                                            autoComplete="tel"
+                                            placeholder="09…"
+                                        />
+                                        <InputError
+                                            message={fieldErrors.phone}
                                         />
                                     </div>
 
@@ -911,6 +1179,7 @@ export default function QuoteRequestPage({
                                                     }
                                                     required
                                                     maxLength={120}
+                                                    autoComplete="organization"
                                                 />
                                                 <InputError
                                                     message={
@@ -948,50 +1217,6 @@ export default function QuoteRequestPage({
                                         </>
                                     )}
 
-                                    <div className="grid gap-2">
-                                        <Label htmlFor="quote-name">
-                                            Tu nombre
-                                        </Label>
-                                        <Input
-                                            id="quote-name"
-                                            value={data.name}
-                                            onChange={(event) =>
-                                                setData(
-                                                    'name',
-                                                    event.target.value,
-                                                )
-                                            }
-                                            required
-                                            maxLength={80}
-                                            autoComplete="name"
-                                        />
-                                        <InputError
-                                            message={fieldErrors.name}
-                                        />
-                                    </div>
-                                    <div className="grid gap-2">
-                                        <Label htmlFor="quote-phone">
-                                            Tu WhatsApp
-                                        </Label>
-                                        <Input
-                                            id="quote-phone"
-                                            type="tel"
-                                            value={data.phone}
-                                            onChange={(event) =>
-                                                setData(
-                                                    'phone',
-                                                    event.target.value,
-                                                )
-                                            }
-                                            required
-                                            maxLength={20}
-                                            autoComplete="tel"
-                                            placeholder="09…"
-                                        />
-                                        <InputError
-                                            message={fieldErrors.phone}
-                                        />
-                                    </div>
                                     <div className="grid gap-2 sm:col-span-2">
                                         <Label htmlFor="quote-email">
                                             Correo (opcional)
@@ -1013,57 +1238,119 @@ export default function QuoteRequestPage({
                                             message={fieldErrors.email}
                                         />
                                     </div>
+                                </div>
 
-                                    <div className="hidden" aria-hidden="true">
-                                        <Label htmlFor="quote-website">
-                                            Sitio web
-                                        </Label>
-                                        <Input
-                                            id="quote-website"
-                                            tabIndex={-1}
-                                            autoComplete="off"
-                                            value={data.website}
-                                            onChange={(event) =>
-                                                setData(
-                                                    'website',
-                                                    event.target.value,
-                                                )
-                                            }
-                                        />
+                                <fieldset className="grid gap-2">
+                                    <legend className="mb-2 text-sm font-medium">
+                                        ¿En qué sector es el trabajo?
+                                    </legend>
+                                    <div className="grid gap-2 sm:grid-cols-2">
+                                        {zones.map((zone) => (
+                                            <ChoiceCard
+                                                key={zone.id}
+                                                selected={
+                                                    data.service_zone_id ===
+                                                    String(zone.id)
+                                                }
+                                                onClick={() =>
+                                                    setData(
+                                                        'service_zone_id',
+                                                        String(zone.id),
+                                                    )
+                                                }
+                                                className="p-3"
+                                            >
+                                                <div className="pr-6 font-medium">
+                                                    {zoneLabel(zone.name)}
+                                                </div>
+                                                {zone.neighborhoods.length >
+                                                    0 && (
+                                                    <div className="mt-0.5 text-sm leading-5 text-muted-foreground">
+                                                        {zone.neighborhoods
+                                                            .slice(0, 5)
+                                                            .join(', ')}
+                                                        {zone.neighborhoods
+                                                            .length > 5 && '…'}
+                                                    </div>
+                                                )}
+                                            </ChoiceCard>
+                                        ))}
                                     </div>
+                                    <InputError
+                                        message={fieldErrors.service_zone_id}
+                                    />
+                                </fieldset>
 
-                                    <div className="grid gap-2 sm:col-span-2">
-                                        <Label htmlFor="quote-captcha">
-                                            {captcha.question}
-                                        </Label>
-                                        <Input
-                                            id="quote-captcha"
-                                            inputMode="numeric"
-                                            value={data.captcha_answer}
-                                            onChange={(event) =>
-                                                setData(
-                                                    'captcha_answer',
-                                                    event.target.value,
-                                                )
-                                            }
-                                            required
-                                            maxLength={10}
-                                            className="max-w-32"
-                                        />
-                                        <InputError
-                                            message={
-                                                fieldErrors.captcha_answer ??
-                                                fieldErrors.website
-                                            }
-                                        />
-                                    </div>
+                                <div className="grid gap-2">
+                                    <Label htmlFor="quote-sector">
+                                        Barrio, ciudadela o urbanización
+                                        (opcional)
+                                    </Label>
+                                    <Input
+                                        id="quote-sector"
+                                        value={data.sector}
+                                        onChange={(event) =>
+                                            setData(
+                                                'sector',
+                                                event.target.value,
+                                            )
+                                        }
+                                        maxLength={120}
+                                        placeholder="Ej.: Ciudad Celeste, Sauces 8…"
+                                    />
+                                    <InputError message={fieldErrors.sector} />
+                                </div>
+
+                                <div className="hidden" aria-hidden="true">
+                                    <Label htmlFor="quote-website">
+                                        Sitio web
+                                    </Label>
+                                    <Input
+                                        id="quote-website"
+                                        tabIndex={-1}
+                                        autoComplete="off"
+                                        value={data.website}
+                                        onChange={(event) =>
+                                            setData(
+                                                'website',
+                                                event.target.value,
+                                            )
+                                        }
+                                    />
+                                </div>
+
+                                <div className="grid gap-2">
+                                    <Label htmlFor="quote-captcha">
+                                        Para saber que no eres un robot:{' '}
+                                        {captcha.question}
+                                    </Label>
+                                    <Input
+                                        id="quote-captcha"
+                                        inputMode="numeric"
+                                        value={data.captcha_answer}
+                                        onChange={(event) =>
+                                            setData(
+                                                'captcha_answer',
+                                                event.target.value,
+                                            )
+                                        }
+                                        required
+                                        maxLength={10}
+                                        className="max-w-32"
+                                    />
+                                    <InputError
+                                        message={
+                                            fieldErrors.captcha_answer ??
+                                            fieldErrors.website
+                                        }
+                                    />
                                 </div>
 
                                 <p className="text-xs leading-5 text-muted-foreground">
                                     Usamos tus datos solo para responder esta
-                                    solicitud. Los precios pueden cambiar según
-                                    materiales y distancia; la cotización final
-                                    te llega por WhatsApp.
+                                    solicitud. El precio depende de materiales y
+                                    distancia; la cotización final te llega por
+                                    WhatsApp.
                                 </p>
                             </div>
                         )}
@@ -1073,7 +1360,9 @@ export default function QuoteRequestPage({
                                 <Button
                                     type="button"
                                     variant="ghost"
-                                    onClick={() => goTo(steps[stepIndex - 1])}
+                                    onClick={() =>
+                                        goTo(STEPS[stepIndex - 1].key)
+                                    }
                                     disabled={stepIndex === 0 || processing}
                                     className={cn(
                                         stepIndex === 0 && 'invisible',
@@ -1082,6 +1371,14 @@ export default function QuoteRequestPage({
                                     <ArrowLeft aria-hidden="true" />
                                     Atrás
                                 </Button>
+                                {step === 'details' && summary.length > 0 && (
+                                    <span className="text-sm text-muted-foreground">
+                                        {summary.length}{' '}
+                                        {summary.length === 1
+                                            ? 'elegido'
+                                            : 'elegidos'}
+                                    </span>
+                                )}
                                 <Button
                                     type="submit"
                                     size="lg"

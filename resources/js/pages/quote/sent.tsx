@@ -9,6 +9,12 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { trackLead } from '@/lib/tracking';
 
+const NEXT_STEPS = [
+    'Revisamos tu pedido. Si hace falta, coordinamos una visita para tomar medidas.',
+    'Te enviamos por WhatsApp la cotización con mano de obra, materiales y movilización.',
+    'Si te parece bien, la aceptas en línea y pagas el anticipo con Deuna o transferencia.',
+];
+
 type Props = {
     reference: string;
     name: string;
@@ -69,7 +75,7 @@ export default function QuoteRequestSent({
                     </Button>
 
                     {summary.length > 0 && (
-                        <Card className="mt-10 shadow-none">
+                        <Card className="mt-10 py-0 shadow-none">
                             <CardContent className="p-5">
                                 <div className="text-sm font-medium">
                                     Lo que nos pediste
@@ -83,11 +89,21 @@ export default function QuoteRequestSent({
                         </Card>
                     )}
 
-                    <p className="mt-8 text-sm leading-6 text-muted-foreground">
-                        Revisamos cada pedido y te enviamos la cotización con el
-                        detalle de mano de obra, materiales y movilización. Si
-                        hace falta, coordinamos una visita para tomar medidas.
-                    </p>
+                    <section className="mt-10">
+                        <h2 className="text-base font-semibold">Qué sigue</h2>
+                        <ol className="mt-4 grid gap-4">
+                            {NEXT_STEPS.map((text, index) => (
+                                <li key={text} className="flex gap-3">
+                                    <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-primary/10 text-sm font-semibold text-primary">
+                                        {index + 1}
+                                    </span>
+                                    <span className="pt-0.5 text-sm leading-6 text-muted-foreground">
+                                        {text}
+                                    </span>
+                                </li>
+                            ))}
+                        </ol>
+                    </section>
 
                     <Button asChild variant="ghost" className="mt-4 px-0">
                         <Link href="/">Volver al inicio</Link>
